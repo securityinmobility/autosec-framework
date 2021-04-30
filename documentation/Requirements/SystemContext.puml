@@ -1,0 +1,72 @@
+@startuml
+
+node "Security Framework" as SF {
+
+    node "TestCore" {
+        [Test Selection]
+        [Test Execution]
+        [Other]
+    }
+
+    database "Test DB" as TestDB{
+        [Vulnerabilities]
+        [Attacks]
+        [DUT Knowledge]
+    }
+
+    TestDB -- TestCore
+
+    note top of TestDB: Information about the current DUT
+
+    node "Adapters"   {
+        [CAN]
+        [(Automotive) Ethernet]
+        [PNC]
+        [LIN]
+        [Flexray]
+        [WLAN]
+        [Bluetooth]
+        [802.11p]
+        [GSM / LTE]
+    }
+    Interface -- Adapters
+    TestCore .. Interface : use
+
+    node "Tools" {
+        [Metasploit]
+        [NMap]
+        [OpenVAS]
+        [AircrackNG]
+        [Busmaster]
+        [...]
+    }
+    ToolInterface -- Tools
+    ToolInterface .. TestCore : use
+    Tools .. Interface : use
+
+
+
+}
+note right of SF: Framework that shall be developed
+["Kratzer" System] as Kratzer
+PNC -- Kratzer
+
+
+[Safety System] as SPS 
+SPS -- SF
+
+database "External Knowledge" as externalDatabase {
+    [Adversary Model]
+    [Attack Model]
+}
+DatabaseInterface -- externalDatabase
+SF .. DatabaseInterface : use
+note bottom of externalDatabase : External Information e.g. MASSIF
+
+[Automotive System\nDUT] as Car
+note top of Car: The Device that shall be tested
+
+Adapters <--> Car
+Kratzer .. Car : charging + PnC
+
+@enduml

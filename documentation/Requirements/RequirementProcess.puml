@@ -1,0 +1,19 @@
+@startuml
+
+[*] -right-> ValidRequirement
+
+state ValidRequirement{
+[*] -right-> Initial
+Initial -right-> Draft : completed
+Draft -right-> Accepted : reviewed
+Accepted -right-> Implemented : tested
+Accepted -left-> Draft : edited
+Implemented -left-> Accepted : test failed
+Implemented -left-> Draft : edited
+}
+
+ValidRequirement -down-> Deprecated : deprecated
+Deprecated -up-> ValidRequirement[H] : validated
+
+
+@enduml
