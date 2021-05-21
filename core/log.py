@@ -41,5 +41,8 @@ class Logger:
             Logger.instance = Logger.__Logger(logLevel) #The logLevel is set once during the initial creation of the Logger. Afterwards only an implicit call can change it - not the constructor
     def __getattr__(self, name):
         return getattr(self.instance, name)
+    
+    def getInstance(self):
+        return self.instance
 
     

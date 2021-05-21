@@ -1,15 +1,17 @@
 from pymetasploit3.msfrpc import MsfRpcClient
 from Msf.msfModule import msfModule
-
-PW = 'RCFDTRKO'     #Will be created with every new start of the RPC interface
-SERVER = '192.168.56.1'
-PORT = 55552
+import subprocess, random, string
 
 class msfClient():    
     def __init__(self):
-        self._client = MsfRpcClient(PW, server=SERVER, port=PORT)
+        self.startMsf()
         self._modules = None
 
+    def startMsf(self):
+        sessionPassword = pw = ''.join(random.choice(string.ascii_letters+string.digits+string.punctuation) for i in range(16))
+        startCommand = ["msfrpcd", "-P", sessionPassword]
+        subprocess.Popen(startCommand)
+        self._client = MsfRpcClient(sessionPassword, ssl=True)
 
     def getModules(self):
 

@@ -1,4 +1,5 @@
 import importlib, os, sys
+from .log import Logger
 
 def loadAvailableModules():
     moduleList = []
@@ -10,11 +11,11 @@ def loadAvailableModules():
     for module in modules:
         try:
             moduleList.append(module.load_module())
-        except AttributeError e:
-            print(f"Module {module} was not loaded due to missing load_module() function")
+        except AttributeError as e:
+            Logger.getInstance.w(f"Module {module} was not loaded due to missing load_module() function")
         except e:
-            print(f"Module {module} was not loaded due to an unknown error:")
-            print(e)
+            Logger.getInstance.f(f"Module {module} was not loaded due to an unknown error:")
+            Logger.getInstance.f(e)
     
     return moduleList
 
