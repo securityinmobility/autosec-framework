@@ -20,6 +20,7 @@ class Logger:
 
         def setLogLevel(self, logLevel):
             self.logLevel = logLevel
+            self.i(f"LogLevel set to {repr(logLevel)}")
 
         def d(self, msg):
             if self.logLevel <= Logger.logLevel.DEBUG:

@@ -67,6 +67,6 @@ class msfClient():
 
         availableModulesDict = {}
         for module in availableModules:
-            availableModulesDict[f"msf.{module.getInfo()["name"]}"] = module
+            availableModulesDict[f"msf.{module.getInfo()['name']}"] = module
         return availableModulesDict
     
