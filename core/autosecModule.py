@@ -1,3 +1,5 @@
+from log import Logger
+
 
 '''
 This is the basic interface that has to be implemented by all adapters that introduce modules to the autosec framework. This module also introduces some functionality, that may help to create modules faster.
@@ -48,4 +50,8 @@ class AutosecModule():
 
     def run(self):
         raise NotImplementedError
+
+    def i(self, msg):
+        Logger.i(msg)
+
 

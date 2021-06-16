@@ -1,6 +1,8 @@
+from .log import Logger
+from .interpreter import Interpreter
 
 class App():
-    def __init__(self, webApi, webApp):
+    def __init__(self):
         """ Main app of the AutoSec framework.
 
         webApi: Not yet implemented, will start a REST API to control the framework
@@ -9,14 +11,19 @@ class App():
         Requires: webApi = True (error if it is set as false).
         """
 
-        self.webApi = webApi
-        if webApp and not webApi:
-            print("WebApp is active but Api is not. Both will be enabled")
-            self.webApi = True
-        self.webApp = webApp
+        self.log = Logger()
+        self.interpreter = Interpreter()
+        self.webApi = False
+        self.webApp = False
+        self.cliApp = False
 
     def start(self):
-        pass
+        if self.webApi:
+            self.log.w("Web Api is not yet implemented")
+        if self.webApp:
+            self.log.w("Web App is not yet implemented")
+        if self.cliApp:
+            self.log.w("CLI App is not yet implemendet")
 
     def stop(self):
-        pass
+        self.interpreter.running = False
