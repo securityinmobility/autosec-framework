@@ -1,11 +1,10 @@
 
 '''
-This is the basic interface that has to be implemented by all adapters that introduce modules to the autosec framework
+This is the basic interface that has to be implemented by all adapters that introduce modules to the autosec framework. This module also introduces some functionality, that may help to create modules faster.
 
-For MSF a special loader will be needed that creates the different instances of the modules itself.
 '''
 
-class moduleInterface():
+class AutosecModule():
     def getInfo(self):
         '''
         This method returns information about the module, e.g. name, package / type, interface, purpose etc.

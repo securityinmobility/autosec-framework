@@ -1,8 +1,8 @@
-from core.moduleInterface import moduleInterface
+from core.autosecModule import AutosecModule
 import json
 
 
-class msfModule(moduleInterface):
+class msfModule(AutosecModule):
     def __init__(self, Client, Module):
         self._client=Client
         self._module=Module
