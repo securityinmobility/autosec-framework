@@ -1,4 +1,6 @@
-from core import moduleLoader
+''' Module description
+Diese Modul ist nur zum testen von pylint in der CI chain gedacht'''
 
-if __name__ == "__main__":
-    print(moduleLoader.loadAvailableModules())
+def summe(erster_summand, zweiter_summand):
+    '''Function docstring'''
+    return erster_summand + zweiter_summand
