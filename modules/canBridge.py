@@ -1,5 +1,5 @@
 from core.autosecModule import AutosecModule
-
+from scapy.all import *
 
 def load_module():
     return canBridge()
@@ -28,6 +28,13 @@ class canBridge(AutosecModule):
             lambda data: b'\x03\x04\x05',
             None, 
             lambda data: b'\x06\x07\x08')]     #list to carry the messages to be intercepted; ID IF1, Answer IF1, ID IF2, Answer IF2
+        load_layer("can")
+        load_contrib("cansocket")
+
+        self.primaryInterface = CANsocket(channep = "vcan0")
+
+
+
 
     def getInfo(self):
         return(dict(
@@ -46,9 +53,9 @@ class canBridge(AutosecModule):
     def run(self):
         return super().run()
 
-    def forwardMessages():
+    def forwardMessages(pkt):
         # Sobald Daten auf einem Kanal ankommen prüfen, ob diese verändert werden müssen, sonst weiterleiten
-        pass
+        return pkt
 
     def interceptMessage(filterRule, data):
         # Abgefangene Nachrichten verändern und dann weiterleiten
