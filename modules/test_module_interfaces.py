@@ -23,3 +23,7 @@ def test_load_modules():
     if attribute_error_list:
         pytest.fail(
             f"Following modules did not implement the load_module()-Method: {attribute_error_list}")
+
+def test_module_interface():
+    '''Test the received modules if they implement the necessary methods defined in the autosec_module.py module'''
+    pass

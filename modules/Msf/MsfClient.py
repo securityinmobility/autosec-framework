@@ -1,8 +1,12 @@
+'''Client to communicate with the msf framework running on the host system'''
 from pymetasploit3.msfrpc import MsfRpcClient
-from Msf.msfModule import msfModule
-import subprocess, random, string
+from .msfModule import msfModule
+import subprocess 
+import random
+import string
 
-class msfClient():    
+
+class msfClient():
     def __init__(self):
         self.startMsf()
         self._modules = None

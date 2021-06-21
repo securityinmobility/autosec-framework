@@ -1,5 +1,5 @@
 from core.autosecModule import AutosecModule
-from scapy.all import *
+from scapy.all import load_layer, load_contrib, CANsocket
 
 def load_module():
     return canBridge()

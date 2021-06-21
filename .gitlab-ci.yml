@@ -1,4 +1,4 @@
-image: "python:3.9"
+image: "python:3.8"
 
 before_script:
   - python --version
@@ -6,8 +6,27 @@ before_script:
 
 stages:
   - Static Analysis
+  - Test
 
 pylint:
   stage: Static Analysis
   script:
-  - pylint test/test.py
+  - pylint modules  # Shall also contain core as soon as the code is adapted
+
+Core Unit Test:
+  # Unit Tests of the core system
+  stage: Test
+  script: 
+  - pytest core
+
+Module Interface Test:
+  # Load all available modules and test that the interfaces are implemented (do not raise NotYetImplementedError)
+  stage: Test
+  script:
+  - pytest modules/test_module_interfaces.py
+
+Module Unit Test:
+  # Execute the tests that are implemented within the different modules
+  stage: Test
+  script:
+  - pytest --ignore=modules/test_module_interfaces.py modules 
