@@ -23,6 +23,7 @@
   - alternatively the in-vehicle network could be monitored as modern architectures use a dedicated access point for the internet access
   - this method is risky, because if the vehicle uses TLS connections, this way wouldn't bring much benefit
 - Further analysis of the OEM diagnostic features (in case the ISO-TP channels are known)
+- Implement attacks on the EOL function of airbags (deployment of all pyrotechnic actuators before the vehicle is scraped)
 
 ## Other implementation work
 
