@@ -1,0 +1,42 @@
+name: lint-and-test-workflow
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  setup:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v2
+        with: 
+          python-version: "3.9"
+
+      - name: Display Python Version
+        run: python -c "import sys; print(sys.version)"
+      
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+  pylint:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Lint with pylint
+        run: pylint modules
+  pytest:
+    needs: [setup, pylint]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Core Unit Test
+        run: pytest core
+      - name: Module Interface Test
+        run: pytest modules/test_module_interfaces.py
+      - name: Module Unit Tests
+        run: pytest --ignore=modules/test_module_interfaces.py modules
