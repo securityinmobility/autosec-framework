@@ -5,7 +5,7 @@ webApp: Not yet implemented, webApplication that can be used to control the fram
 
 Requires: webApi = True (error if it is set as false).
 """
-
+import logging
 from .log import Logger
 from .interpreter import Interpreter
 
@@ -17,6 +17,12 @@ class App():
         '''
         Initializes the main app module and its varibles
         '''
+
+        ##Initialize Logging##
+        logging.basicConfig=(filename='../logfiles/autosec.log', 
+            filemode='w', 
+            level=logging.DEBUG,
+            format='%(asctime)s\t%(levelname)s\t%(name)s\t%(message)s')
 
         self.log = Logger()
         self.interpreter = Interpreter()
