@@ -1,7 +1,7 @@
 '''
 Core Module to organize necessary tasks
 '''
-from core import moduleLoader
+from core import module_loader
 
 class Core:
     '''
@@ -12,7 +12,7 @@ class Core:
         Initialize the core module
         '''
         print("Loading available modules")
-        self.modules = moduleLoader.loadAvailableModules()
+        self.modules = module_loader.loadAvailableModules()
         print("Loading modules finished")
 
     def get_moduels(self):
