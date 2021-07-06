@@ -41,8 +41,8 @@ class ArgParser:
         if log_level is None:
             return
         log_level = log_level.upper()
-        if log_level in log.Logger.logLevel.__members__:
-            self.log.setLogLevel(log.Logger.logLevel[log_level])
+        if log_level in log.Logger.LogLevel.__members__:
+            self.log.setLogLevel(log.Logger.LogLevel[log_level])
 
     def _wep_api(self):
         '''
