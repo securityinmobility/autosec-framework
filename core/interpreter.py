@@ -1,10 +1,16 @@
+'''
+Simple Interpreter to create a interactive application
+'''
 from .log import Logger
 
-''' Simple Interpreter to create a interactive application
-'''
-
 class Interpreter:
+    '''
+    Class that provides the functionality of an interpreter
+    '''
     def __init__(self):
+        '''
+        Initializes the interpreter
+        '''
         self.log = Logger()
         self.running = True
 
@@ -15,5 +21,8 @@ class Interpreter:
         self.log.w("Unknown Command")
 
     def loop(self):
+        '''
+        Main loop of the interpreter
+        '''
         while self.running:
             pass
