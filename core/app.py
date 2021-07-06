@@ -23,6 +23,7 @@ class App():
             filemode='w', 
             level=logging.DEBUG,
             format='%(asctime)s\t%(levelname)s\t%(name)s\t%(message)s')
+        self.logger = logging.getLogger("autosec.core")
 
         self.log = Logger()
         self.interpreter = Interpreter()
