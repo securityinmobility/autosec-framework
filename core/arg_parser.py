@@ -3,7 +3,7 @@ Small Argument Parser that reads the command line arguements
 '''
 
 import sys
-from core import log
+import logging
 
 class ArgParser:
     '''
@@ -14,7 +14,8 @@ class ArgParser:
         Initializes the needed variables
         '''
         self.app_instance = appInstance
-        self.log = log.Logger()
+        self.logger = logging.getLogger("autosec.core.argparser")
+        self.logger.setLevel(logging.DEBUG)
 
     def parse(self):
         '''

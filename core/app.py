@@ -6,8 +6,11 @@ webApp: Not yet implemented, webApplication that can be used to control the fram
 Requires: webApi = True (error if it is set as false).
 """
 import logging
-from .log import Logger
+import utils
+import IPython
+from traitlets.config import Config
 from .interpreter import Interpreter
+
 
 class App():
     '''
@@ -18,14 +21,13 @@ class App():
         Initializes the main app module and its varibles
         '''
 
-        ##Initialize Logging##
-        logging.basicConfig=(filename='../logfiles/autosec.log', 
-            filemode='w', 
-            level=logging.DEBUG,
-            format='%(asctime)s\t%(levelname)s\t%(name)s\t%(message)s')
-        self.logger = logging.getLogger("autosec.core")
+        utils.set_top_level_logger("DEBUG")
 
-        self.log = Logger()
+        ##Get Own Logger##
+        self.logger = logging.getLogger("autosec.core.app")
+        self.logger.setLevel(logging.DEBUG)
+        self.logger.info("New App Instance Created")
+
         self.interpreter = Interpreter()
         self.web_api = False
         self.web_app = False
@@ -47,3 +49,11 @@ class App():
         Stop method for the app
         '''
         self.interpreter.running = False
+
+    def _create_ipython_config(self):
+
+        config = Config()
+        
+        config.InteractiveShellApp.exec_lines= [
+
+        ]
