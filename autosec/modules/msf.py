@@ -1,5 +1,5 @@
 '''Module to provide the metasploit framework modules'''
-from modules.Msf.MsfClient import msfClient
+from autosec.modules.Msf.MsfClient import msfClient
 
 def load_module():
     '''Provides a list of all msf modules'''

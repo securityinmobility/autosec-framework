@@ -13,10 +13,13 @@ def set_top_log_level(level="DEBUG"):
     logfile_dir= os.path.join(os.path.dirname(__file__), 
         "..", "logfiles")
     pathlib.Path(logfile_dir).mkdir(parents=True, exist_ok=True)
-    logfile_path = os.path.joing(logfile_dir, "autosec.log")
-    
+    logfile_path = os.path.join(logfile_dir, "autosec.log")
+
     ##Initialize Logging##
     top_logger = logging.getLogger("autosec")
+    ##Remove all current handlers##
+    for handler in top_logger.handlers.copy():
+        top_logger.removeHandler(handler)
     #Create handlers for file & stderr that print every
     #message that reaches the top_logger
     logging_handler_stream = logging.StreamHandler()
@@ -31,9 +34,10 @@ def set_top_log_level(level="DEBUG"):
     top_logger.addHandler(logging_handler_file)
     top_logger.addHandler(logging_handler_stream)
 
-def load_available_modules():
+def load_available_modules(ignore_modules = []):
     '''
-    Loads all available modules in the modules folder
+    Loads all available modules in the modules folder.
+    The modules that are named in the "ignore_modules" list are not loaded.
     '''
 
     logger = logging.getLogger("autosec.core.utils")
@@ -45,7 +49,9 @@ def load_available_modules():
     sys.path.append(modules_path)
     file_list = os.listdir(modules_path)
     modules_list = [file[:-3] for file in file_list if file.endswith(".py")
-        and not file == "__init__.py"]
+        and not file == "__init__.py"
+        and not file.startswith("test")
+        and not file[:-3] in ignore_modules]
     modules = [importlib.import_module(module, "modules") for module in modules_list]
     for module in modules:
         try:
@@ -53,6 +59,6 @@ def load_available_modules():
         except AttributeError as error:
             logger.warning(
                 f"Module {module} was not loaded due to missing load_module() function")
-        except error:
+        except Exception as error:
             logger.exception(f"Module {module} was not loaded due to an unknown error:")
     return module_list

@@ -1,4 +1,4 @@
-from core.autosecModule import AutosecModule
+from autosec.core.autosec_module import AutosecModule
 import json
 
 

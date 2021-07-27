@@ -4,16 +4,17 @@ Small Argument Parser that reads the command line arguements
 
 import sys
 import logging
+import autosec.core.utils as utils
 
 class ArgParser:
     '''
     Class that is responsible to parse the arguments
     '''
-    def __init__(self, appInstance):
+    def __init__(self, app_instance):
         '''
         Initializes the needed variables
         '''
-        self.app_instance = appInstance
+        self.app_instance = app_instance
         self.logger = logging.getLogger("autosec.core.argparser")
         self.logger.setLevel(logging.DEBUG)
 
@@ -26,6 +27,7 @@ class ArgParser:
         self._wep_api()
         self._wep_app()
         self._cli_app()
+        self._disable_auto_load()
 
     def _help(self):
         '''
@@ -42,8 +44,15 @@ class ArgParser:
         if log_level is None:
             return
         log_level = log_level.upper()
-        if log_level in log.Logger.LogLevel.__members__:
-            self.log.setLogLevel(log.Logger.LogLevel[log_level])
+        utils.set_top_log_level(log_level)
+        self.logger.debug(f"logLevel set to {log_level}")
+
+    def _disable_auto_load(self):
+        '''
+        Method that sets a flag that disables the automatic loading 
+        of all avaliable modules during startup
+        '''
+        self.app_instance.disable_auto_load = self._get_named_flag("--disableAutoLoad")
 
     def _wep_api(self):
         '''

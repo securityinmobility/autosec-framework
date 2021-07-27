@@ -1,8 +1,9 @@
-from core.autosecModule import AutosecModule
-from scapy.all import load_layer, load_contrib, CANsocket
+from autosec.core.autosec_module import AutosecModule
+from scapy.all import load_layer, load_contrib
+
 
 def load_module():
-    return canBridge()
+    return [canBridge()]
 
 
 class canBridge(AutosecModule):
@@ -31,7 +32,7 @@ class canBridge(AutosecModule):
         load_layer("can")
         load_contrib("cansocket")
 
-        self.primaryInterface = CANsocket(channep = "vcan0")
+        self.primaryInterface = CANsocket(channel = "vcan0")
 
 
 
@@ -48,7 +49,7 @@ class canBridge(AutosecModule):
         return self.interfaces #Vielleicht nur eine Kopie, damit setter genutzt werden muss?
 
     def setOptions(self, options):
-        return super().setOptions(options)
+        return super().set_options(options)
 
     def run(self):
         return super().run()
