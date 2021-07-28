@@ -161,9 +161,12 @@ def get_mil_status():
                     components_test = "ready"
 
 
-                logger.info("\n" + tabulate([["Misfire monitoring", misfire, misfire_test],
-                                ["Fuel system monitoring", fuel, fuel_test],
-                                ["Comprehensive component monitoring", components, components_test]],
+                logger.info("\n" + tabulate([["Misfire monitoring",
+                                misfire, misfire_test],
+                                ["Fuel system monitoring",
+                                fuel, fuel_test],
+                                ["Comprehensive component monitoring",
+                                components, components_test]],
                                 ["On-Board-Test", "Availability", "Completeness"],
                                 tablefmt="pretty", stralign="left"))
                 logger.info("------------On-Board-Tests that are ignition specific------------")
@@ -220,8 +223,9 @@ def get_mil_status():
                     egr_system_test = "ready"
 
                 if ign == 0:
-                    logger.info("\n" + tabulate([["EGR System monitoring", egr_system, egr_system_test],
-                                    ["Oxygen Sensor Heater monitoring", oxygen_sensor_heater,
+                    logger.info("\n" + tabulate([["EGR System monitoring",
+                                    egr_system, egr_system_test],
+                                    ["Oxygen Sensor Heater monitoring",oxygen_sensor_heater,
                                     oxygen_sensor_heater_test],
                                     ["Oxygen Sensor monitoring", oxygen_sensor, oxygen_sensor_test],
                                     ["ISO/SAE reserved", "-", "-"],
