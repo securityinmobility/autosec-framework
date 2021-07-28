@@ -27,7 +27,6 @@ class ArgParser:
         self._wep_api()
         self._wep_app()
         self._cli_app()
-        self._disable_auto_load()
 
     def _help(self):
         '''
@@ -46,13 +45,6 @@ class ArgParser:
         log_level = log_level.upper()
         utils.set_top_log_level(log_level)
         self.logger.debug(f"logLevel set to {log_level}")
-
-    def _disable_auto_load(self):
-        '''
-        Method that sets a flag that disables the automatic loading 
-        of all avaliable modules during startup
-        '''
-        self.app_instance.disable_auto_load = self._get_named_flag("--disableAutoLoad")
 
     def _wep_api(self):
         '''

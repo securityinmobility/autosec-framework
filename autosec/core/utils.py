@@ -44,9 +44,7 @@ def load_available_modules(ignore_modules = []):
     logger.setLevel(logging.WARNING)
 
     module_list = []
-    modules_path = os.path.join(os.path.dirname(__file__), "..", "modules")
-    #Make this better by directly referring from the main dir?
-    sys.path.append(modules_path)
+    modules_path = _add_module_path()
     file_list = os.listdir(modules_path)
     modules_list = [file[:-3] for file in file_list if file.endswith(".py")
         and not file == "__init__.py"
@@ -62,3 +60,26 @@ def load_available_modules(ignore_modules = []):
         except Exception as error:
             logger.exception(f"Module {module} was not loaded due to an unknown error:")
     return module_list
+
+
+def load_module(module_name):
+
+    logger = logging.getLogger("autosec.core.utils")
+    logger.setLevel(logging.WARNING)
+    _add_module_path()
+    py_module = importlib.import_module(module_name, "modules")
+    module = None
+    try:
+       module = py_module.load_module()
+    except AttributeError as error:
+        logger.warning(
+            f"Module {module_name} was not loaded due to missing load_module() function")
+    except Exception as error:
+        logger.exception(f"Module {module_name} was not loaded due to an unknwon error:")
+    return module
+
+def _add_module_path():
+    modules_path = os.path.join(os.path.dirname(__file__), "..", "modules")
+    #Make this better by directly referring from the main dir?
+    sys.path.append(modules_path)
+    return modules_path

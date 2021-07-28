@@ -30,7 +30,6 @@ class App():
         self.web_api = False
         self.web_app = False
         self.cli_app = False
-        self.disable_auto_load = False
 
     def start(self):
         '''
@@ -40,8 +39,7 @@ class App():
             self.log.w("Web Api is not yet implemented")
         if self.web_app:
             self.log.w("Web App is not yet implemented")
-        if not self.disable_auto_load:
-            self.modules = utils.load_available_modules()
+
 
         IPython.embed()
 
