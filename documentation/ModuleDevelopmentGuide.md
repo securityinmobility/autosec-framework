@@ -6,6 +6,7 @@ This guide is meant to be used by any person that wants (or has to) implement a 
 Date | Author | Changes
 --- | --- | ---
 07.07.2021 | Marco Michl | Initial creation, description of installation, logging, repo and CI-Structure
+29.07.2021 | Marco Michl | Further description on how the framework itself is started and used
 
 ## Installation
 
@@ -16,6 +17,14 @@ To use the framework (and to develop a own module) the needed libs have to be in
 As the students of the THI are not able to access the CARISSMA GitLab server, the project is hosted on [github.com](https://github.com/marcomichl/autosec-framework). As of now, the project is private and the authors are individually authorized to access the project. For this purpose they have to create a github account.
 
 To be able to collaborate, each student shall create its own development branches to create their modules. The branches can be merged into the master branch at any time. As soon as there is a push to the master branch, several Github-actions are triggered. These actions mainly check the code style by applying [pylint](https://pypi.org/project/pylint/). Additionally the implementes tests are executed by [pytest](https://docs.pytest.org/en/6.2.x/). If the code style check fails, the tests are not executed. To reduce the number of pushes that result in failed tests, each contributer should check if the executed tests fail bevore the code is pushed to the master branch. This can be done by performing `pylint` and `pytest` in the main directory of the framework. A script that can be used to perform these tests locally will be created (at some moment in the future).
+
+## Starting the Framwork
+
+The framework currently uses a command-line interface. This is created by the usage of IPython's embedded module. Therefore, the framework is controlled by the creation of python code.
+
+To start the framework, it the file "start" in the root directory shall be executed. This script then starts the framework.
+
+Currently, modules can be loaded by using the "utils.load_module("module-name")" method. The creation of a own namespace that can be directly accessed and that contains the most-used methods is on the to-do-list.
 
 ## Module Interface
 
