@@ -24,7 +24,6 @@ def get_supported_pid(pid):
     )
 
     try:
-        # Get supported PIDs [01 - 20]
         bus.send(msg_pid)
         logger.info(f"Message sent on {bus.channel_info}")
 
@@ -34,6 +33,7 @@ def get_supported_pid(pid):
         else:
             while message.arbitration_id != 2024:
                 message = bus.recv()
+                break
             else:
             # convert bytearray in binary
                 byte_list = []
@@ -115,6 +115,7 @@ def get_mil_status():
         else:
             while message.arbitration_id != 2024:
                 message = bus.recv()
+                break
             else:
             # convert bytearray in binary
                 byte_list = []
@@ -279,6 +280,7 @@ def get_fuelsystem_status():
         else:
             while message.arbitration_id != 2024:
                 message = bus.recv()
+                break
             else:
                 switcher = {
                     0: "The motor is off",
@@ -331,6 +333,7 @@ def get_engine_load():
         else:
             while message.arbitration_id != 2024:
                 message = bus.recv()
+                break
             else:
                 load_value = round(message.data[3] / 2.55, 2)
                 logger.info(f"Calculated Engine load: {load_value} %")
@@ -359,6 +362,7 @@ def get_engine_coolant_temp():
         else:
             while message.arbitration_id != 2024:
                 message = bus.recv()
+                break
             else:
                 eng_temp = round(message.data[3] - 40, 2)
                 logger.info(f"Engine Coolant Temperature: {eng_temp} °C")
@@ -387,6 +391,7 @@ def get_engine_speed():
         else:
             while message.arbitration_id != 2024:
                 message = bus.recv()
+                break
             else:
                 speed = round(((256 * message.data[3]) + message.data[4]) / 4, 2)
                 logger.info(f"Vehicle speed: {speed} RPM")
@@ -415,6 +420,7 @@ def get_vehicle_speed():
         else:
             while message.arbitration_id != 2024:
                 message = bus.recv()
+                break
             else:
                 speed = message.data[3]
                 logger.info(f"Vehicle speed: {speed} km/h")
@@ -443,6 +449,7 @@ def get_obd_standard():
         else:
             while message.arbitration_id != 2024:
                 message = bus.recv()
+                break
             else:
                 switcher = {
                     1: "OBD-II as defined by the CARB",
