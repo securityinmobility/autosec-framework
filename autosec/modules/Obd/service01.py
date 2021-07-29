@@ -9,7 +9,7 @@ from tabulate import tabulate
 logger = logging.getLogger("autosec.modules.service01")
 logger.setLevel(logging.DEBUG)
 
-def get_supported_pid(pid):
+def get_supported_pid(device, pid):
     '''
     PID 0x00, 0x20, 0x40, 0x60, 0x80, 0xA0, 0xC0
     Provides the available PIDs of the ECU
@@ -17,7 +17,7 @@ def get_supported_pid(pid):
     valid = [0x00, 0x20, 0x40, 0x60, 0x80, 0xA0, 0xC0]
     if pid not in valid:
         raise ValueError("Valid PIDs:", [hex(i) for i in valid])
-    bus = can.interface.Bus(bustype='socketcan', channel='vcan0')
+    bus = can.interface.Bus(bustype='socketcan', channel=device)
 
     msg_pid = can.Message(
     arbitration_id=0x7DF,data=[0x02, 0x01, pid], is_extended_id=False
@@ -93,13 +93,13 @@ def get_supported_pid(pid):
     except can.CanError:
         logger.warning("Message NOT sent")
 
-def get_mil_status():
+def get_mil_status(device):
     '''
     PID 01
     Monitor status sice DTCs cleared. Includes malfunction indicator lamp status
     and number of DTCs.
     '''
-    bus = can.interface.Bus(bustype='socketcan', channel='vcan0')
+    bus = can.interface.Bus(bustype='socketcan', channel=device)
 
     msg = can.Message(
     arbitration_id=0x7DF,data=[0x02, 0x01, 0x01], is_extended_id=False
@@ -259,12 +259,12 @@ def get_mil_status():
     except can.CanError:
         logger.warning("Message NOT sent")
 
-def get_fuelsystem_status():
+def get_fuelsystem_status(device):
     '''
     PID 03
     Fuel system status
     '''
-    bus = can.interface.Bus(bustype='socketcan', channel='vcan0')
+    bus = can.interface.Bus(bustype='socketcan', channel=device)
 
     msg = can.Message(
     arbitration_id=0x7DF,data=[0x02, 0x01, 0x03], is_extended_id=False
@@ -312,12 +312,12 @@ def get_fuelsystem_status():
     except can.CanError:
         logger.warning("Message NOT sent")
 
-def get_engine_load():
+def get_engine_load(device):
     '''
     PID 04
     Calculated engine load
     '''
-    bus = can.interface.Bus(bustype='socketcan', channel='vcan0')
+    bus = can.interface.Bus(bustype='socketcan', channel=device)
 
     msg = can.Message(
     arbitration_id=0x7DF,data=[0x02, 0x01, 0x04], is_extended_id=False
@@ -341,12 +341,12 @@ def get_engine_load():
     except can.CanError:
         logger.warning("Message NOT sent")
 
-def get_engine_coolant_temp():
+def get_engine_coolant_temp(device):
     '''
     PID 05
     Engine coolant temperature
     '''
-    bus = can.interface.Bus(bustype='socketcan', channel='vcan0')
+    bus = can.interface.Bus(bustype='socketcan', channel=device)
 
     msg = can.Message(
     arbitration_id=0x7DF,data=[0x02, 0x01, 0x05], is_extended_id=False
@@ -370,12 +370,12 @@ def get_engine_coolant_temp():
     except can.CanError:
         logger.warning("Message NOT sent")
 
-def get_engine_speed():
+def get_engine_speed(device):
     '''
     PID 0C
     Engine speed
     '''
-    bus = can.interface.Bus(bustype='socketcan', channel='vcan0')
+    bus = can.interface.Bus(bustype='socketcan', channel=device)
 
     msg = can.Message(
     arbitration_id=0x7DF,data=[0x02, 0x01, 0x0C], is_extended_id=False
@@ -399,12 +399,12 @@ def get_engine_speed():
     except can.CanError:
         logger.warning("Message NOT sent")
 
-def get_vehicle_speed():
+def get_vehicle_speed(device):
     '''
     PID 0D
     Vehicle Speed
     '''
-    bus = can.interface.Bus(bustype='socketcan', channel='vcan0')
+    bus = can.interface.Bus(bustype='socketcan', channel=device)
 
     msg = can.Message(
     arbitration_id=0x7DF,data=[0x02, 0x01, 0x0D], is_extended_id=False
@@ -428,12 +428,12 @@ def get_vehicle_speed():
     except can.CanError:
         logger.info("Message NOT sent")
 
-def get_obd_standard():
+def get_obd_standard(device):
     '''
     PID 1C
     Get OBD standard this vehicle conforms to
     '''
-    bus = can.interface.Bus(bustype='socketcan', channel='vcan0')
+    bus = can.interface.Bus(bustype='socketcan', channel=device)
 
     msg = can.Message(
     arbitration_id=0x7DF,data=[0x02, 0x01, 0x1C], is_extended_id=False
