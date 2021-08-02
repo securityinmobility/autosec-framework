@@ -7,7 +7,7 @@ import isotp
 
 from vininfo import Vin
 
-logger = logging.getLogger("autosec.modules.service09")
+logger = logging.getLogger("autosec.modules.Obd.service09")
 logger.setLevel(logging.INFO)
 
 def get_vin():

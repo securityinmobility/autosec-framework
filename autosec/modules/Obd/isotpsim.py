@@ -7,7 +7,7 @@ conf.contribs['CANSocket'] = {'use-python-can': False}
 load_contrib('cansocket')
 load_contrib('isotp')
 
-logger = logging.getLogger("autosec.modules.isotpsim")
+logger = logging.getLogger("autosec.modules.Obd.isotpsim")
 logger.setLevel(logging.INFO)
 
 try:
