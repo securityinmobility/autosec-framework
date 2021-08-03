@@ -41,10 +41,17 @@ class ObdService01(AutosecModule):
             description = "Module that interprets OBD-II service 01 PIDs"))
 
     def get_options(self):
-        pass
+        return dict(
+            interface = dict(name = "interface",
+                required = True,
+                default = "vcan0",
+                unit = "SocketCAN Device Name",
+                range = None,
+                value = self.interface),
+            )   
 
     def set_options(self, options):
-        pass
+        self.interface = options
 
     def run(self):
         pids = [0x00, 0x20, 0x40, 0x60, 0x80, 0xA0, 0xC0]
