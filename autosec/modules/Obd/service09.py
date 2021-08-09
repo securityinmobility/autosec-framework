@@ -10,7 +10,7 @@ from vininfo import Vin
 logger = logging.getLogger("autosec.modules.Obd.service09")
 logger.setLevel(logging.INFO)
 
-def get_vin():
+def get_vin(interface):
     '''
     Gets the VIN number from a CAN message and decodes it.
     '''
@@ -21,7 +21,7 @@ def get_vin():
     #s.set_ll_opts(...)
 
     try:
-        socket.bind("vcan0", isotp.Address(rxid=0x7E8, txid=0x7DF))
+        socket.bind(interface, isotp.Address(rxid=0x7E8, txid=0x7DF))
         socket.send(b"\x09\x02")
     except OSError as err:
         logger.warning(f"Message could not be sent {err}")
