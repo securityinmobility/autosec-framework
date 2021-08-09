@@ -5,35 +5,37 @@ import logging
 
 from scapy.all import conf, load_contrib
 
-def scan_endpoints(interface):
+logger = logging.getLogger("autosec.modules.Obd.isotp_endpoints")
+logger.setLevel(logging.INFO)
+
+def scan_endpoints(interface, scan_type, scan_range, extended_range):
     '''
     Scan for ISO-TP Endpoints
     '''
-    logger = logging.getLogger("autosec.modules.Obd.isotp_endpoints")
-    logger.setLevel(logging.INFO)
-
     conf.contribs['ISOTP'] = {'use-can-isotp-kernel-module': True}
     conf.contribs['CANSocket'] = {'use-python-can': False}
     load_contrib('cansocket')
     load_contrib('isotp')
 
+    if scan_type == "normal":
+        scan_endpoints_normal(interface, scan_range)
+    elif scan_type == "extended":
+        scan_endpoints_extended(interface, scan_range, extended_range)
+    else:
+        scan_endpoints_normal(interface, scan_range)
+        scan_endpoints_extended(interface, scan_range, extended_range)
+
+def scan_endpoints_normal(interface, scan_range):
     logger.info("Starting scan for normal IDs...")
-    socks = scan_endpoints_normal(interface)
+    socks = ISOTPScan(CANSocket(interface), scan_range, can_interface="vcan0",
+                                output_format="text", verbose=True)
     logger.info("Scan for normal IDs done.")
     logger.info(socks)
 
+def scan_endpoints_extended(interface, scan_range, extended_range):
     logger.info("Starting scan for extended IDs...")
-    socks_extended = scan_endpoints_extended(interface)
+    socks_extended = ISOTPScan(CANSocket(interface), scan_range, can_interface="vcan0",
+                                extended_addressing=True, extended_scan_range=extended_range,
+                                output_format="text", verbose=True)
     logger.info("Scan for extended IDs done.")
     logger.info(socks_extended)
-
-def scan_endpoints_normal(interface):
-    socks = ISOTPScan(CANSocket(interface), range(0x700, 0x7ff), can_interface="vcan0",
-                                output_format="text", verbose=True)
-    return socks
-
-def scan_endpoints_extended(interface):
-    socks_extended = ISOTPScan(CANSocket(interface), range(0x700, 0x7ff), can_interface="vcan0",
-                                extended_addressing=True, extended_scan_range=range(0x40, 0x5a),
-                                output_format="text", verbose=True)
-    return socks_extended
