@@ -1,7 +1,6 @@
 '''
 Load Obd modules
 '''
-import logging
 from autosec.core.autosec_module import AutosecModule
 from autosec.modules.Obd import service01, service09, isotp_endpoints
 
@@ -17,10 +16,16 @@ class ObdServices(AutosecModule):
     Class that provides the service01 and service09 functions.
     '''
     def __init__(self):
-        self.logger = logging.getLogger("autosec.modules.obd")
-        self.logger.setLevel(logging.WARNING)
+        super().__init__()
 
-        self.interface = "vcan0"
+        #self.logger = logging.getLogger("autosec.modules.obd")
+        #self.logger.setLevel(logging.WARNING)
+
+        self._add_option("interface",
+            description="Interface for the ObdServices",
+            required=True)
+
+        self.interface = None
 
         self.functions = {
             "01": service01.get_mil_status,
@@ -40,24 +45,19 @@ class ObdServices(AutosecModule):
             interface = "CAN",
             description = "Module that interprets OBD-II service 01 and 09 PIDs"))
 
-    def get_options(self):
-        return dict(
-            interface = dict(name = "interface",
-                required = True,
-                default = "vcan0",
-                unit = "SocketCAN Device Name",
-                range = None,
-                value = self.interface),
-            )
-
-    def set_options(self, options):
-        self.interface = options
-
     def run(self):
-        service09.get_vin()
-        self.check_pid_and_run()
+        try:
+            super().run()
+        except ValueError as error:
+            self.logger.warning(error)
+            return
 
-    def check_pid_and_run(self):
+        self.interface = self._options["interface"]["value"]
+
+        service09.get_vin(self.interface)
+        self._check_pid_and_run()
+
+    def _check_pid_and_run(self):
         pids = [0x00, 0x20, 0x40, 0x60, 0x80, 0xA0, 0xC0]
         for pid in pids:
             pid_list = service01.get_supported_pid(self.interface, pid)
@@ -73,31 +73,50 @@ class IsoTpServices(AutosecModule):
     Class that provides the isotp endpoints scan.
     '''
     def __init__(self):
-        self.logger = logging.getLogger("autosec.modules.obd")
-        self.logger.setLevel(logging.WARNING)
+        super().__init__()
 
-        self.interface = "vcan0"
+        #self.logger = logging.getLogger("autosec.modules.obd")
+        #self.logger.setLevel(logging.WARNING)
+
+        self._add_option("interface",
+            description="Interface for the ObdServices",
+            required=True)
+        
+        self._add_option("scanType",
+            description="Scan Type for normal, extended or both",
+            required=False)
+
+        self._add_option("scanRange",
+            description="Set scan range",
+            required=True)
+
+        self._add_option("extendedRange",
+            description="Set scan range for extended IDs")
+
+        self.interface = None
+        self.scan_type = None
+        self.scan_range = None
+        self.extended_range = None    
 
     def get_info(self):
         return(dict(
-            name = "ObdService01",
+            name = "IsoTpServices",
             source = "autosec",
             type = "payload",
             interface = "CAN",
-            description = "Module that interprets OBD-II service 01 PIDs"))
-
-    def get_options(self):
-        return dict(
-            interface = dict(name = "interface",
-                required = True,
-                default = "vcan0",
-                unit = "SocketCAN Device Name",
-                range = None,
-                value = self.interface),
-            )
-
-    def set_options(self, options):
-        self.interface = options
+            description = "Module that interprets services that run over ISO-TP"))
 
     def run(self):
-        isotp_endpoints.scan_endpoints(self.interface)
+        try:
+            super().run()
+        except ValueError as error:
+            self.logger.warning(error)
+            return
+
+        self.interface = self._options["interface"]["value"]
+        self.scan_type = self._options["scanType"]["value"]
+        # example: range(0x700,0x7ff), ext: range(0x40,0x5a)
+        self.scan_range = self._options["scanRange"]["value"]
+        self.extended_range = self._options["extendedRange"]["value"]
+
+        isotp_endpoints.scan_endpoints(self.interface, self.scan_type, self.scan_range, self.extended_range)
