@@ -25,6 +25,12 @@ class ObdServices(AutosecModule):
             description="Interface for the ObdServices",
             required=True)
 
+        self._add_option("checkPID",
+            description="Run a check for available ECU PIDs and runs the corresponding functions",
+            required=False,
+            default=True,
+            value=True)
+
         self.interface = None
 
         self.functions = {
@@ -53,9 +59,16 @@ class ObdServices(AutosecModule):
             return
 
         self.interface = self._options["interface"]["value"]
+        self.check_pids = self._options["checkPID"]["value"]
 
         service09.get_vin(self.interface)
-        self._check_pid_and_run()
+        
+        if self.check_pids is True:
+            self._check_pid_and_run()
+        else:
+            self.logger.warning("Running all functions, not checking for ECU PIDs")
+            for function in self.functions.values():
+                function(self.interface)
 
     def _check_pid_and_run(self):
         pids = [0x00, 0x20, 0x40, 0x60, 0x80, 0xA0, 0xC0]
@@ -91,12 +104,10 @@ class IsoTpServices(AutosecModule):
             required=True)
 
         self._add_option("extendedRange",
-            description="Set scan range for extended IDs")
+            description="Set scan range for extended IDs",
+            required=False)
 
         self.interface = None
-        self.scan_type = None
-        self.scan_range = None
-        self.extended_range = None    
 
     def get_info(self):
         return(dict(
