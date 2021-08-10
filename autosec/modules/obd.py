@@ -32,6 +32,7 @@ class ObdServices(AutosecModule):
             value=True)
 
         self.interface = None
+        self.check_pids = True
 
         self.functions = {
             "01": service01.get_mil_status,
@@ -62,7 +63,7 @@ class ObdServices(AutosecModule):
         self.check_pids = self._options["checkPID"]["value"]
 
         service09.get_vin(self.interface)
-        
+
         if self.check_pids is True:
             self._check_pid_and_run()
         else:
@@ -94,7 +95,7 @@ class IsoTpServices(AutosecModule):
         self._add_option("interface",
             description="Interface for the ObdServices",
             required=True)
-        
+
         self._add_option("scanType",
             description="Scan Type for normal, extended or both",
             required=False)
@@ -108,6 +109,9 @@ class IsoTpServices(AutosecModule):
             required=False)
 
         self.interface = None
+        self.scan_type = None
+        self.scan_range = None
+        self.extended_range = None
 
     def get_info(self):
         return(dict(
@@ -130,4 +134,5 @@ class IsoTpServices(AutosecModule):
         self.scan_range = self._options["scanRange"]["value"]
         self.extended_range = self._options["extendedRange"]["value"]
 
-        isotp_endpoints.scan_endpoints(self.interface, self.scan_type, self.scan_range, self.extended_range)
+        isotp_endpoints.scan_endpoints(self.interface, self.scan_type,
+                                       self.scan_range, self.extended_range)

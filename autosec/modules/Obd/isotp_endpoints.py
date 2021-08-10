@@ -26,6 +26,9 @@ def scan_endpoints(interface, scan_type, scan_range, extended_range):
         scan_endpoints_extended(interface, scan_range, extended_range)
 
 def scan_endpoints_normal(interface, scan_range):
+    '''
+    Scan for ISO-TP Endpoints
+    '''
     logger.info("Starting scan for normal IDs...")
     socks = ISOTPScan(CANSocket(interface), scan_range, can_interface="vcan0",
                                 output_format="text", verbose=True)
@@ -33,6 +36,9 @@ def scan_endpoints_normal(interface, scan_range):
     logger.info(socks)
 
 def scan_endpoints_extended(interface, scan_range, extended_range):
+    '''
+    Scan for Extended ISO-TP Endpoints
+    '''
     logger.info("Starting scan for extended IDs...")
     socks_extended = ISOTPScan(CANSocket(interface), scan_range, can_interface="vcan0",
                                 extended_addressing=True, extended_scan_range=extended_range,
