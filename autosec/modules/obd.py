@@ -35,13 +35,13 @@ class ObdServices(AutosecModule):
         self.check_pids = True
 
         self.functions = {
-            "01": service01.get_mil_status,
-            "03": service01.get_fuelsystem_status,
-            "04": service01.get_engine_load,
-            "05": service01.get_engine_coolant_temp,
-            "0C": service01.get_engine_speed,
-            "0D": service01.get_vehicle_speed,
-            "1C": service01.get_obd_standard
+            0x01: service01.get_mil_status,
+            0x03: service01.get_fuelsystem_status,
+            0x04: service01.get_engine_load,
+            0x05: service01.get_engine_coolant_temp,
+            0x0C: service01.get_engine_speed,
+            0x0D: service01.get_vehicle_speed,
+            0x1C: service01.get_obd_standard
         }
 
     def get_info(self):
@@ -76,11 +76,11 @@ class ObdServices(AutosecModule):
         for pid in pids:
             pid_list = service01.get_supported_pid(self.interface, pid)
             if pid_list is None:
-                self.logger.warning(f"No list returned for PID {hex(pid)}")
+                self.logger.warning(f"No list returned for PID 0x{pid:02X}")
             else:
                 for available_pid in pid_list:
                     if available_pid in self.functions:
-                        self.functions[available_pid](self.interface)
+                        self.functions[available_pid](self.interface, available_pid)
 
 class IsoTpServices(AutosecModule):
     '''
