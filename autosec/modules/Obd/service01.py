@@ -10,7 +10,9 @@ logger = logging.getLogger("autosec.modules.Obd.service01")
 logger.setLevel(logging.DEBUG)
 
 def _send_message(bus, msg, pid):
-
+    '''
+    Sends the given message over the given CAN Bus
+    '''
     try:
         bus.send(msg)
         logger.debug(f"Message sent on {bus.channel_info}: Running PID 0x{pid:02X}")
@@ -18,7 +20,9 @@ def _send_message(bus, msg, pid):
         logger.warning("Message NOT sent")
 
 def _receive_message(bus):
-
+    '''
+    Receives a message from the CAN Bus
+    '''
     message = bus.recv(10.0)
     if message is None:
         logger.error("Timeout occured, no message.")
@@ -29,32 +33,47 @@ def _receive_message(bus):
     return message
 
 def _fill_table(byte_list, byte_1, byte_2, bit, tests):
-
+    '''
+    Helper function for get_mil_status()
+    '''
     tests_table = {}
     if len(tests) == 3:
         for offset, name in enumerate(tests):
+            tests_table[name] = {}
             if byte_list[byte_1][5 + offset] == "1":
                 supported = "supported"
-            tests_table[name] = (supported,)
+            tests_table[name]["Availability"] = supported
             if byte_list[byte_2][3 - offset] == "0":
                 ready = "ready"
-            tests_table[name] += (ready,)
+            tests_table[name]["Completeness"] = ready
 
             ready = "not ready"
             supported = "not supported"
     else:
         for offset, name in enumerate(tests):
+            tests_table[name] = {}
             if byte_list[byte_1][bit + offset] == "1":
                 supported = "supported"
-            tests_table[name] = (supported,)
+            tests_table[name]["Availability"] = supported
             if byte_list[byte_2][bit + offset] == "0":
                 ready = "ready"
-            tests_table[name] += (ready,)
+            tests_table[name]["Completeness"] = ready
 
             ready = "not ready"
             supported = "not supported"
 
     return tests_table
+
+def _printable_table(tests, tests_table):
+    '''
+    Returns a table for tabulate
+    '''
+    printable_table = []
+    for test in tests:
+        availability = tests_table[test]["Availability"]
+        comepleteness = tests_table[test]["Completeness"]
+        printable_table += [[test, availability, comepleteness]]
+    return printable_table
 
 def get_supported_pid(interface, pid):
     '''
@@ -179,7 +198,7 @@ def get_mil_status(interface, pid):
 
     tests_table = _fill_table(byte_list, 4, 4, None, tests)
     mil_info = {**mil_info, **tests_table}
-    logger.debug("\n" + tabulate([(k,) + v for k,v in tests_table.items()], headers=headers,
+    logger.debug("\n" + tabulate(_printable_table(tests, tests_table), headers=headers,
                     tablefmt="pretty", stralign="left"))
     ignition = {
         "0": "Spark ignition (Otto/Wankel engine)",
@@ -197,7 +216,7 @@ def get_mil_status(interface, pid):
 
         tests_table = _fill_table(byte_list, 5, 6, 0, tests)
         mil_info = {**mil_info, **tests_table}
-        logger.debug("\n" + tabulate([(k,) + v for k,v in tests_table.items()], headers,
+        logger.debug("\n" + tabulate(_printable_table(tests, tests_table), headers,
                     tablefmt="pretty", stralign="left"))
     else:
         tests = ["EGR and/or VVT System", "PM filter monitoring",
@@ -207,10 +226,11 @@ def get_mil_status(interface, pid):
 
         tests_table = _fill_table(byte_list, 5, 6, 0, tests)
         mil_info = {**mil_info, **tests_table}
-        logger.debug("\n" + tabulate([(k,) + v for k,v in tests_table.items()],
-                    headers, tablefmt="pretty", stralign="left"))
+        logger.debug("\n" + tabulate(_printable_table(tests, tests_table), headers,
+                    tablefmt="pretty", stralign="left"))
 
     #logger.debug(mil_info)
+
     return mil_info
 
 def get_fuelsystem_status(interface, pid):
