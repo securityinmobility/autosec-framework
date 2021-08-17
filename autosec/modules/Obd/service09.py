@@ -8,7 +8,7 @@ import isotp
 from vininfo import Vin
 
 logger = logging.getLogger("autosec.modules.Obd.service09")
-logger.setLevel(logging.INFO)
+logger.setLevel(logging.DEBUG)
 
 def get_vin(interface):
     '''
@@ -29,7 +29,7 @@ def get_vin(interface):
     msg = socket.recv()
     if msg is not None:
         vin = Vin(str(msg[3:], "utf-8"))
-        logger.info(f"\nVIN: {vin}\nCountry: {vin.country}\nManufacturer: {vin.manufacturer}"
+        logger.debug(f"\nVIN: {vin}\nCountry: {vin.country}\nManufacturer: {vin.manufacturer}"
                     f"\nRegion: {vin.region}\nYears: {vin.years}")
     else:
         logger.warning("Message could not be received")

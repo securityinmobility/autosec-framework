@@ -44,6 +44,8 @@ class ObdServices(AutosecModule):
             0x1C: service01.get_obd_standard
         }
 
+        self.info_dict = {}
+
     def get_info(self):
         return(dict(
             name = "ObdServices",
@@ -57,7 +59,7 @@ class ObdServices(AutosecModule):
             super().run()
         except ValueError as error:
             self.logger.warning(error)
-            return
+            return error
 
         self.interface = self._options["interface"]["value"]
         self.check_pids = self._options["checkPID"]["value"]
@@ -65,11 +67,15 @@ class ObdServices(AutosecModule):
         service09.get_vin(self.interface)
 
         if self.check_pids is True:
-            self._check_pid_and_run()
-        else:
-            self.logger.warning("Running all functions, not checking for ECU PIDs")
-            for function in self.functions.values():
-                function(self.interface)
+            self.info_dict = self._check_pid_and_run()
+            return self.info_dict
+
+        self.logger.warning("Running all functions, not checking for ECU PIDs")
+        for pid, function in self.functions.items():
+            func_info = function(self.interface, pid)
+            self.info_dict = {**self.info_dict, **func_info}
+        #self.logger.debug(self.info_dict)
+        return self.info_dict
 
     def _check_pid_and_run(self):
         pids = [0x00, 0x20, 0x40, 0x60, 0x80, 0xA0, 0xC0]
@@ -80,7 +86,10 @@ class ObdServices(AutosecModule):
             else:
                 for available_pid in pid_list:
                     if available_pid in self.functions:
-                        self.functions[available_pid](self.interface, available_pid)
+                        func_info = self.functions[available_pid](self.interface, available_pid)
+                        self.info_dict = {**self.info_dict, **func_info}
+        #self.logger.debug(self.info_dict)
+        return self.info_dict
 
 class IsoTpServices(AutosecModule):
     '''
@@ -122,6 +131,7 @@ class IsoTpServices(AutosecModule):
             description = "Module that interprets services that run over ISO-TP"))
 
     def run(self):
+        
         try:
             super().run()
         except ValueError as error:

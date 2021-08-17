@@ -13,7 +13,7 @@ def _send_message(bus, msg, pid):
 
     try:
         bus.send(msg)
-        logger.info(f"Message sent on {bus.channel_info}: Running PID 0x{pid:02X}")
+        logger.debug(f"Message sent on {bus.channel_info}: Running PID 0x{pid:02X}")
     except can.CanError:
         logger.warning("Message NOT sent")
 
@@ -130,7 +130,7 @@ def get_supported_pid(interface, pid):
         0xC0: "[C1 - E0]",
     }
     curr_pid = switcher.get(pid, "Invalid")
-    logger.info(f"List of supported PIDs {curr_pid}:\n%s",
+    logger.debug(f"List of supported PIDs {curr_pid}:\n%s",
                 ["0x{:02X}".format(i) for i in supported_pids])
 
     return supported_pids
@@ -164,12 +164,12 @@ def get_mil_status(interface, pid):
     state = "OFF"
     if byte_list[3][0] == "1":
         state = "ON"
-    logger.info(f"MIL: {state}")
+    logger.debug(f"MIL: {state}")
     mil_info["Malfunction indicator lamp"] = state
 
 # Number of DTCs
     dtc_count = int(byte_list[3][1:],2)
-    logger.info(f"Number of emission-related DTCs: {dtc_count}")
+    logger.debug(f"Number of emission-related DTCs: {dtc_count}")
     mil_info["Number of emission-related DTCs"] = dtc_count
 
 # Availablity and Completeness of On-Board-Tests
@@ -179,14 +179,14 @@ def get_mil_status(interface, pid):
 
     tests_table = _fill_table(byte_list, 4, 4, None, tests)
     mil_info = {**mil_info, **tests_table}
-    logger.info("\n" + tabulate([(k,) + v for k,v in tests_table.items()], headers=headers,
+    logger.debug("\n" + tabulate([(k,) + v for k,v in tests_table.items()], headers=headers,
                     tablefmt="pretty", stralign="left"))
     ignition = {
         "0": "Spark ignition (Otto/Wankel engine)",
         "1": "Compression ignition (Diesel engine)"
     }
-    logger.info("------------On-Board-Tests that are ignition specific------------")
-    logger.info(f"Ignition: {ignition[byte_list[4][4]]}")
+    logger.debug("------------On-Board-Tests that are ignition specific------------")
+    logger.debug(f"Ignition: {ignition[byte_list[4][4]]}")
     mil_info["Ignition"] = ignition[byte_list[4][4]]
 
     if byte_list[4][4] == "0":
@@ -197,7 +197,7 @@ def get_mil_status(interface, pid):
 
         tests_table = _fill_table(byte_list, 5, 6, 0, tests)
         mil_info = {**mil_info, **tests_table}
-        logger.info("\n" + tabulate([(k,) + v for k,v in tests_table.items()], headers,
+        logger.debug("\n" + tabulate([(k,) + v for k,v in tests_table.items()], headers,
                     tablefmt="pretty", stralign="left"))
     else:
         tests = ["EGR and/or VVT System", "PM filter monitoring",
@@ -207,10 +207,10 @@ def get_mil_status(interface, pid):
 
         tests_table = _fill_table(byte_list, 5, 6, 0, tests)
         mil_info = {**mil_info, **tests_table}
-        logger.info("\n" + tabulate([(k,) + v for k,v in tests_table.items()],
+        logger.debug("\n" + tabulate([(k,) + v for k,v in tests_table.items()],
                     headers, tablefmt="pretty", stralign="left"))
 
-    logger.info(mil_info)
+    #logger.debug(mil_info)
     return mil_info
 
 def get_fuelsystem_status(interface, pid):
@@ -240,7 +240,7 @@ def get_fuelsystem_status(interface, pid):
     }
     fs_status = switcher.get(message.data[3], "Invalid Response")
     fs_info["Fuel system #1"] = fs_status
-    logger.info(f"Fuel system #1:\n{fs_status}")
+    logger.debug(f"Fuel system #1:\n{fs_status}")
 
     # If the 2nd byte is exists, then there are two fuel systems
     # that are identically encoded
@@ -256,9 +256,9 @@ def get_fuelsystem_status(interface, pid):
     }
     fs_status2 = switcher.get(message.data[4], "Invalid Response")
     fs_info["Fuel system #2"] = fs_status2
-    logger.info(f"Fuel system #2:\n{fs_status2}")
+    logger.debug(f"Fuel system #2:\n{fs_status2}")
 
-    logger.info(fs_info)
+    #logger.debug(fs_info)
     return fs_info
 
 def get_engine_load(interface, pid):
@@ -279,9 +279,9 @@ def get_engine_load(interface, pid):
     eload_info = {}
     load_value = round(message.data[3] / 2.55, 2)
     eload_info["Calculated Engine load[%]"] = load_value
-    logger.info(f"Calculated Engine load: {load_value} %")
+    logger.debug(f"Calculated Engine load: {load_value} %")
 
-    logger.info(eload_info)
+    #logger.debug(eload_info)
     return eload_info
 
 def get_engine_coolant_temp(interface, pid):
@@ -302,9 +302,9 @@ def get_engine_coolant_temp(interface, pid):
     ecoolant_info = {}
     ecoolant_temp = round(message.data[3] - 40, 2)
     ecoolant_info["Engine Coolant Temperature[°C]"] = ecoolant_temp
-    logger.info(f"Engine Coolant Temperature: {ecoolant_temp} °C")
+    logger.debug(f"Engine Coolant Temperature: {ecoolant_temp} °C")
 
-    logger.info(ecoolant_info)
+    #logger.debug(ecoolant_info)
     return ecoolant_info
 
 def get_engine_speed(interface, pid):
@@ -325,9 +325,9 @@ def get_engine_speed(interface, pid):
     espeed_info = {}
     speed = round(((256 * message.data[3]) + message.data[4]) / 4, 2)
     espeed_info["Engine Speed[RPM]"] = speed
-    logger.info(f"Engine speed: {speed} RPM")
+    logger.debug(f"Engine speed: {speed} RPM")
 
-    logger.info(espeed_info)
+    #logger.debug(espeed_info)
     return espeed_info
 
 def get_vehicle_speed(interface, pid):
@@ -348,9 +348,9 @@ def get_vehicle_speed(interface, pid):
     vspeed_info = {}
     speed = message.data[3]
     vspeed_info["Vehicle speed[km/h]"] = speed
-    logger.info(f"Vehicle speed: {speed} km/h")
+    logger.debug(f"Vehicle speed: {speed} km/h")
 
-    logger.info(vspeed_info)
+    #logger.debug(vspeed_info)
     return vspeed_info
 
 def get_obd_standard(interface, pid):
@@ -407,7 +407,7 @@ def get_obd_standard(interface, pid):
     obdstd = switcher.get(message.data[3], "Reserved / Not available for assignment")
 
     obdstd_info["Vehicle OBD Standard"] = obdstd
-    logger.info(f"This vehicle conforms to the {obdstd} standard.")
+    logger.debug(f"This vehicle conforms to the {obdstd} standard.")
 
-    logger.info(obdstd_info)
+    #logger.debug(obdstd_info)
     return obdstd_info
