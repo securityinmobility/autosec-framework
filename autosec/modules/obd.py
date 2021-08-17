@@ -45,6 +45,7 @@ class ObdServices(AutosecModule):
         }
 
         self.info_dict = {}
+        self.raw_data = {}
 
     def get_info(self):
         return(dict(
@@ -64,7 +65,9 @@ class ObdServices(AutosecModule):
         self.interface = self._options["interface"]["value"]
         self.check_pids = self._options["checkPID"]["value"]
 
-        service09.get_vin(self.interface)
+        vin_results = service09.get_vin(self.interface)
+        self.info_dict.update(vin_results[0])
+        self.raw_data.update(vin_results[1])
 
         if self.check_pids is True:
             self.info_dict = self._check_pid_and_run()
@@ -73,23 +76,25 @@ class ObdServices(AutosecModule):
         self.logger.warning("Running all functions, not checking for ECU PIDs")
         for pid, function in self.functions.items():
             func_info = function(self.interface, pid)
-            self.info_dict = {**self.info_dict, **func_info}
-        #self.logger.debug(self.info_dict)
-        return self.info_dict
+            self.info_dict.update(func_info[0])
+            self.raw_data.update(func_info[1])
+        return self.info_dict, self.raw_data
 
     def _check_pid_and_run(self):
         pids = [0x00, 0x20, 0x40, 0x60, 0x80, 0xA0, 0xC0]
         for pid in pids:
             pid_list = service01.get_supported_pid(self.interface, pid)
-            if pid_list is None:
+            self.raw_data.update(pid_list[1])
+            self.logger.warning(self.raw_data)
+            if pid_list[0] is None:
                 self.logger.warning(f"No list returned for PID 0x{pid:02X}")
             else:
-                for available_pid in pid_list:
+                for available_pid in pid_list[0]:
                     if available_pid in self.functions:
                         func_info = self.functions[available_pid](self.interface, available_pid)
-                        self.info_dict = {**self.info_dict, **func_info}
-        #self.logger.debug(self.info_dict)
-        return self.info_dict
+                        self.info_dict.update(func_info[0])
+                        self.raw_data.update(func_info[1])
+        return self.info_dict, self.raw_data
 
 class IsoTpServices(AutosecModule):
     '''
@@ -133,7 +138,8 @@ class IsoTpServices(AutosecModule):
             description = "Module that interprets services that run over ISO-TP"))
 
     def run(self):
-        if self._options["scanType"]["value"] == "extended" or self._options["scanType"]["value"] == "both":
+        if (self._options["scanType"]["value"] == "extended" or
+                self._options["scanType"]["value"] == "both"):
             self._options["extendedRange"]["required"] = True
         else:
             self._options["extendedRange"]["required"] = False

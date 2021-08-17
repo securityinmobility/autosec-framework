@@ -75,6 +75,15 @@ def _printable_table(tests, tests_table):
         printable_table += [[test, availability, comepleteness]]
     return printable_table
 
+def _convert_to_bin(message):
+    '''
+    Converts the given bytearray to binary
+    '''
+    byte_list = []
+    for byte in message.data:
+        byte_list.append(bin(byte)[2:].zfill(8))
+    return byte_list
+
 def get_supported_pid(interface, pid):
     '''
     PID 0x00, 0x20, 0x40, 0x60, 0x80, 0xA0, 0xC0
@@ -93,13 +102,14 @@ def get_supported_pid(interface, pid):
 
     message = _receive_message(bus)
 
-    # convert bytearray in binary
+    raw_data = {}
+    raw_data[format(pid, "02X")] = " 0x".join(format(x, "02X") for x in message.data)
+    raw_data.update(raw_data)
+
     if message is None:
         return None
 
-    byte_list = []
-    for byte in message.data:
-        byte_list.append(bin(byte)[2:].zfill(8))
+    byte_list = _convert_to_bin(message)
 
     switcher = {
         0x00: [0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09,
@@ -152,7 +162,7 @@ def get_supported_pid(interface, pid):
     logger.debug(f"List of supported PIDs {curr_pid}:\n%s",
                 ["0x{:02X}".format(i) for i in supported_pids])
 
-    return supported_pids
+    return supported_pids, raw_data
 
 def get_mil_status(interface, pid):
     '''
@@ -169,15 +179,15 @@ def get_mil_status(interface, pid):
     _send_message(bus, msg, pid)
 
     message = _receive_message(bus)
+    #print(" 0x".join(format(x, "02X") for x in message.data))
+    raw_data = {"get_mil_status": " 0x".join(format(x, "02X") for x in message.data)}
 
     mil_info = {}
-# convert bytearray in binary
+
     if message is None:
         return None
 
-    byte_list = []
-    for byte in message.data:
-        byte_list.append(bin(byte)[2:].zfill(8))
+    byte_list = _convert_to_bin(message)
 
 # If the first Bit is 1 then the MIL is on
     state = "OFF"
@@ -197,7 +207,7 @@ def get_mil_status(interface, pid):
                     "Comprehensive component monitoring"]
 
     tests_table = _fill_table(byte_list, 4, 4, None, tests)
-    mil_info = {**mil_info, **tests_table}
+    mil_info.update(tests_table)
     logger.debug("\n" + tabulate(_printable_table(tests, tests_table), headers=headers,
                     tablefmt="pretty", stralign="left"))
     ignition = {
@@ -215,7 +225,7 @@ def get_mil_status(interface, pid):
             "Heated catalyst monitoring", "Catalyst monitoring"]
 
         tests_table = _fill_table(byte_list, 5, 6, 0, tests)
-        mil_info = {**mil_info, **tests_table}
+        mil_info.update(tests_table)
         logger.debug("\n" + tabulate(_printable_table(tests, tests_table), headers,
                     tablefmt="pretty", stralign="left"))
     else:
@@ -225,13 +235,13 @@ def get_mil_status(interface, pid):
             "NOx/SCR aftertreatment monitoring", "NMHC catalyst monitoring"]
 
         tests_table = _fill_table(byte_list, 5, 6, 0, tests)
-        mil_info = {**mil_info, **tests_table}
+        mil_info.update(tests_table)
         logger.debug("\n" + tabulate(_printable_table(tests, tests_table), headers,
                     tablefmt="pretty", stralign="left"))
 
     #logger.debug(mil_info)
 
-    return mil_info
+    return mil_info, raw_data
 
 def get_fuelsystem_status(interface, pid):
     '''
@@ -247,6 +257,7 @@ def get_fuelsystem_status(interface, pid):
     _send_message(bus, msg, pid)
 
     message = _receive_message(bus)
+    raw_data = {"get_fuelsystem_status": " 0x".join(format(x, "02X") for x in message.data)}
 
     fs_info = {}
     switcher = {
@@ -279,7 +290,7 @@ def get_fuelsystem_status(interface, pid):
     logger.debug(f"Fuel system #2:\n{fs_status2}")
 
     #logger.debug(fs_info)
-    return fs_info
+    return fs_info, raw_data
 
 def get_engine_load(interface, pid):
     '''
@@ -295,6 +306,7 @@ def get_engine_load(interface, pid):
     _send_message(bus, msg, pid)
 
     message = _receive_message(bus)
+    raw_data = {"get_engine_load": " 0x".join(format(x, "02X") for x in message.data)}
 
     eload_info = {}
     load_value = round(message.data[3] / 2.55, 2)
@@ -302,7 +314,7 @@ def get_engine_load(interface, pid):
     logger.debug(f"Calculated Engine load: {load_value} %")
 
     #logger.debug(eload_info)
-    return eload_info
+    return eload_info, raw_data
 
 def get_engine_coolant_temp(interface, pid):
     '''
@@ -318,6 +330,7 @@ def get_engine_coolant_temp(interface, pid):
     _send_message(bus, msg, pid)
 
     message = _receive_message(bus)
+    raw_data = {"get_engine_coolant_temp": " 0x".join(format(x, "02X") for x in message.data)}
 
     ecoolant_info = {}
     ecoolant_temp = round(message.data[3] - 40, 2)
@@ -325,7 +338,7 @@ def get_engine_coolant_temp(interface, pid):
     logger.debug(f"Engine Coolant Temperature: {ecoolant_temp} °C")
 
     #logger.debug(ecoolant_info)
-    return ecoolant_info
+    return ecoolant_info, raw_data
 
 def get_engine_speed(interface, pid):
     '''
@@ -341,6 +354,7 @@ def get_engine_speed(interface, pid):
     _send_message(bus, msg, pid)
 
     message = _receive_message(bus)
+    raw_data = {"get_engine_speed": " 0x".join(format(x, "02X") for x in message.data)}
 
     espeed_info = {}
     speed = round(((256 * message.data[3]) + message.data[4]) / 4, 2)
@@ -348,7 +362,7 @@ def get_engine_speed(interface, pid):
     logger.debug(f"Engine speed: {speed} RPM")
 
     #logger.debug(espeed_info)
-    return espeed_info
+    return espeed_info, raw_data
 
 def get_vehicle_speed(interface, pid):
     '''
@@ -364,6 +378,7 @@ def get_vehicle_speed(interface, pid):
     _send_message(bus, msg, pid)
 
     message = _receive_message(bus)
+    raw_data = {"get_vehicle_speed": " 0x".join(format(x, "02X") for x in message.data)}
 
     vspeed_info = {}
     speed = message.data[3]
@@ -371,7 +386,7 @@ def get_vehicle_speed(interface, pid):
     logger.debug(f"Vehicle speed: {speed} km/h")
 
     #logger.debug(vspeed_info)
-    return vspeed_info
+    return vspeed_info, raw_data
 
 def get_obd_standard(interface, pid):
     '''
@@ -387,6 +402,7 @@ def get_obd_standard(interface, pid):
     _send_message(bus, msg, pid)
 
     message = _receive_message(bus)
+    raw_data = {"get_obd_standard": " 0x".join(format(x, "02X") for x in message.data)}
 
     obdstd_info = {}
     switcher = {
@@ -430,4 +446,4 @@ def get_obd_standard(interface, pid):
     logger.debug(f"This vehicle conforms to the {obdstd} standard.")
 
     #logger.debug(obdstd_info)
-    return obdstd_info
+    return obdstd_info, raw_data

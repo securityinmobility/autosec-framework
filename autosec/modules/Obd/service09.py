@@ -29,7 +29,17 @@ def get_vin(interface):
     msg = socket.recv()
     if msg is not None:
         vin = Vin(str(msg[3:], "utf-8"))
+        vin_dict = {
+            "VIN": str(vin),
+            "Country": vin.country,
+            "Manufacturer": vin.manufacturer,
+            "Region": vin.region,
+            "Years": vin.years
+        }
+        raw_data = {"get_vin": " 0x".join(format(x, "02X") for x in msg)}
         logger.debug(f"\nVIN: {vin}\nCountry: {vin.country}\nManufacturer: {vin.manufacturer}"
                     f"\nRegion: {vin.region}\nYears: {vin.years}")
     else:
         logger.warning("Message could not be received")
+
+    return vin_dict, raw_data
