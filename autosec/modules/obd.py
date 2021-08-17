@@ -107,14 +107,16 @@ class IsoTpServices(AutosecModule):
 
         self._add_option("scanType",
             description="Scan Type for normal, extended or both",
-            required=False)
+            required=False,
+            default="both",
+            value="both")
 
         self._add_option("scanRange",
             description="Set scan range",
             required=True)
 
         self._add_option("extendedRange",
-            description="Set scan range for extended IDs",
+            description="Set scan range for extended IDs, required if scanType is extended or both",
             required=False)
 
         self.interface = None
@@ -131,7 +133,11 @@ class IsoTpServices(AutosecModule):
             description = "Module that interprets services that run over ISO-TP"))
 
     def run(self):
-        
+        if self._options["scanType"]["value"] == "extended" or self._options["scanType"]["value"] == "both":
+            self._options["extendedRange"]["required"] = True
+        else:
+            self._options["extendedRange"]["required"] = False
+
         try:
             super().run()
         except ValueError as error:
