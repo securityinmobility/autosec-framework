@@ -16,9 +16,9 @@ def get_vin(interface):
     '''
     socket = isotp.socket()
     # Configuring the sockets.
-    socket.set_fc_opts(stmin=5, bs=10)
-    #s.set_general_opts(...)
-    #s.set_ll_opts(...)
+    #socket.set_fc_opts(stmin=5, bs=10)
+    #socket.set_general_opts(...)
+    #socket.set_ll_opts(...)
 
     try:
         socket.bind(interface, isotp.Address(rxid=0x7E8, txid=0x7DF))
@@ -27,6 +27,8 @@ def get_vin(interface):
         logger.warning(f"Message could not be sent {err}")
 
     msg = socket.recv()
+    vin_dict = {}
+    raw_data = {}
     if msg is not None:
         vin = Vin(str(msg[3:], "utf-8"))
         vin_dict = {
