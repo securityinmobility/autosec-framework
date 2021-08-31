@@ -66,6 +66,8 @@ class ObdServices(AutosecModule):
         self.check_pids = self._options["checkPID"]["value"]
 
         vin_results = service09.get_vin(self.interface)
+        self.info_dict = {}
+        self.raw_data = {}
         self.info_dict.update(vin_results[0])
         self.raw_data.update(vin_results[1])
 
