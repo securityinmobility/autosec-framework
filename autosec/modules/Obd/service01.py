@@ -27,9 +27,6 @@ def _receive_message(bus):
     if message is None:
         logger.error("Timeout occured, no message.")
         return None
-    while message.arbitration_id != 2024:
-        message = bus.recv()
-        break
     return message
 
 def _fill_table(byte_list, byte_1, byte_2, bit, tests):
@@ -97,10 +94,11 @@ def get_supported_pid(interface, pid):
     valid = [0x00, 0x20, 0x40, 0x60, 0x80, 0xA0, 0xC0]
     if pid not in valid:
         raise ValueError("Valid PIDs:", [hex(i) for i in valid])
-    bus = can.interface.Bus(bustype='socketcan', channel=interface)
+    bus = can.interface.Bus(bustype='socketcan', channel=interface,
+                            can_filters=[{"can_id": 0x7E8, "can_mask":0x7FF}])
 
     msg_pid = can.Message(
-    arbitration_id=0x7E0, dlc=0x02, data=[0x01, pid], is_extended_id=False
+    arbitration_id=0x7E0, dlc=0x08, data=[0x02, 0x01, pid], is_extended_id=False
     )
 
     _send_message(bus, msg_pid, pid)
@@ -108,7 +106,6 @@ def get_supported_pid(interface, pid):
     message = _receive_message(bus)
 
     raw_data = {_format_raw_data(msg_pid): _format_raw_data(message)}
-    #raw_data[format(pid, "02X")] = " 0x".join(format(x, "02X") for x in message.data)
     raw_data.update(raw_data)
 
     if message is None:
@@ -149,7 +146,7 @@ def get_supported_pid(interface, pid):
     pid_list = switcher.get(pid, "Invalid")
     supported_pids = []
     i = 0
-    for j in range(2,6):
+    for j in range(3,7):
         for bit in byte_list[j]:
             if bit == "1":
                 supported_pids.append(pid_list[i])
@@ -175,10 +172,11 @@ def get_mil_status(interface, pid):
     Monitor status sice DTCs cleared. Includes malfunction indicator lamp status
     and number of DTCs.
     '''
-    bus = can.interface.Bus(bustype='socketcan', channel=interface)
+    bus = can.interface.Bus(bustype='socketcan', channel=interface,
+                            can_filters=[{"can_id": 0x7E8, "can_mask":0x7FF}])
 
     msg = can.Message(
-    arbitration_id=0x7E0, dlc=0x02, data=[0x01, 0x01], is_extended_id=False
+    arbitration_id=0x7E0, dlc=0x08, data=[0x02, 0x01, 0x01], is_extended_id=False
     )
 
     _send_message(bus, msg, pid)
@@ -196,13 +194,13 @@ def get_mil_status(interface, pid):
 
 # If the first Bit is 1 then the MIL is on
     state = "OFF"
-    if byte_list[2][0] == "1":
+    if byte_list[3][0] == "1":
         state = "ON"
     logger.debug(f"MIL: {state}")
     mil_info["Malfunction indicator lamp"] = state
 
 # Number of DTCs
-    dtc_count = int(byte_list[2][1:],2)
+    dtc_count = int(byte_list[3][1:],2)
     logger.debug(f"Number of emission-related DTCs: {dtc_count}")
     mil_info["Number of emission-related DTCs"] = dtc_count
 
@@ -211,7 +209,7 @@ def get_mil_status(interface, pid):
     tests = ["Misfire monitoring", "Fuel system monitoring",
                     "Comprehensive component monitoring"]
 
-    tests_table = _fill_table(byte_list, 3, 3, None, tests)
+    tests_table = _fill_table(byte_list, 4, 4, None, tests)
     mil_info.update(tests_table)
     logger.debug("\n" + tabulate(_printable_table(tests, tests_table), headers=headers,
                     tablefmt="pretty", stralign="left"))
@@ -220,8 +218,8 @@ def get_mil_status(interface, pid):
         "1": "Compression ignition (Diesel engine)"
     }
     logger.debug("------------On-Board-Tests that are ignition specific------------")
-    logger.debug(f"Ignition: {ignition[byte_list[3][4]]}")
-    mil_info["Ignition"] = ignition[byte_list[3][4]]
+    logger.debug(f"Ignition: {ignition[byte_list[4][4]]}")
+    mil_info["Ignition"] = ignition[byte_list[4][4]]
 
     if byte_list[4][4] == "0":
         tests = ["EGR system montioring", "Oxygen sensor heater monitoring",
@@ -229,7 +227,7 @@ def get_mil_status(interface, pid):
             "Secondary air system monitoring", "Evaporative system monitoring",
             "Heated catalyst monitoring", "Catalyst monitoring"]
 
-        tests_table = _fill_table(byte_list, 4, 5, 0, tests)
+        tests_table = _fill_table(byte_list, 5, 6, 0, tests)
         mil_info.update(tests_table)
         logger.debug("\n" + tabulate(_printable_table(tests, tests_table), headers,
                     tablefmt="pretty", stralign="left"))
@@ -239,7 +237,7 @@ def get_mil_status(interface, pid):
             "Boost pressure monitoring", "ISO/SAE Reserved C2/D2",
             "NOx/SCR aftertreatment monitoring", "NMHC catalyst monitoring"]
 
-        tests_table = _fill_table(byte_list, 4, 5, 0, tests)
+        tests_table = _fill_table(byte_list, 5, 6, 0, tests)
         mil_info.update(tests_table)
         logger.debug("\n" + tabulate(_printable_table(tests, tests_table), headers,
                     tablefmt="pretty", stralign="left"))
@@ -253,10 +251,11 @@ def get_fuelsystem_status(interface, pid):
     PID 03
     Fuel system status
     '''
-    bus = can.interface.Bus(bustype='socketcan', channel=interface)
+    bus = can.interface.Bus(bustype='socketcan', channel=interface,
+                            can_filters=[{"can_id": 0x7E8, "can_mask":0x7FF}])
 
     msg = can.Message(
-    arbitration_id=0x7E0, dlc=0x02, data=[0x01, 0x03], is_extended_id=False
+    arbitration_id=0x7E0, dlc=0x08, data=[0x02, 0x01, 0x03], is_extended_id=False
     )
 
     _send_message(bus, msg, pid)
@@ -274,7 +273,7 @@ def get_fuelsystem_status(interface, pid):
         16: "Closed loop, using at least one oxygen sensor but there is a "
             "fault in the feedbacksystem",
     }
-    fs_status = switcher.get(message.data[2], "Invalid Response")
+    fs_status = switcher.get(message.data[3], "Invalid Response")
     fs_info["Fuel system #1"] = fs_status
     logger.debug(f"Fuel system #1:\n{fs_status}")
 
@@ -290,7 +289,7 @@ def get_fuelsystem_status(interface, pid):
         16:"Closed loop, using at least one oxygen sensor but there is a "
         "fault in the feedback system",
     }
-    fs_status2 = switcher.get(message.data[3], "Invalid Response")
+    fs_status2 = switcher.get(message.data[4], "Invalid Response")
     fs_info["Fuel system #2"] = fs_status2
     logger.debug(f"Fuel system #2:\n{fs_status2}")
 
@@ -302,10 +301,11 @@ def get_engine_load(interface, pid):
     PID 04
     Calculated engine load
     '''
-    bus = can.interface.Bus(bustype='socketcan', channel=interface)
+    bus = can.interface.Bus(bustype='socketcan', channel=interface,
+                            can_filters=[{"can_id": 0x7E8, "can_mask":0x7FF}])
 
     msg = can.Message(
-    arbitration_id=0x7E0, dlc=0x02, data=[0x01, 0x04], is_extended_id=False
+    arbitration_id=0x7E0, dlc=0x08, data=[0x02, 0x01, 0x04], is_extended_id=False
     )
 
     _send_message(bus, msg, pid)
@@ -314,7 +314,7 @@ def get_engine_load(interface, pid):
     raw_data = {_format_raw_data(msg): _format_raw_data(message)}
 
     eload_info = {}
-    load_value = round(message.data[2] / 2.55, 2)
+    load_value = round(message.data[3] / 2.55, 2)
     eload_info["Calculated Engine load[%]"] = load_value
     logger.debug(f"Calculated Engine load: {load_value} %")
 
@@ -326,10 +326,11 @@ def get_engine_coolant_temp(interface, pid):
     PID 05
     Engine coolant temperature
     '''
-    bus = can.interface.Bus(bustype='socketcan', channel=interface)
+    bus = can.interface.Bus(bustype='socketcan', channel=interface,
+                            can_filters=[{"can_id": 0x7E8, "can_mask":0x7FF}])
 
     msg = can.Message(
-    arbitration_id=0x7E0, dlc=0x02, data=[0x01, 0x05], is_extended_id=False
+    arbitration_id=0x7E0, dlc=0x08, data=[0x02, 0x01, 0x05], is_extended_id=False
     )
 
     _send_message(bus, msg, pid)
@@ -338,7 +339,7 @@ def get_engine_coolant_temp(interface, pid):
     raw_data = {_format_raw_data(msg): _format_raw_data(message)}
 
     ecoolant_info = {}
-    ecoolant_temp = round(message.data[2] - 40, 2)
+    ecoolant_temp = round(message.data[3] - 40, 2)
     ecoolant_info["Engine Coolant Temperature[°C]"] = ecoolant_temp
     logger.debug(f"Engine Coolant Temperature: {ecoolant_temp} °C")
 
@@ -350,10 +351,11 @@ def get_engine_speed(interface, pid):
     PID 0C
     Engine speed
     '''
-    bus = can.interface.Bus(bustype='socketcan', channel=interface)
+    bus = can.interface.Bus(bustype='socketcan', channel=interface,
+                            can_filters=[{"can_id": 0x7E8, "can_mask":0x7FF}])
 
     msg = can.Message(
-    arbitration_id=0x7E0, dlc=0x02, data=[0x01, 0x0C], is_extended_id=False
+    arbitration_id=0x7E0, dlc=0x08, data=[0x02, 0x01, 0x0C], is_extended_id=False
     )
 
     _send_message(bus, msg, pid)
@@ -362,7 +364,7 @@ def get_engine_speed(interface, pid):
     raw_data = {_format_raw_data(msg): _format_raw_data(message)}
 
     espeed_info = {}
-    speed = round(((256 * message.data[2]) + message.data[3]) / 4, 2)
+    speed = round(((256 * message.data[3]) + message.data[4]) / 4, 2)
     espeed_info["Engine Speed[RPM]"] = speed
     logger.debug(f"Engine speed: {speed} RPM")
 
@@ -374,10 +376,11 @@ def get_vehicle_speed(interface, pid):
     PID 0D
     Vehicle Speed
     '''
-    bus = can.interface.Bus(bustype='socketcan', channel=interface)
+    bus = can.interface.Bus(bustype='socketcan', channel=interface,
+                            can_filters=[{"can_id": 0x7E8, "can_mask":0x7FF}])
 
     msg = can.Message(
-    arbitration_id=0x7E0, dlc=0x02, data=[0x01, 0x0D], is_extended_id=False
+    arbitration_id=0x7E0, dlc=0x08, data=[0x02, 0x01, 0x0D], is_extended_id=False
     )
 
     _send_message(bus, msg, pid)
@@ -387,7 +390,7 @@ def get_vehicle_speed(interface, pid):
     raw_data = {_format_raw_data(msg): _format_raw_data(message)}
 
     vspeed_info = {}
-    speed = message.data[2]
+    speed = message.data[3]
     vspeed_info["Vehicle speed[km/h]"] = speed
     logger.debug(f"Vehicle speed: {speed} km/h")
 
@@ -399,10 +402,11 @@ def get_obd_standard(interface, pid):
     PID 1C
     Get OBD standard this vehicle conforms to
     '''
-    bus = can.interface.Bus(bustype='socketcan', channel=interface)
+    bus = can.interface.Bus(bustype='socketcan', channel=interface,
+                            can_filters=[{"can_id": 0x7E8, "can_mask":0x7FF}])
 
     msg = can.Message(
-    arbitration_id=0x7E0, dlc=0x02, data=[0x01, 0x1C], is_extended_id=False
+    arbitration_id=0x7E0, dlc=0x08, data=[0x02, 0x01, 0x1C], is_extended_id=False
     )
 
     _send_message(bus, msg, pid)
@@ -446,7 +450,7 @@ def get_obd_standard(interface, pid):
         32: "India OBD II (IOBD II)",
         33: "Heavy Duty Euro OBD Stage VI (HD EOBD-IV)",
     }
-    obdstd = switcher.get(message.data[2], "Reserved / Not available for assignment")
+    obdstd = switcher.get(message.data[3], "Reserved / Not available for assignment")
 
     obdstd_info["Vehicle OBD Standard"] = obdstd
     logger.debug(f"This vehicle conforms to the {obdstd} standard.")
