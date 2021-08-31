@@ -3,7 +3,9 @@ Decodes the VIN number of a vehicle and gives additional information
 such as the country, manufacturer, region and years.
 '''
 import logging
-import isotp
+
+from scapy.all import load_contrib
+from scapy.main import load_layer
 
 from vininfo import Vin
 
@@ -14,23 +16,23 @@ def get_vin(interface):
     '''
     Gets the VIN number from a CAN message and decodes it.
     '''
-    socket = isotp.socket()
-    # Configuring the sockets.
-    #socket.set_fc_opts(stmin=5, bs=10)
-    #socket.set_general_opts(...)
-    #socket.set_ll_opts(...)
+    load_contrib("isotp")
+    load_layer("can")
 
     try:
-        socket.bind(interface, isotp.Address(rxid=0x7E8, txid=0x7DF))
-        socket.send(b"\x09\x02")
+        socket = ISOTPSocket(interface, sid=0x7E0, did=0x7E8)
+        msg = ISOTP(data=b'\x09\x02')
+        socket.send(msg)
     except OSError as err:
         logger.warning(f"Message could not be sent {err}")
 
-    msg = socket.recv()
+    message = socket.recv()
+    message_bytes = bytes(message)
+
     vin_dict = {}
     raw_data = {}
-    if msg is not None:
-        vin = Vin(str(msg[3:], "utf-8"))
+    if message is not None:
+        vin = Vin(str(message_bytes[3:], "utf-8"))
         vin_dict = {
             "VIN": str(vin),
             "Country": vin.country,
@@ -38,10 +40,13 @@ def get_vin(interface):
             "Region": vin.region,
             "Years": vin.years
         }
-        raw_data = {"get_vin": " 0x".join(format(x, "02X") for x in msg)}
+        raw_data = {format(message.src, "02X")+ "#" + str(format(len(msg), "02X"))+
+                    " " +msg.data.hex(" "):
+                    format(message.dst, "02X") + "#" + format(len(message), "02X") + " " +
+                    " ".join(format(x, "02X") for x in message_bytes)}
         logger.debug(f"\nVIN: {vin}\nCountry: {vin.country}\nManufacturer: {vin.manufacturer}"
                     f"\nRegion: {vin.region}\nYears: {vin.years}")
     else:
         logger.warning("Message could not be received")
-
+    socket.close()
     return vin_dict, raw_data
