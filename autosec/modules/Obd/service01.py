@@ -82,6 +82,8 @@ def _convert_to_bin(message):
     return byte_list
 
 def _format_raw_data(msg):
+    if msg is None:
+        return None
     formated_msg = (format(msg.arbitration_id, "02X")+ "#" +
                     " ".join(format(x, "02X") for x in msg.data))
     return formated_msg
@@ -104,12 +106,12 @@ def get_supported_pid(interface, pid):
     _send_message(bus, msg_pid, pid)
 
     message = _receive_message(bus)
+    
+    if message is None:
+        return None
 
     raw_data = {_format_raw_data(msg_pid): _format_raw_data(message)}
     raw_data.update(raw_data)
-
-    if message is None:
-        return None
 
     byte_list = _convert_to_bin(message)
 
@@ -183,12 +185,12 @@ def get_mil_status(interface, pid):
 
     message = _receive_message(bus)
 
+    if message is None:
+        return None
+
     raw_data = {_format_raw_data(msg): _format_raw_data(message)}
 
     mil_info = {}
-
-    if message is None:
-        return None
 
     byte_list = _convert_to_bin(message)
 
@@ -261,6 +263,10 @@ def get_fuelsystem_status(interface, pid):
     _send_message(bus, msg, pid)
 
     message = _receive_message(bus)
+
+    if message is None:
+        return None
+
     raw_data = {_format_raw_data(msg): _format_raw_data(message)}
 
     fs_info = {}
@@ -311,6 +317,10 @@ def get_engine_load(interface, pid):
     _send_message(bus, msg, pid)
 
     message = _receive_message(bus)
+
+    if message is None:
+        return None
+
     raw_data = {_format_raw_data(msg): _format_raw_data(message)}
 
     eload_info = {}
@@ -336,6 +346,10 @@ def get_engine_coolant_temp(interface, pid):
     _send_message(bus, msg, pid)
 
     message = _receive_message(bus)
+
+    if message is None:
+        return None
+
     raw_data = {_format_raw_data(msg): _format_raw_data(message)}
 
     ecoolant_info = {}
@@ -361,6 +375,10 @@ def get_engine_speed(interface, pid):
     _send_message(bus, msg, pid)
 
     message = _receive_message(bus)
+
+    if message is None:
+        return None
+
     raw_data = {_format_raw_data(msg): _format_raw_data(message)}
 
     espeed_info = {}
@@ -387,6 +405,9 @@ def get_vehicle_speed(interface, pid):
 
     message = _receive_message(bus)
 
+    if message is None:
+        return None
+
     raw_data = {_format_raw_data(msg): _format_raw_data(message)}
 
     vspeed_info = {}
@@ -412,6 +433,10 @@ def get_obd_standard(interface, pid):
     _send_message(bus, msg, pid)
 
     message = _receive_message(bus)
+
+    if message is None:
+        return None
+
     raw_data = {_format_raw_data(msg): _format_raw_data(message)}
 
     obdstd_info = {}
@@ -457,3 +482,34 @@ def get_obd_standard(interface, pid):
 
     #logger.debug(obdstd_info)
     return obdstd_info, raw_data
+
+def get_distance_with_mil(interface, pid):
+    '''
+    PID 21
+    Distance traveled with MIL on
+    '''
+    bus = can.interface.Bus(bustype='socketcan', channel=interface,
+                            can_filters=[{"can_id": 0x7E8, "can_mask":0x7FF}])
+
+    msg = can.Message(
+    arbitration_id=0x7E0, dlc=0x08, data=[0x02, 0x01, 0x21], is_extended_id=False
+    )
+
+    _send_message(bus, msg, pid)
+
+    message = _receive_message(bus)
+
+    if message is None:
+        return None
+
+    raw_data = {_format_raw_data(msg): _format_raw_data(message)}
+    
+    d_info = {}
+
+    '''
+    speed = message.data[3]
+    vspeed_info["Vehicle speed[km/h]"] = speed
+    logger.debug(f"Vehicle speed: {speed} km/h")
+    '''
+    #logger.debug(vspeed_info)
+    return d_info, raw_data

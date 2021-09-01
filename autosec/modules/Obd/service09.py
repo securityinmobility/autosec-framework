@@ -26,7 +26,7 @@ def get_vin(interface):
     except OSError as err:
         logger.warning(f"Message could not be sent {err}")
 
-    message = socket.recv()
+    message = socket.recv(x=1) # TODO: figure out why timeout doesnt work
     message_bytes = bytes(message)
 
     vin_dict = {}
