@@ -35,6 +35,7 @@
     - Bus-Off Attack (Force a ECU off the bus due to repeated errors)
     - Freeze Doom Loop Attacks (using a legacy feature of CAN)
   - Analyse and attack CAN security mechanisms (IDS, Hardware, Gateways, Encryption)
+  - Attacks are described e.g. in [here](https://canislabs.com/wp-content/uploads/2020/05/1901-2019-11-29-White-Paper-CAN-Security.pdf)
 
 
 ## Other implementation work
