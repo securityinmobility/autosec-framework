@@ -25,6 +25,17 @@
   - this method is risky, because if the vehicle uses TLS connections, this way wouldn't bring much benefit
 - Further analysis of the OEM diagnostic features (in case the ISO-TP channels are known)
 - Implement attacks on the EOL function of airbags (deployment of all pyrotechnic actuators before the vehicle is scraped)
+- Implement attacks on the CAN Network
+  - Various attacks possible:
+    - Bus flood
+    - Frame spoofing (with or without causing a Arbitration Doom Loop)
+    - Adaptive frame spoofing
+    - Error passive spoofing (not through a CAN transceiver)
+    - Double receiving attack (through manipulated EOF0 field)
+    - Bus-Off Attack (Force a ECU off the bus due to repeated errors)
+    - Freeze Doom Loop Attacks (using a legacy feature of CAN)
+  - Analyse and attack CAN security mechanisms (IDS, Hardware, Gateways, Encryption)
+
 
 ## Other implementation work
 
