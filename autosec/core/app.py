@@ -8,8 +8,7 @@ Requires: webApi = True (error if it is set as false).
 import logging
 import autosec.core.utils as utils
 import IPython 
-from traitlets.config import Config
-
+from autosec.modules.iPythonConfig import IPythonConfig
 
 class App():
     '''
@@ -40,19 +39,11 @@ class App():
         if self.web_app:
             self.log.w("Web App is not yet implemented")
 
-
-        IPython.embed()
-
+        c = IPythonConfig()
+        IPython.embed(config=c)
 
     def stop(self):
         '''
         Stop method for the app
         '''
         exit()
-
-    def _create_ipython_config(self):
-
-        config = Config()
-        config.InteractiveShellApp.exec_lines= [
-
-        ]
