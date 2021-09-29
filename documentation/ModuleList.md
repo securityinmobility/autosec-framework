@@ -45,4 +45,4 @@
 # Other subjects (possibly for a thesis)
 
 -  Automotive usage of TEEs (Trusted Execution Environments)
--  
+-  Testing of neuronal networks used in automotive domain (e.g., Tesla Autopilote)
