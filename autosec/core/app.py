@@ -38,10 +38,9 @@ class App():
         Startup method for the app
         '''
         if self.web_api:
-            self.log.w("Web Api is not yet implemented")
+            self.logger.warning("Web Api is not yet implemented")
         if self.web_app:
-            self.log.w("Web App is not yet implemented")
-
+            self.logger.warning("Web App is not yet implemented")
 
         IPython.embed()
 
