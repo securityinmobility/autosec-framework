@@ -8,9 +8,12 @@ import pathlib
 import sys
 
 def set_top_log_level(level="DEBUG"):
+    '''
+    (Re-)initialize logging using the given log level.
+    '''
 
-    log_level=getattr(logging, level.upper(), logging.DEBUG)
-    logfile_dir= os.path.join(os.path.dirname(__file__), 
+    log_level = getattr(logging, level.upper(), logging.DEBUG)
+    logfile_dir = os.path.join(os.path.dirname(__file__),
         "..", "logfiles")
     pathlib.Path(logfile_dir).mkdir(parents=True, exist_ok=True)
     logfile_path = os.path.join(logfile_dir, "autosec.log")
@@ -25,7 +28,7 @@ def set_top_log_level(level="DEBUG"):
     logging_handler_stream = logging.StreamHandler()
     logging_handler_stream.setLevel(log_level)
     logging_handler_file = logging.FileHandler(
-        logfile_path, 
+        logfile_path,
         mode="a")
     logging_handler_file.setLevel(log_level)
     logging_formatter = logging.Formatter('%(asctime)s\t%(levelname)s\t%(name)s\t%(message)s')
@@ -34,49 +37,63 @@ def set_top_log_level(level="DEBUG"):
     top_logger.addHandler(logging_handler_file)
     top_logger.addHandler(logging_handler_stream)
 
-def load_available_modules(ignore_modules = []):
+def load_available_modules(ignore_modules = None):
     '''
     Loads all available modules in the modules folder.
     The modules that are named in the "ignore_modules" list are not loaded.
     '''
 
+    ignore_modules = ignore_modules or []
+
     logger = logging.getLogger("autosec.core.utils")
     logger.setLevel(logging.WARNING)
 
-    module_list = []
     modules_path = _add_module_path()
     file_list = os.listdir(modules_path)
-    modules_list = [file[:-3] for file in file_list if file.endswith(".py")
+    name_list = [file[:-3] for file in file_list if file.endswith(".py")
         and not file == "__init__.py"
         and not file.startswith("test")
         and not file[:-3] in ignore_modules]
-    modules = [importlib.import_module(module, "modules") for module in modules_list]
-    for module in modules:
+
+    module_list = []
+    for module_name in name_list:
+        module = importlib.import_module(module_name, "modules")
+        print(module)
+        if not hasattr(module, "load_module"):
+            logger.warning("Module %s ignored due to missing load_module() function",
+                module_name)
+            continue
+
         try:
             module_list.append(module.load_module())
-        except AttributeError as error:
-            logger.warning(
-                f"Module {module} was not loaded due to missing load_module() function")
-        except Exception as error:
-            logger.exception(f"Module {module} was not loaded due to an unknown error:")
+        except Exception: # pylint: disable=broad-except
+            logger.exception(
+                "Module %s was not loaded due to an error during loading",
+                    module_name)
     return module_list
 
 
 def load_module(module_name):
+    '''
+    Load a single module using the given module name.
+    '''
 
     logger = logging.getLogger("autosec.core.utils")
     logger.setLevel(logging.WARNING)
     _add_module_path()
+
     py_module = importlib.import_module(module_name, "modules")
-    module = None
+    if not hasattr(py_module, "load_module"):
+        logger.warning("Module %s ignored due to missing load_module() function",
+            module_name)
+        return None
+
     try:
-       module = py_module.load_module()
-    except AttributeError as error:
-        logger.warning(
-            f"Module {module_name} was not loaded due to missing load_module() function")
-    except Exception as error:
-        logger.exception(f"Module {module_name} was not loaded due to an unknwon error:")
-    return module
+        return py_module.load_module()
+    except Exception: # pylint: disable=broad-except
+        logger.exception("Module %s was not loaded due to an error during loading",
+            module_name)
+        return None
 
 def _add_module_path():
     modules_path = os.path.join(os.path.dirname(__file__), "..", "modules")

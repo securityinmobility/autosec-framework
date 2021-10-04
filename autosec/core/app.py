@@ -5,10 +5,12 @@ webApp: Not yet implemented, webApplication that can be used to control the fram
 
 Requires: webApi = True (error if it is set as false).
 """
+import sys
 import logging
-import autosec.core.utils as utils
-import IPython 
+import IPython
 from traitlets.config import Config
+
+from autosec.core import utils
 
 
 class App():
@@ -43,14 +45,15 @@ class App():
 
         IPython.embed()
 
-
-    def stop(self):
+    @staticmethod
+    def stop():
         '''
         Stop method for the app
         '''
-        exit()
+        sys.exit()
 
-    def _create_ipython_config(self):
+    @staticmethod
+    def _create_ipython_config():
 
         config = Config()
         config.InteractiveShellApp.exec_lines= [

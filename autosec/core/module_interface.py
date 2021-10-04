@@ -16,7 +16,7 @@ class ModuleInterface():
         Initialize the module
         '''
         self.log = Logger()
-        self.options = dict()
+        self.options = {}
 
     def get_info(self):
         '''
@@ -71,7 +71,7 @@ class ModuleInterface():
         '''
         get the accessible CAN interfaces on the current machine
         '''
-        with open("/proc/net/dev", 'r') as net_device_file:
+        with open("/proc/net/dev", 'r', encoding='ascii') as net_device_file:
             net_device_file_lines = net_device_file.readlines()[2:]
 
         can_device_lines = [x for x in net_device_file_lines if "can" in x]

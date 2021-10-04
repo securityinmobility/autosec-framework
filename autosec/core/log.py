@@ -19,7 +19,7 @@ class Logger:
         WARNING = 2
         FAILURE = 3
 
-    class __Logger:
+    class _Logger:
         '''
         Private inner class that implements the logger
         Inner class is used to provide a single logging instance
@@ -69,7 +69,7 @@ class Logger:
         Initializes the outer class
         '''
         if not Logger.instance:
-            Logger.instance = Logger.__Logger(logLevel)
+            Logger.instance = Logger._Logger(logLevel)
             #The logLevel is set once during the initial creation of the Logger.
             #Afterwards only an implicit call can change it - not the constructor
     def __getattr__(self, name):
