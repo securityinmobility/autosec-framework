@@ -25,12 +25,14 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Pylint
-        run: pylint modules
+      - name: Lint core
+        run: pylint autosec/core
+      - name: Lint modules
+        run: pylint autosec/modules
 
-      - name: Core Unit Test
-        run: pytest core
+      - name: Core Tests
+        run: pytest autosec/core
       - name: Module Interface Test
-        run: pytest modules/test_module_interfaces.py
-      - name: Module Unit Tests
-        run: pytest --ignore=modules/test_module_interfaces.py modules
+        run: pytest autosec/modules/test_module_interfaces.py
+      - name: Module Tests
+        run: pytest --ignore=autosec/modules/test_module_interfaces.py autosec/modules
