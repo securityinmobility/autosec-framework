@@ -6,7 +6,9 @@ messages (e.g. with certain IDs) can be manipulated.
 '''
 import threading
 import logging
-from scapy.all import CAN, CANSocket, load_layer, load_contrib
+from scapy.all import load_layer, load_contrib
+from scapy.layers.can import CAN
+from scapy.contrib.cansocket import CANSocket
 
 from autosec.core.autosec_module import AutosecModule
 
