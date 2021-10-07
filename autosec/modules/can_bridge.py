@@ -72,7 +72,7 @@ class CanBridge(AutosecModule):
 
     def _sniff(self):
         self.primary_interface.sniff(prn=self._primary_message)
-        self.secondary_interface.snitt(prn=self._secondary_message)
+        self.secondary_interface.sniff(prn=self._secondary_message)
 
     def _primary_message(self, pkt):
         self._on_message(0, pkt.identifier, pkt.data)
