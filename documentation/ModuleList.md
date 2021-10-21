@@ -13,6 +13,7 @@
 
 - Intercept, sniff and participate in Car-2-X-Communication (DSRC, ETSI ITS G5 / 802.11p) with modified WLAN hardware or SDRs
 - Scan and attack automotive infotainment interfaces (WLAN, Bluetooth, USB, SD Card slots)
+  - possible attacks on BT shown in this [article](https://www.bleepingcomputer.com/news/security/bluetooth-braktooth-bugs-could-affect-billions-of-devices/)
 - Identify, scan and attack automotive debugging interfaces (e.g. (automotive) ethernet interfaces, hidden infotainment interfaces through USB-Ethernet-Interfaces)
 - Analyze, sniff and modify the communication between charging stations and electric vehicles 
   - Different protocols used, e.g. simple PWM for AC charging, powerline communication (PLC) at DC charging
