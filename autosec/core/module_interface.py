@@ -5,7 +5,7 @@ introduce modules to the autosec framework
 For MSF a special loader will be needed that creates the different instances
 of the modules itself.
 '''
-from .log import Logger
+import logging
 
 class ModuleInterface():
     '''
@@ -15,8 +15,14 @@ class ModuleInterface():
         '''
         Initialize the module
         '''
+<<<<<<< HEAD
         self.log = Logger()
         self.options = {}
+=======
+        self._module_name = str(self._class__).split(".")[-1][:-2]
+        self.logger = logging.getLogger(f"autosec.modules.{self._module_name}")
+        self._options = dict()
+>>>>>>> feature/can_bridge
 
     def get_info(self):
         '''
@@ -45,26 +51,41 @@ class ModuleInterface():
         description
         value (value that is currently set if so)
         '''
+        return self._options.copy()
         raise NotImplementedError
 
-    def set_options(self, options):
+    def set_options(self, *options):
         '''
         Method to store options for this module. The Options are given within a list of
         tuples with the name and the value.
         TBD: check Range and value of the option (if these requirements are available)
         '''
-
-        for option in options:
+        for i, op in enumerate(options):
+            if len(op) != 2:
+                self.logger.warning(f"Could not insert option {op} due to wrong format")
+                continue
+            key = op[0]
+            value = op[1]
             try:
-                self.options[option[0]] = option[1]
-            except ValueError:
-                print(f"Error assigning option{option[0]} to module {self.get_info['name']}")
+                self._options[key]["value"] = value
+            except Exception as e:
+                self.logger.warning(f"Could not insert option with key {key}. Value was {value}")
 
     def run(self):
         '''
         run the module
         '''
         raise NotImplementedError
+
+    def _add_option(self, name, description = "", required = False, default = None):
+        '''
+        Adds an option to the _options dictionary
+        By using this structure, the set_options method can be used
+        '''
+        self._options[name] = dict(required = required, 
+            description = description,
+            default = default,
+            value = default)
 
     @classmethod
     def get_can_interfaces(cls):
