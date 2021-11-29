@@ -37,6 +37,8 @@ def _fill_table(byte_list, byte_1, byte_2, bit, tests):
     if len(tests) == 3:
         for offset, name in enumerate(tests):
             tests_table[name] = {}
+            ready = "not ready"
+            supported = "not supported"
             if byte_list[byte_1][5 + offset] == "1":
                 supported = "supported"
             tests_table[name]["Availability"] = supported
@@ -44,20 +46,17 @@ def _fill_table(byte_list, byte_1, byte_2, bit, tests):
                 ready = "ready"
             tests_table[name]["Completeness"] = ready
 
-            ready = "not ready"
-            supported = "not supported"
     else:
         for offset, name in enumerate(tests):
             tests_table[name] = {}
+            ready = "not ready"
+            supported = "not supported"
             if byte_list[byte_1][bit + offset] == "1":
                 supported = "supported"
             tests_table[name]["Availability"] = supported
             if byte_list[byte_2][bit + offset] == "0":
                 ready = "ready"
             tests_table[name]["Completeness"] = ready
-
-            ready = "not ready"
-            supported = "not supported"
 
     return tests_table
 
