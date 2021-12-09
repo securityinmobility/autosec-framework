@@ -12,17 +12,19 @@ class msfClient():
         self._modules = None
 
     def startMsf(self):
-        sessionPassword = pw = ''.join(random.choice(string.ascii_letters+string.digits+string.punctuation) for i in range(16))
-        startCommand = ["msfrpcd", "-P", sessionPassword]
-        subprocess.Popen(startCommand)
-        self._client = MsfRpcClient(sessionPassword, ssl=True)
+        alphabet = string.ascii_letters + string.digits + string.punctuation
+        password = ''.join(random.choice(alphabet) for i in range(16))
+        command = ["msfrpcd", "-P", password]
+        subprocess.Popen(command)
+        self._client = MsfRpcClient(password, ssl=True)
 
     def getModules(self):
 
 
         availableModules = []
         exploits = self._client.modules.exploits
-        exploits.remove("linux/misc/saltstack_salt_unauth_rce")     #This module causes a freeze within the pymetasploit3 lib
+        # The following module causes a freeze within the pymetasploit3 lib
+        exploits.remove("linux/misc/saltstack_salt_unauth_rce")
         auxiliary = self._client.modules.auxiliary
         post = self._client.modules.post
         payloads = self._client.modules.payloads

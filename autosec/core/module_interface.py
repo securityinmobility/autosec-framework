@@ -15,14 +15,9 @@ class ModuleInterface():
         '''
         Initialize the module
         '''
-<<<<<<< HEAD
-        self.log = Logger()
-        self.options = {}
-=======
         self._module_name = str(self._class__).split(".")[-1][:-2]
         self.logger = logging.getLogger(f"autosec.modules.{self._module_name}")
-        self._options = dict()
->>>>>>> feature/can_bridge
+        self._options = {}
 
     def get_info(self):
         '''
