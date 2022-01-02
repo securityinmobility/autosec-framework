@@ -107,7 +107,8 @@ class CanAttackModule(AutosecModule):
         if self._options["identifier"]["value"] > 2047:
             self.ide = 1
         elif self._options["identifier"]["value"] > 4294967296:
-            raise ValueError(f"Identifier Value of{self._options['identifier']['value']} exceeding the Limit of 32 Bits")
+            raise ValueError(
+                f"Identifier Value of{self._options['identifier']['value']} exceeding the Limit of 32 Bits")
             return -1
         else:
             self.ide = 0
@@ -123,10 +124,11 @@ class CanAttackModule(AutosecModule):
             socket = ethernet_connection.connect_board(self._options["ip"]["value"], self._options["port"]["value"])
         except socket.error as error:
             raise ConnectionError(
-                "Ethernet Connection with [{}] and [{}] could not be established".format(self._options["ip"]["value"],
-                                                                                         self._options["port"][
-                                                                                             "value"]))
-            return-1
+                "Ethernet Connection with IP: [{}] and Port: [{}] could not be established".format(
+                    self._options["ip"]["value"],
+                    self._options["port"][
+                        "value"]))
+            return -1
 
         identifier = [((self._options["identifier"]["value"] & 0xFF000000) >> 24),
                       ((self._options["identifier"]["value"] & 0x00FF0000) >> 16),
@@ -135,6 +137,7 @@ class CanAttackModule(AutosecModule):
 
         transfer_array.append(self._options["attack"]["value"])
         transfer_array.append(self.ide)
+
         for i in range(4):
             transfer_array.append(identifier[i])
         transfer_array.append(self.dlc)
@@ -142,12 +145,15 @@ class CanAttackModule(AutosecModule):
         for i in range(len(self._options["data"]["value"])):
             transfer_array.append(self._options["data"]["value"][i])
 
-        print(transfer_array)
-
         socket.send(transfer_array)
         print("Warte auf Antwort")
         receive = socket.recv(1024).decode()
-        print(receive)
-        # receive = socket.recv(1024).decode()
-        # print(receive)
+
+        if "Attack not implemented " in receive:
+            print("Attack not implemented")
+        else:
+            print(receive)
+            receive = socket.recv(1024).decode()
+            print(receive)
+
         socket.close()
