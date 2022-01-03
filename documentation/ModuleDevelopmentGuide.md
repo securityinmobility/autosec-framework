@@ -28,6 +28,40 @@ Currently, modules can be loaded by using the "utils.load_module("module-name")"
 
 ## Module Interface
 
+The module interface is implemented in the autosec/core/autosec_module.py module. The modules itself can inherit from the class within this file and therfore use the methods that are already implemented.
+
+By now the framework itself is not calling any of the methods described in the interface. Therefore the modules can implement a different interface - but this is not recommended as the automatisation of the tests is a target of the autosec framework.
+
+The main methods are described in the following sections.
+
+### \_\_init\_\_
+The \_\_init\_\_ method is used as it is within standard python code. By inheriting the super-init method with `super().__init__()`, the logging instance (`self.logger`) and an empty dictionary for options is created.
+
+### get_info
+
+This method is not implemented in the interface description. It shall simply return a dict with the most relevant information about the module like the name, what interfaces (CAN, Ethernet...), a short description...
+
+### get_options
+
+By calling this method, a copy of the current options is returned. As it is a copy, it shall can not be modified directly.
+
+### set_options
+
+The modification of the options can be done by the set_options method. This method accepts multiple arguments that consist of key / value pairs. The key is the name of the option in the internal dictionary, the value will be places in the value field.
+An example for the can_bridge module:
+```python
+module.set_option(("primaryInterface", "vcan0"), ("secondaryInterface", "vcan1"), ("filters", ([lambda id, data: (True, None, None)][]])))
+```
+This call sets three options: primary and secondary interface and one filter.
+
+### \_add_option
+
+To add options that work with the set_options mehthod, \_add_options can be used. This adds an option to the internal dictionary, that contains all necessary fields. Only the name is required, all other fields are optional.
+
+### run
+
+To start the functionality of a module, run shall be called. By calling the super-run method, a check if all necessary options are set is performed (within this step, the default values are applied).
+
 ## Logging
 
 The core part of the framework (autosec.core) configures a standard [python logger](https://docs.python.org/3/howto/logging.html) that pipes the logging messages together with the time, the module and the level into a file (/logfiles/autosec.log) as well to stderr.
