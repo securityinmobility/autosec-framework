@@ -1,6 +1,7 @@
 '''This module implements tests that ensure that the autosec-modules can be loaded correctly'''
 
 from inspect import getmembers, isfunction
+from autosec.core.autosec_module import AutosecModule
 import sys
 import os
 import importlib
@@ -30,8 +31,9 @@ def test_module_interface():
     '''
     modules = load_all_modules()
     for module in modules:
-        instance = module.load_module()
-        assert callable(instance.get_info)
-        assert callable(instance.get_options)
-        assert callable(instance.set_options)
-        assert callable(instance.run)
+        for instance in module.load_module():
+            assert isinstance(instance, AutosecModule)
+            assert callable(instance.get_info)
+            assert callable(instance.get_options)
+            assert callable(instance.set_options)
+            assert callable(instance.run)

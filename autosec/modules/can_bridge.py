@@ -31,40 +31,30 @@ class CanBridge(AutosecModule):
 
         self._add_option("primaryInterface",
             description="First Interface of the CAN Bridge",
-            required = True)
+            required=True,
+            value="can0"
+        )
 
         self._add_option("secondaryInterface",
             description="Second Interface of the CAN Bridge",
-            required = True)
+            required=True,
+            value="can1"
+        )
 
         self._add_option("filters",
-            description = "Filters that can intercept the communication",
-            required = True,
-            default = ([],[]))
+            description="Filters that can intercept the communication",
+            required=True,
+            default=([],[])
+        )
 
         self.logger = logging.getLogger("autosec.modules.can_bridge")
         self.logger.setLevel(logging.DEBUG)
 
-        self.interfaces = dict(
-            primaryInterface = dict(name = "primaryInterface",
-                required = True,
-                default = None,
-                unit = "SocketCAN Device Name",
-                range = None,
-                value = None),
-            secondaryInterface = dict(name = "secondaryInterface",
-                required = True,
-                default = None,
-                unit = "SocketCAN Device Name",
-                range = None,
-                value = None)
-            )
-
         load_layer("can")
         load_contrib("cansocket")
 
-        self.primary_interface = CANSocket(channel = "vcan0")
-        self.secondary_interface = CANSocket(channel = "vcan1")
+        self.primary_interface = None
+        self.secondary_interface = None
         self.filters = ([], [])
         self.thread = None
 
@@ -76,13 +66,9 @@ class CanBridge(AutosecModule):
             interface = "CAN",
             description = "Module to perform MITM CAN attacks with two CAN interfaces"))
 
-    def get_options(self):
-        return self.interfaces.copy()
-
-    def set_options(self, *options):
-        raise NotImplementedError
-
     def run(self):
+        self.primary_interface = CANSocket(channel = "vcan0")
+        self.secondary_interface = CANSocket(channel = "vcan1")
         self.logger.debug("Starting the bridge..")
         self.thread = threading.Thread(target=self._sniff)
         self.thread.start()
