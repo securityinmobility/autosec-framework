@@ -4,6 +4,14 @@ modules to the autosec framework. This module also introduces some functionality
 may help to create modules faster.
 '''
 import logging
+from typing import TypedDict
+
+class AutosecModuleInformation(TypedDict):
+    name: str
+    source: str
+    type: str
+    interface: str
+    description: str
 
 class AutosecModule():
     '''
@@ -18,7 +26,7 @@ class AutosecModule():
         self.logger = logging.getLogger(f"autosec.modules.{self._module_name}")
         self._options = dict()
 
-    def get_info(self):
+    def get_info(self) -> AutosecModuleInformation:
         '''
         This method returns information about the module, e.g. name, package / type, interface,
         purpose etc.
@@ -32,7 +40,7 @@ class AutosecModule():
         '''
         raise NotImplementedError
 
-    def get_options(self):
+    def get_options(self) -> dict:
         '''
         return the specific options this module has with a description
 
@@ -75,7 +83,7 @@ class AutosecModule():
             if  self._options[key]["required"] and self._options[key]["value"] == None:
                 raise ValueError(f"Required option {key} is not set")
 
-    def _add_option(self, name, description = "", required = False, default = None, value = None):
+    def _add_option(self, name: str, description: str = "", required: bool = False, default = None, value = None):
         '''
         Adds an option to the _options dictionary
         By using this structure, the set_options method can be used
