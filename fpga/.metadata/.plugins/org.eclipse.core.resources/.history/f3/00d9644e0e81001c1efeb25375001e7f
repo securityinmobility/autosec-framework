@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="ASCII"?>
+<systemproject:SystemProject xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:sdkproject="http://www.xilinx.com/sdkproject" xmlns:systemproject="http://www.xilinx.com/systemproject" name="Socket_system" platform="S:/Studium/Bachelorarbeit/Vivado/ZyboZ7Bachelorarbeit/PMODCAN_Interrupt_EXTCLK_JE_1/export/PMODCAN_Interrupt_EXTCLK_JE_1/PMODCAN_Interrupt_EXTCLK_JE_1.xpfm" platformUID="xilinx:zybo-z7-10::0.0(custom)" sysConfig="PMODCAN_Interrupt_EXTCLK_JE_1" runtime="cpp" rootFSLocation="" linuxImage="" sysroot="">
+  <configuration name="Debug">
+    <configBuildOptions xsi:type="systemproject:SystemOptions">
+      <applications name="Socket" domainName="domain_ps7_cortexa9_0" domainPrettyName="domain_ps7_cortexa9_0" appBuildConfig="Debug"/>
+      <options xsi:type="sdkproject:SdkOptions" generateSdCard="true"/>
+    </configBuildOptions>
+    <lastBuildOptions xsi:type="systemproject:SystemOptions">
+      <applications name="Socket" domainName="domain_ps7_cortexa9_0" domainPrettyName="domain_ps7_cortexa9_0" appBuildConfig="Debug"/>
+      <options xsi:type="sdkproject:SdkOptions" generateSdCard="true"/>
+    </lastBuildOptions>
+  </configuration>
+  <configuration name="Release">
+    <configBuildOptions xsi:type="systemproject:SystemOptions">
+      <applications name="Socket" domainName="domain_ps7_cortexa9_0" domainPrettyName="domain_ps7_cortexa9_0" appBuildConfig="Release"/>
+      <options xsi:type="sdkproject:SdkOptions" generateSdCard="true"/>
+    </configBuildOptions>
+  </configuration>
+</systemproject:SystemProject>

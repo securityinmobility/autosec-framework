@@ -133,18 +133,19 @@ class CanAttackModule(AutosecModule):
                 self._options["port"][
                     "value"]))
             socket = ethernet_connection.connect_board(self._options["ip"]["value"], self._options["port"]["value"])
-        except socket.error:
-            self.logger.error("Ethernet Connection with IP: [{}] and Port: [{}] could not be established".format(
-                self._options["ip"]["value"],
-                self._options["port"][
-                    "value"]))
-            return -1
         except TimeoutError:
             self.logger.error("Receiver with IP: [{}] and Port: [{}] does not answer".format(
                 self._options["ip"]["value"],
                 self._options["port"][
                     "value"]))
             return -1
+        except socket.error:
+            self.logger.error("Ethernet Connection with IP: [{}] and Port: [{}] could not be established".format(
+                self._options["ip"]["value"],
+                self._options["port"][
+                    "value"]))
+            return -1
+
 
         # Convert Integer to Bytes
         identifier = [((self._options["identifier"]["value"] & 0xFF000000) >> 24),

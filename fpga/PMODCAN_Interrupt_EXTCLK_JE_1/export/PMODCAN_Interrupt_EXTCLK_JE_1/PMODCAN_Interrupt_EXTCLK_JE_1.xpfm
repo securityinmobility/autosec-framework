@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sdx:platform sdx:vendor="xilinx.com"
+              sdx:library="sdx"
+              sdx:name="PMODCAN_Interrupt_EXTCLK_JE_1"
+              sdx:version="1.0"
+              xmlns:sdx="http://www.xilinx.com/sdx">
+    <sdx:description>
+PMODCAN_Interrupt_EXTCLK_JE_1
+    </sdx:description>
+    <sdx:hardwarePlatforms>
+        <sdx:hardwarePlatform sdx:path="hw" sdx:name="PMODCAN_Interrupt_EXTCLK_JE.xsa"/>
+    </sdx:hardwarePlatforms>
+    <sdx:softwarePlatforms>
+        <sdx:softwarePlatform sdx:path="sw" sdx:name="PMODCAN_Interrupt_EXTCLK_JE_1.spfm"/>
+    </sdx:softwarePlatforms>
+</sdx:platform>
+

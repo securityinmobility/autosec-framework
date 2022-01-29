@@ -1,0 +1,10 @@
+timestamp=[2022-01-29 15:14:54], mode=WORKBENCH_START, duration=0:00:04.295, duration_ms=4295, data={}
+timestamp=[2022-01-29 15:14:54], mode=WORKBENCH_UI_INIT, duration=0:00:00.406, duration_ms=406, data={editors_count=0, platform_editors_count=0, projects_count=0, platform_projects_count=0, active_platform_editor=false, projects=}
+timestamp=[2022-01-29 15:14:57], mode=PLATFORM_REPOSITORY_INIT, duration=0:00:02.211, duration_ms=2211, data={}
+timestamp=[2022-01-29 15:17:01], mode=WORKBENCH_START, duration=0:00:04.169, duration_ms=4169, data={}
+timestamp=[2022-01-29 15:17:01], mode=WORKBENCH_UI_INIT, duration=0:00:00.443, duration_ms=443, data={editors_count=0, platform_editors_count=0, projects_count=1, platform_projects_count=0, active_platform_editor=false, projects=RemoteSystemsTempFiles}
+timestamp=[2022-01-29 15:17:04], mode=PLATFORM_REPOSITORY_INIT, duration=0:00:02.224, duration_ms=2224, data={}
+timestamp=[2022-01-29 15:17:48], mode=PLATFORM_GENERATION, duration=0:00:24.551, duration_ms=24551, data={name=PMODCAN_Interrupt_EXTCLK_JE_1}
+timestamp=[2022-01-29 15:17:54], mode=BUILD, duration=0:00:04.665, duration_ms=4665, data={name=Socket, configuration=Debug, clean_build=false}
+timestamp=[2022-01-29 15:18:02], mode=BUILD, duration=0:00:07.286, duration_ms=7286, data={name=Socket_system, configuration=Debug, clean_build=false}
+timestamp=[2022-01-29 15:18:22], mode=BUILD, duration=0:00:04.305, duration_ms=4305, data={name=Socket, configuration=Release, clean_build=false}

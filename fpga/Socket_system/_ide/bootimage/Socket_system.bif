@@ -1,0 +1,12 @@
+/* C:/Users/tobia/AppData/Local/Temp/bootgen_Socket_system15684833821105872856/sd_card_temp/boot.bif */
+/* Command to create bitstream .bin file:       */
+/*   bootgen -image <bif_file> -split bin -w    */
+/* Command to create BOOT.BIN file:             */
+/*   bootgen  -image <bif_file> -w -o i BOOT.BIN */
+/*PMODCAN_Interrupt_EXTCLK_JE_1*/
+the_ROM_image:
+{
+ [bootloader] S:/Studium/Bachelorarbeit/Vivado/ZyboZ7Bachelorarbeit/PMODCAN_Interrupt_EXTCLK_JE_1/export/PMODCAN_Interrupt_EXTCLK_JE_1/sw/PMODCAN_Interrupt_EXTCLK_JE_1/boot/fsbl.elf
+ S:/Studium/Bachelorarbeit/Vivado/ZyboZ7Bachelorarbeit/Socket/_ide/bitstream/PMODCAN_Interrupt_EXTCLK_JE.bit
+ S:/Studium/Bachelorarbeit/Vivado/ZyboZ7Bachelorarbeit/Socket/Debug/Socket.elf
+}
