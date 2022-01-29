@@ -112,8 +112,6 @@
 #include "lwip/ip6_addr.h"
 #include "lwip/nd6.h"
 
-#include <string.h>
-
 #ifdef LWIP_HOOK_FILENAME
 #include LWIP_HOOK_FILENAME
 #endif

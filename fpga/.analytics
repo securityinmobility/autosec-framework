@@ -8,3 +8,19 @@ timestamp=[2022-01-29 15:17:48], mode=PLATFORM_GENERATION, duration=0:00:24.551,
 timestamp=[2022-01-29 15:17:54], mode=BUILD, duration=0:00:04.665, duration_ms=4665, data={name=Socket, configuration=Debug, clean_build=false}
 timestamp=[2022-01-29 15:18:02], mode=BUILD, duration=0:00:07.286, duration_ms=7286, data={name=Socket_system, configuration=Debug, clean_build=false}
 timestamp=[2022-01-29 15:18:22], mode=BUILD, duration=0:00:04.305, duration_ms=4305, data={name=Socket, configuration=Release, clean_build=false}
+timestamp=[2022-01-29 18:10:21], mode=WORKBENCH_START, duration=0:00:09.307, duration_ms=9307, data={}
+timestamp=[2022-01-29 18:10:22], mode=PLATFORM_REPOSITORY_INIT, duration=0:00:00.034, duration_ms=34, data={}
+timestamp=[2022-01-29 18:10:22], mode=WORKBENCH_UI_INIT, duration=0:00:00.982, duration_ms=982, data={editors_count=1, platform_editors_count=0, projects_count=4, platform_projects_count=1, active_platform_editor=false, projects=PMODCAN_Interrupt_EXTCLK_JE_1,RemoteSystemsTempFiles,Socket,Socket_system}
+timestamp=[2022-01-29 18:21:08], mode=BUILD, duration=0:00:01.783, duration_ms=1783, data={name=Socket, configuration=Release, clean_build=false}
+timestamp=[2022-01-29 18:22:32], mode=BUILD, duration=0:00:01.022, duration_ms=1022, data={name=Socket, configuration=Release, clean_build=false}
+timestamp=[2022-01-29 18:27:29], mode=BUILD, duration=0:00:00.659, duration_ms=659, data={name=Socket, configuration=Release, clean_build=false}
+timestamp=[2022-01-29 18:28:21], mode=PLATFORM_GENERATION, duration=0:00:25.464, duration_ms=25464, data={name=PMODCAN_Interrupt_EXTCLK_JE_1}
+timestamp=[2022-01-29 18:28:26], mode=BUILD, duration=0:00:04.319, duration_ms=4319, data={name=Socket, configuration=Release, clean_build=false}
+timestamp=[2022-01-29 18:29:47], mode=BUILD, duration=0:00:00.658, duration_ms=658, data={name=Socket, configuration=Release, clean_build=false}
+timestamp=[2022-01-29 18:32:11], mode=BUILD, duration=0:00:00.651, duration_ms=651, data={name=Socket, configuration=Release, clean_build=false}
+timestamp=[2022-01-29 18:32:28], mode=BUILD, duration=0:00:01.018, duration_ms=1018, data={name=Socket, configuration=Release, clean_build=false}
+timestamp=[2022-01-29 18:34:27], mode=BUILD, duration=0:00:01.194, duration_ms=1194, data={name=Socket, configuration=Release, clean_build=false}
+timestamp=[2022-01-29 18:37:19], mode=BUILD, duration=0:00:01.266, duration_ms=1266, data={name=Socket, configuration=Release, clean_build=false}
+timestamp=[2022-01-29 18:39:35], mode=BUILD, duration=0:00:01.024, duration_ms=1024, data={name=Socket, configuration=Release, clean_build=false}
+timestamp=[2022-01-29 18:40:07], mode=BUILD, duration=0:00:01.026, duration_ms=1026, data={name=Socket, configuration=Release, clean_build=false}
+timestamp=[2022-01-29 18:41:33], mode=BUILD, duration=0:00:01.022, duration_ms=1022, data={name=Socket, configuration=Release, clean_build=false}

@@ -3,7 +3,7 @@ Load CAN_Util Module
 '''
 
 from autosec.core.autosec_module import AutosecModule
-from enum import Enum
+from enum import IntEnum
 from autosec.modules.CAN_Util import ethernet_connection
 
 '''
@@ -13,7 +13,7 @@ may help to create modules faster.
 '''
 
 
-class Attack(Enum):
+class Attack(IntEnum):
     No_Attack = 0,
     BusFlood_Start = 1,
     Simple_Frame_Spoofing = 2,
@@ -74,7 +74,7 @@ class CanAttackModule(AutosecModule):
         self._add_option("bitrate",
                          description="Bitrate of the CAN Bus",
                          required=False,
-                         default=1000000
+                         default=500000
                          )
 
         self.ide = None
@@ -146,7 +146,6 @@ class CanAttackModule(AutosecModule):
                     "value"]))
             return -1
 
-
         # Convert Integer to Bytes
         identifier = [((self._options["identifier"]["value"] & 0xFF000000) >> 24),
                       ((self._options["identifier"]["value"] & 0x00FF0000) >> 16),
@@ -175,6 +174,12 @@ class CanAttackModule(AutosecModule):
             self.logger.info("Attack not implemented")
         elif "Bitrate not supported" in receive:
             self.logger.info("Bitrate not supported")
+        elif self._options["attack"]["value"] == Attack.BusFlood_Start:
+            self.logger.info(receive)
+            input("Press Enter to Stop Busflood")
+            socket.send(b'\xFE')
+            receive = socket.recv(1024).decode()
+            self.logger.info(receive)
         else:
             self.logger.info(receive)
             receive = socket.recv(1024).decode()

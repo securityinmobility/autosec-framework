@@ -251,7 +251,7 @@ int main()
 			case(No_Attack):
 				break;
 			case (Busflood_Attack):
-				startBusFlood();
+				startBusFlood(echo_netif);
 				attack = No_Attack;
 				break;
 			case (Simple_Frame_Spoofing):

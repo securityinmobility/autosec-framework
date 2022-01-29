@@ -81,6 +81,7 @@ err_t recv_callback(void *arg, struct tcp_pcb *tpcb,
 		u8 command = frame[0];
 		if(command == Busflood_Stop) {
 			busfloodActive = 0;
+			xil_printf("Stopping Busflood");
 			pbuf_free(p);
 			return ERR_OK;
 		}
@@ -90,8 +91,6 @@ err_t recv_callback(void *arg, struct tcp_pcb *tpcb,
 		id = (frame[2] << 24) + (frame[3] << 16) + (frame[4] << 8) + frame[5];
 		dlc = frame[6];
 		u32 bitrate = (frame[6+dlc+1] << 16) + (frame[6+dlc+2] << 8) + frame[6+dlc+3];
-		xil_printf("Bitrate: %d %d %d\n\r", frame[15], frame[16], frame[17]);
-
 		xil_printf("Command: %d \n\r", command);
 		xil_printf("IDE: %d \n\r", ide);
 		xil_printf("Identifier: %x \n\r", id);

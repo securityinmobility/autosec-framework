@@ -6,6 +6,7 @@
 #include "PmodCAN.h"
 #include "xgpiops.h"
 #include "CanSetup.h"
+#include "netif/xadapter.h"
 
 PmodCAN myDevice;
 
@@ -20,6 +21,9 @@ u8 dlc;
 u8 message_data[8];
 u8 CNF[3];
 u8 busfloodActive;
+
+extern volatile int TcpFastTmrFlag;
+extern volatile int TcpSlowTmrFlag;
 
 //Preconfigured Bitrates
 bitrate_t Bitrate_Lookup[NUM_INSTANCES_BITRATE] = {
@@ -37,7 +41,7 @@ bitrate_t Bitrate_Lookup[NUM_INSTANCES_BITRATE] = {
 *
 ******************************************************************************/
 
-Attack_StatusTypeDef startBusFlood() {
+Attack_StatusTypeDef startBusFlood(struct netif *netif) {
 	CAN_Message BusFloodMessage;
 	u8 status;
 
@@ -76,13 +80,14 @@ Attack_StatusTypeDef startBusFlood() {
 	//Execute Busflood until stopped by User
 	busfloodActive = 1;
 	while (busfloodActive == 1) {
+		xemacif_input(netif);
 		CAN_RequestToSend(&myDevice, CAN_RTS_TXB012_MASK);
 	}
 	CAN_ModifyReg(&myDevice, CAN_CANINTE_REG_ADDR, CAN_CANINTE_TX012IF_MASK, 1);
 	CAN_ModifyReg(&myDevice, CAN_CANINTF_REG_ADDR, CAN_CANINTF_TX012IF_MASK, 0);
 
 	//Sending finished Frame
-	xil_printf("Spoofing finished\r\n");
+	xil_printf("Busflood finished\r\n");
 	char message1[] = "Busflood finished";
 	tcp_write(connection, message1, sizeof(message1), 1);
 	CANCleanup();
