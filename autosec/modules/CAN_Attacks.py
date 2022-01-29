@@ -15,12 +15,14 @@ may help to create modules faster.
 
 class Attack(Enum):
     No_Attack = 0,
-    BusFlood = 1,
+    BusFlood_Start = 1,
     Simple_Frame_Spoofing = 2,
+    Adaptive_Spoofing = 3,
     Error_Passive_Spoofing_Attack = 4,
     Double_Receive_Attack = 5,
     Bus_Off_Attack = 6,
     Freeze_Doom_Loop_Attack = 7,
+    Busflood_Stop = 254,
 
 
 def load_module():
@@ -37,6 +39,7 @@ class CanAttackModule(AutosecModule):
 
     def __init__(self):
         super().__init__()
+
         self._add_option("ip",
                          description="Ip of the FPGA",
                          required=True,
@@ -60,13 +63,18 @@ class CanAttackModule(AutosecModule):
         self._add_option("identifier",
                          description="Identifier to be used in Hexadecimal",
                          required=True,
-                         default=0x00
+                         default=0x000
                          )
 
         self._add_option("data",
                          description="Array with Data to be used in Hexadecimal",
                          required=False,
                          default=[0x11, 0x22, 0x33, 0x44]
+                         )
+        self._add_option("bitrate",
+                         description="Bitrate of the CAN Bus",
+                         required=False,
+                         default=1000000
                          )
 
         self.ide = None
@@ -95,65 +103,80 @@ class CanAttackModule(AutosecModule):
         Method to run the module
         '''
 
-        print(Attack.__members__.items())
-        transfer_array = bytearray()
-
         try:
             super().run()
         except ValueError as error:
-            # self.logger.warning(error)
+            self.logger.error(error)
             return error
 
-        if self._options["identifier"]["value"] > 2047:
-            self.ide = 1
-        elif self._options["identifier"]["value"] > 4294967296:
-            raise ValueError(
+        # Check Identifier
+        if self._options["identifier"]["value"] > 4294967296:
+            self.logger.error(
                 f"Identifier Value of{self._options['identifier']['value']} exceeding the Limit of 32 Bits")
             return -1
+        elif self._options["identifier"]["value"] > 2047:
+            self.ide = 1
         else:
             self.ide = 0
 
+        # Check Data Length
         if len(self._options["data"]["value"]) > 8:
-            raise ValueError(f"Data Segment Length of{len(self._options['data']['value'])} exceeding the Limit of 8")
+            self.logger.error(f"Data Segment Length of{len(self._options['data']['value'])} exceeding the Limit of 8")
             return -1
         else:
             self.dlc = len(self._options["data"]["value"])
 
+        # Setup Connection to FPGA
         try:
-            print(self._options["ip"]["value"], self._options["port"]["value"])
+            self.logger.info("Setup Ethernet Connection with IP: [{}] and Port: [{}]".format(
+                self._options["ip"]["value"],
+                self._options["port"][
+                    "value"]))
             socket = ethernet_connection.connect_board(self._options["ip"]["value"], self._options["port"]["value"])
-        except socket.error as error:
-            raise ConnectionError(
-                "Ethernet Connection with IP: [{}] and Port: [{}] could not be established".format(
-                    self._options["ip"]["value"],
-                    self._options["port"][
-                        "value"]))
+        except socket.error:
+            self.logger.error("Ethernet Connection with IP: [{}] and Port: [{}] could not be established".format(
+                self._options["ip"]["value"],
+                self._options["port"][
+                    "value"]))
+            return -1
+        except TimeoutError:
+            self.logger.error("Receiver with IP: [{}] and Port: [{}] does not answer".format(
+                self._options["ip"]["value"],
+                self._options["port"][
+                    "value"]))
             return -1
 
+        # Convert Integer to Bytes
         identifier = [((self._options["identifier"]["value"] & 0xFF000000) >> 24),
                       ((self._options["identifier"]["value"] & 0x00FF0000) >> 16),
                       ((self._options["identifier"]["value"] & 0x0000FF00) >> 8),
                       ((self._options["identifier"]["value"] & 0x000000FF) >> 0)]
+        bitrate = [((self._options["bitrate"]["value"] & 0x00FF0000) >> 16),
+                   ((self._options["bitrate"]["value"] & 0x0000FF00) >> 8),
+                   ((self._options["bitrate"]["value"] & 0x000000FF) >> 0)]
 
+        # Attach everything to the Bytearray and send it aftterwards
+        transfer_array = bytearray()
         transfer_array.append(self._options["attack"]["value"])
         transfer_array.append(self.ide)
-
         for i in range(4):
             transfer_array.append(identifier[i])
         transfer_array.append(self.dlc)
-
         for i in range(len(self._options["data"]["value"])):
             transfer_array.append(self._options["data"]["value"][i])
-
+        for i in range(3):
+            transfer_array.append(bitrate[i])
         socket.send(transfer_array)
-        print("Warte auf Antwort")
-        receive = socket.recv(1024).decode()
+        self.logger.info("Waiting for Answer")
 
-        if "Attack not implemented " in receive:
-            print("Attack not implemented")
+        receive = socket.recv(1024).decode()
+        if "Attack not implemented" in receive:
+            self.logger.info("Attack not implemented")
+        elif "Bitrate not supported" in receive:
+            self.logger.info("Bitrate not supported")
         else:
-            print(receive)
+            self.logger.info(receive)
             receive = socket.recv(1024).decode()
-            print(receive)
+            self.logger.info(receive)
 
         socket.close()
