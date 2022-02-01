@@ -1,15 +1,39 @@
-#  Modules for the Autosec-Framework
+# Modules for the Autosec-Framework
 
-## Modules already implemented
+# Possible Thesis topics (german)
 
-## Modules in implementation
+- Aufbau eines Zwischensteckers zum mitschneiden der Kommunikation an DC Ladesäulen
+- Aufbau einer DC-Ladesäule mit Sniffing Funktionalität
+- Aufbau eines Car2X WLANp/802.11p Sniffing Prüfstandes mit Consumer Hardware
+- Konzeption zum mitschneiden von Cellular-V2X Kommunikation
+- Analyse der Angriffsfläche von Infotainment Systemen über die Bluetooth Schnittstelle
+- Analyse der Angriffsfläche von Infotainment Systemen über die USB Schnittstelle
+- Analyse der Angriffsfläche von Infotainment Systemen über die WLAN Schnittstelle
+- Analyse von Logdateien aus Automotive Steuergeräten zur forensischen Verwertung
+- Fuzzing von Bluetooth Implementierung (A2DP, PBAP, SDAP)
 
-- OBD2-Data retrieval 
-- UDS CAN Id resolver
+## Other possible theses topics (not related to autosec-framework / HATS3)
+
+- Identifizieren von Javascript Bibliotheken in gebündelten Dateien
+- Firmware und Protokollanalyse eines elektrischen Kleinstkraftfahrzeug (E-Scooter)
+- Firmware und Protokollanalyse von Sharing Kleinstkraftfahrzeug (E-Scootern)
+- Analyse der Backend Services von Sharing Anbietern
+- Vergleichende Analyse verschiedener Intermediate Representation (IR) Modelle auf Ihre Eignung für platform-unabhängige statische Analysen
+
+## Work in progress modules and theses
+
+- OBD2-Data retrieval
+- Implementierung von CAN Angriffen mithilfe von FPGAs (flooding, frame spoofing, adaptive frame spoofing)
+- Assisted Reverse-Engineering of CAN-Signals
+- User interface concept to control and visualize automotive penetration tests
+
+## Finished modules and theses
+
+- "Konzeptionierung einer DC Fast Charging Ladesäule mit Zugriff auf die Power Line Communication"
+- UDS CAN ID finder
 - CAN MITM bridge
-- Assisted Reverse-Engineering of CAN-Signals (currently out of scope HATS3)
 
-## Modules to be implemented
+## Module Idea Brainstorming
 
 - Intercept, sniff and participate in Car-2-X-Communication (DSRC, ETSI ITS G5 / 802.11p) with modified WLAN hardware or SDRs
 - Scan and attack automotive infotainment interfaces (WLAN, Bluetooth, USB, SD Card slots)
@@ -37,13 +61,3 @@
     - Freeze Doom Loop Attacks (using a legacy feature of CAN)
   - Analyse and attack CAN security mechanisms (IDS, Hardware, Gateways, Encryption)
   - Attacks are described e.g. in [here](https://canislabs.com/wp-content/uploads/2020/05/1901-2019-11-29-White-Paper-CAN-Security.pdf)
-
-
-## Other implementation work
-
-- Create and implement a concept to control and visualize automotive penetration tests
-
-# Other subjects (possibly for a thesis)
-
--  Automotive usage of TEEs (Trusted Execution Environments)
--  Testing of neuronal networks used in automotive domain (e.g., Tesla Autopilote)
