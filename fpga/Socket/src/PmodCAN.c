@@ -595,25 +595,23 @@ u8 CAN_RxStatus(PmodCAN *InstancePtr) {
 */
 void CAN_Configure_Adaptive_Spoofing(PmodCAN *InstancePtr, u8 mode, u32 identifier, u8 ide) {
    u8 RXF0[4];
-   //u8 RXF1[4];
+   u8 RXF1[4];
    u8 RXM0[4];
-   //u8 RXM1[4];
-   u8 RXF_Size;
 
    // Set CAN control mode to configuration
    CAN_ModifyReg(InstancePtr, CAN_CANCTRL_REG_ADDR, CAN_CAN_CANCTRL_MODE_MASK,
          CAN_ModeConfiguration);
 
    CAN_ModifyReg(InstancePtr, 0x0C, 0x05, 0x05); // Enable Pin 9
+   CAN_ModifyReg(InstancePtr, 0x0C, 0x0A, 0x0A); // Enable Pin 10
 
    if(ide == Extended_Identifier) { 	//Extended Identifier
-
+	   xil_printf("Identifier: %x \n\r", identifier);
 	   //Values for the Filter Register
 	   RXF0[0] = (identifier & 0x1FE00000) >> 21;														//SIDH
 	   RXF0[1] = (((identifier & 0x001C0000) >> 13) | 0x00000008) | ((identifier & 0x00030000) >> 16);	//SIDL
 	   RXF0[2] = (identifier & 0x0000FF00) >> 8;														//EID8
 	   RXF0[3] = identifier & 0x000000FF;																//EID0
-	   RXF_Size = 4;
 
 	   //Values for the Mask Register
 	   RXM0[0] = 0xFF;
@@ -621,36 +619,21 @@ void CAN_Configure_Adaptive_Spoofing(PmodCAN *InstancePtr, u8 mode, u32 identifi
 	   RXM0[2] = 0xFF;
 	   RXM0[3] = 0xFF;
 
-	   for(int i = 0; i < RXF_Size; i++) {
-		   xil_printf("RXF[%d]: %x\r\n", i, RXF0[i]);
-	   }
    } else {			//Normal Identifier
-	   //FEHLT EXTENDED IDENTIFIER DER AUCH FÜR DIE ID FILTERT, VLT BUFFER 1 für extended und Buffer 0 für normal
 	   //Values for the Filter Register
 	   RXF0[0] = (identifier & 0x000007F8) >> 3;														//SIDH
 	   RXF0[1] = ((identifier & 0x00000007) << 5) & 0xFFFFFFF7;											//SIDL
-	   RXF_Size = 2;
-	   /*
-	   RXF1[0] = 0x00;
-	   RXF1[0] = 0x08;
-	   RXF1[0] = (identifier & 0x00000700) >> 8;
-	   RXF1[0] = identifier & 0x000000FF;
-	    */
+
+	   RXF1[0] = 0x00;																					//SIDH
+	   RXF1[1] = 0x08;																					//SIDL
+	   RXF1[2] = (identifier & 0x00000700) >> 8;														//EID8
+	   RXF1[3] = identifier & 0x000000FF;																//EID0
 
 	   //Values for the Mask Register
 	   RXM0[0] = 0xFF;
 	   RXM0[1] = 0xE0;
 	   RXM0[2] = 0x00;
 	   RXM0[3] = 0x00;
-	   /*
-	   RXM1[0] = 0xFF;
-	   RXM1[1] = 0xE3;
-	   RXM1[2] = 0xFF;
-	   RXM1[3] = 0xFF;
-	*/
-	   for(int i = 0; i < RXF_Size; i++) {
-		   xil_printf("RXF[%d]: %x\r\n", i, RXF0[i]);
-	   }
    }
 
    // Set config rate and clock for CAN
@@ -663,20 +646,21 @@ void CAN_Configure_Adaptive_Spoofing(PmodCAN *InstancePtr, u8 mode, u32 identifi
    CAN_ClearReg(InstancePtr, 0x40, 14);
    CAN_ClearReg(InstancePtr, 0x50, 14);
 
-   // Set the CAN mode for any message type
-   //CAN_ModifyReg(InstancePtr, CAN_RXB0CTRL_REG_ADDR, 0x64, 0x60);
+   if( ide == Extended_Identifier) {
+	   //Set Acceptance Filter and Mask for Buffer 0
+	   CAN_WriteReg(InstancePtr, CAN_RXF0SIDH_REG_ADDR, RXF0, 4);
+	   CAN_WriteReg(InstancePtr, CAN_RXM0SIDH_REG_ADDR, RXM0, 4);
+	   CAN_ModifyReg(InstancePtr, CAN_RXB0CTRL_REG_ADDR, 0x64, 0x00);
+   } else {
+	   //Set Acceptance Filter and Mask for Buffer 0
+	   CAN_WriteReg(InstancePtr, CAN_RXF0SIDH_REG_ADDR, RXF0, 2);
+	   CAN_WriteReg(InstancePtr, CAN_RXM0SIDH_REG_ADDR, RXM0, 4);
+	   CAN_ModifyReg(InstancePtr, CAN_RXB0CTRL_REG_ADDR, 0x64, 0x00);
 
-   //Set Acceptance Filter and Mask for Buffer 0
-   CAN_WriteReg(InstancePtr, CAN_RXF0SIDH_REG_ADDR, RXF0, RXF_Size);
-   CAN_WriteReg(InstancePtr, CAN_RXM0SIDH_REG_ADDR, RXM0, 4);
-   CAN_ModifyReg(InstancePtr, CAN_RXB0CTRL_REG_ADDR, 0x64, 0x00);
-
-   /*
-   //Set Acceptance Filter and Mask for Buffer 1
-   CAN_WriteReg(InstancePtr, CAN_RXF1SIDH_REG_ADDR, RXF, RXF_Size);
-   CAN_WriteReg(InstancePtr, CAN_RXM0SIDH_REG_ADDR, RXM, 4);
-   CAN_ModifyReg(InstancePtr, CAN_RXB0CTRL_REG_ADDR, 0x64, 0x00);
-   */
+	   //Set Acceptance Filter for Buffer 1
+	   CAN_WriteReg(InstancePtr, CAN_RXF2SIDH_REG_ADDR, RXF1, 4);
+	   CAN_ModifyReg(InstancePtr, CAN_RXB1CTRL_REG_ADDR, 0x60, 0x00);
+   }
 
    // Set CAN control mode to selected mode (exit configuration)
    CAN_ModifyReg(InstancePtr, CAN_CANCTRL_REG_ADDR, CAN_CAN_CANCTRL_MODE_MASK,
@@ -787,14 +771,8 @@ XStatus CAN_PrepareMessage(PmodCAN *InstancePtr, CAN_Message message,
 
    for (i = 0; i < message.dlc; i++)
       data[i + 5] = message.data[i];
-/*
-   xil_printf("CAN_SendMessage message.dlc: %02x\r\n", message.dlc);
-   for (i = 0; i < 5 + message.dlc; i++)
-      xil_printf("CAN_SendMessage: %02x\r\n", data[i]);
-*/
 
    CAN_LoadTxBuffer(InstancePtr, load_start_addr, data, message.dlc + 5);
-   //CAN_RequestToSend(InstancePtr, rts_mask);
 
    return XST_SUCCESS;
 }
@@ -859,11 +837,6 @@ XStatus CAN_SendMessage(PmodCAN *InstancePtr, CAN_Message message,
 
    for (i = 0; i < message.dlc; i++)
       data[i + 5] = message.data[i];
-/*
-   xil_printf("CAN_SendMessage message.dlc: %02x\r\n", message.dlc);
-   for (i = 0; i < 5 + message.dlc; i++)
-      xil_printf("CAN_SendMessage: %02x\r\n", data[i]);
-*/
 
    CAN_LoadTxBuffer(InstancePtr, load_start_addr, data, message.dlc + 5);
    CAN_RequestToSend(InstancePtr, rts_mask);

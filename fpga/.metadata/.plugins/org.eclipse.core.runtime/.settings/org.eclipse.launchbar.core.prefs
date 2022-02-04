@@ -6,3 +6,4 @@ eclipse.preferences.version=1
 org.eclipse.launchbar.core.descriptorType.default\:Debugger_Socket-GDB/activeLaunchMode=run
 org.eclipse.launchbar.core.descriptorType.default\:Debugger_Socket-GDB/activeLaunchTarget=org.eclipse.launchbar.core.launchTargetType.local\:Local
 org.eclipse.launchbar.core.descriptorType.default\:Debugger_Socket-GDB_1/activeLaunchMode=embrun
+org.eclipse.launchbar.core.descriptorType.default\:SystemDebugger_Socket_system/activeLaunchMode=run

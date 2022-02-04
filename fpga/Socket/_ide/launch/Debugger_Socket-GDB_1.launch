@@ -62,6 +62,7 @@
     <stringAttribute key="org.eclipse.cdt.launch.PROJECT_ATTR" value="Socket"/>
     <booleanAttribute key="org.eclipse.cdt.launch.PROJECT_BUILD_CONFIG_AUTO_ATTR" value="true"/>
     <stringAttribute key="org.eclipse.cdt.launch.PROJECT_BUILD_CONFIG_ID_ATTR" value=""/>
+    <stringAttribute key="org.eclipse.dsf.launch.MEMORY_BLOCKS" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot;?&gt;&#13;&#10;&lt;memoryBlockExpressionList context=&quot;reserved-for-future-use&quot;/&gt;&#13;&#10;"/>
     <booleanAttribute key="org.eclipse.tcf.debug.AttachChildren" value="true"/>
     <booleanAttribute key="org.eclipse.tcf.debug.DisconnectOnCtxExit" value="false"/>
     <booleanAttribute key="org.eclipse.tcf.debug.StopAtEntry" value="false"/>

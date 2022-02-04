@@ -92,6 +92,7 @@
 #define CAN_CNF2_REG_ADDR         0x29
 #define CAN_CNF1_REG_ADDR         0x2A
 #define CAN_RXB0CTRL_REG_ADDR     0x60
+#define CAN_RXB1CTRL_REG_ADDR	  0x70
 
 #define CAN_RXF0SIDH_REG_ADDR	  0x00
 #define CAN_RXF0SIDL_REG_ADDR	  0x01

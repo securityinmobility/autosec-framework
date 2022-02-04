@@ -47,11 +47,10 @@ int transfer_data() {
 void print_app_header()
 {
 #if (LWIP_IPV6==0)
-	xil_printf("\n\r\n\r-----lwIP TCP echo server ------\n\r");
+	xil_printf("\n\r\n\r-----lwIP TCP server ------\n\r");
 #else
-	xil_printf("\n\r\n\r-----lwIPv6 TCP echo server ------\n\r");
+	xil_printf("\n\r\n\r-----lwIPv6 TCP server ------\n\r");
 #endif
-	xil_printf("TCP packets sent to port 6001 will be echoed back\n\r");
 }
 
 err_t recv_callback(void *arg, struct tcp_pcb *tpcb,
@@ -71,8 +70,6 @@ err_t recv_callback(void *arg, struct tcp_pcb *tpcb,
 	/* echo back the payload */
 	/* in this case, we assume that the payload is < TCP_SND_BUF */
 	if (tcp_sndbuf(tpcb) > p->len) {
-		xil_printf("Requested Attack: %s \n\r", p->payload);
-		xil_printf("Integer des Requests %d \n\r", atoi(p->payload));
 
 		/*Checking out Payload data*/
 		u8* frame = (u8*)(p->payload);
@@ -95,12 +92,13 @@ err_t recv_callback(void *arg, struct tcp_pcb *tpcb,
 		xil_printf("IDE: %d \n\r", ide);
 		xil_printf("Identifier: %x \n\r", id);
 		xil_printf("DLC: %d \n\r", dlc);
-		xil_printf("Bitrate selected: %d Hz\n\r", bitrate);
 
 		for(int i = 0; i < dlc; i++) {
 			message_data[i] = frame[7+i];
 			xil_printf("Message Data %d: %d \n\r", i, message_data[i]);
 		}
+
+		xil_printf("Bitrate selected: %d Hz\n\r", bitrate);
 
 		if(checkBitrate(bitrate) != 0) {
 			command = Bitrate_Not_Supported;
