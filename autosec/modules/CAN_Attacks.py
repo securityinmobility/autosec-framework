@@ -57,7 +57,7 @@ class CanAttackModule(AutosecModule):
         self._add_option("attack",
                          description="Attack that hast to be executed",
                          required=True,
-                         default=0
+                         default=1
                          )
 
         self._add_option("identifier",

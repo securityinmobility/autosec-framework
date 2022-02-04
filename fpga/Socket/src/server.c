@@ -78,7 +78,7 @@ err_t recv_callback(void *arg, struct tcp_pcb *tpcb,
 		u8 command = frame[0];
 		if(command == Busflood_Stop) {
 			busfloodActive = 0;
-			xil_printf("Stopping Busflood");
+			xil_printf("Stopping Busflood\r\n");
 			pbuf_free(p);
 			return ERR_OK;
 		}
