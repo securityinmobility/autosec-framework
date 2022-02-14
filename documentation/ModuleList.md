@@ -9,6 +9,7 @@
 - Analyse der Angriffsfläche von Infotainment Systemen über die Bluetooth Schnittstelle
 - Analyse der Angriffsfläche von Infotainment Systemen über die USB Schnittstelle
 - Analyse der Angriffsfläche von Infotainment Systemen über die WLAN Schnittstelle
+- Analyse der Angriffsfläche von Infotainment Systemen über die Rundfunk Schnittstelle [1](https://arstechnica.com/cars/2022/02/radio-station-snafu-in-seattle-bricks-some-mazda-infotainment-systems/)
 - Analyse von Logdateien aus Automotive Steuergeräten zur forensischen Verwertung
 - Fuzzing von Bluetooth Implementierung (A2DP, PBAP, SDAP)
 
