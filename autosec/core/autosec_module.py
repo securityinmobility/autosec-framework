@@ -7,6 +7,9 @@ import logging
 from typing import TypedDict
 
 class AutosecModuleInformation(TypedDict):
+    '''
+    Typed dictionary class holding meta information about an autosec module
+    '''
     name: str
     source: str
     type: str
@@ -22,9 +25,9 @@ class AutosecModule():
         '''
         Initialize the module, create logger and empty options dictionary
         '''
-        self._module_name = str(self.__class__).split(".")[-1][:-2]
+        self._module_name = str(self.__class__).rsplit(".", maxsplit=1)[:-2]
         self.logger = logging.getLogger(f"autosec.modules.{self._module_name}")
-        self._options = dict()
+        self._options = {}
 
     def get_info(self) -> AutosecModuleInformation:
         '''
@@ -64,26 +67,34 @@ class AutosecModule():
 
         for option in options:
             if len(option) != 2:
-                self.logger.warning(f"Could not insert option {option} due to wrong format")
+                self.logger.warning("Could not insert option %s due to wrong format", option)
                 continue
             key = option[0]
             value = option[1]
             try:
                 self._options[key]["value"] = value
             except KeyError:
-                self.logger.warning(f"Could not insert option with key {key}. Value was {value}")
+                self.logger.warning("Could not insert option with key %s. Value was %s", key, value)
 
     def run(self):
         '''
         Method to run the module.
         '''
-        for key in self._options:
-            if self._options[key]["value"] is None and self._options[key]["default"] is not None:
-                self._options[key]["value"] = self._options[key]["default"]
-            if  self._options[key]["required"] and self._options[key]["value"] == None:
+        for key, option in self._options.items():
+            if option["value"] is None and option["default"] is not None:
+                option["value"] = option["default"]
+            if  option["required"] and option["value"] is None:
                 raise ValueError(f"Required option {key} is not set")
 
-    def _add_option(self, name: str, description: str = "", required: bool = False, default = None, value = None):
+    #pylint: disable=too-many-arguments
+    def _add_option(
+        self,
+        name: str,
+        description: str = "",
+        required: bool = False,
+        default = None,
+        value = None
+    ):
         '''
         Adds an option to the _options dictionary
         By using this structure, the set_options method can be used

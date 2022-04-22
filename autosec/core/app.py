@@ -1,10 +1,11 @@
-""" Main app of the AutoSec framework.
+'''
+Main app of the AutoSec framework.
 
 webApi: Not yet implemented, will start a REST API to control the framework
 webApp: Not yet implemented, webApplication that can be used to control the framework.
 
 Requires: webApi = True (error if it is set as false).
-"""
+'''
 import sys
 import logging
 import IPython
@@ -55,6 +56,6 @@ class App():
     def _create_ipython_config():
 
         config = Config()
-        config.InteractiveShellApp.exec_lines= [
+        config.InteractiveShellApp.exec_lines = [
 
         ]
