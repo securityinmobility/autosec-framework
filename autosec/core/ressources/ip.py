@@ -1,5 +1,5 @@
 import socket
-from base import AutosecRessource, NetworkInterface
+from .base import AutosecRessource, NetworkInterface
 from typing import Optional
 
 class InternetInterface(NetworkInterface):

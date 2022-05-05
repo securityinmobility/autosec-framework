@@ -6,7 +6,7 @@ may help to create modules faster.
 import logging
 from typing import TypedDict, List, Union
 from abc import ABC, abstractmethod
-from ressources.base import AutosecRessource
+from .ressources.base import AutosecRessource
 
 class AutosecModuleInformation(TypedDict):
     '''
@@ -109,6 +109,14 @@ class AutosecModule(ABC):
         '''
         return []
 
+    @staticmethod
+    def get_ressources(inputs: List[AutosecRessource], kind: AutosecRessource):
+        return [x for x in inputs if isinstance(x, kind)]
+
+    @staticmethod
+    def get_ressource(inputs: List[AutosecRessource], kind: AutosecRessource):
+        return AutosecModule.get_ressources(inputs, kind)[0]
+
     def can_run(self, inputs: List[AutosecRessource]) -> Union[bool, AutosecExpectedMetrics]:
         '''
         This method returns expected metrics of running the attack with the
@@ -118,7 +126,7 @@ class AutosecModule(ABC):
         information about expected runtime and success rate
         '''
         for req in self.get_required_ressources():
-            given_amount = len([x for x in inputs if isinstance(x, req)])
+            given_amount = self.get_ressources(inputs, req)
             required_amount = len([x for x in required if x == req])
             if given_amount < required_amount:
                 return False
