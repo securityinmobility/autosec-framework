@@ -63,13 +63,13 @@ class InternetConnection(AutosecRessource):
         self._socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self._socket.connect((service.get_device().get_address(), service.get_port()))
 
-    def send(data: bytes):
+    def send(self, data: bytes):
         self._socket.send(data)
 
-    def recv(amount: int):
+    def recv(self, amount: int):
         self._socket.recv(amount)
 
-    def read_until(stop = b'\n'):
+    def read_until(self, stop = b'\n'):
         result = b''
         while True:
             curr = self.recv(1)

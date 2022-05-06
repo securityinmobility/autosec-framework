@@ -30,17 +30,8 @@ class ArpService(AutosecModule):
     
 
     def get_required_ressources(self):
-        return [ip.InternetDevice]
+        return [self.get_ressource([ip.InternetInterface])]
     
-
-    def get_optional_ressources(self):
-        return None
-
-    
-    def can_run(self, inputs):
-        runnable = super().can_run(inputs)
-        return runnable
-
     
     def run(self, inputs):
         results = []

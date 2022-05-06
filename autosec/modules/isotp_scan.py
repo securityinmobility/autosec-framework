@@ -3,7 +3,7 @@ Module for scanning CAN bus for ISO-TP endpoints
 '''
 
 from typing import List
-from scapy.all import conf, load_contrib
+from scapy.all import conf, load_contrib, ISOTPScan
 
 from autosec.core.autosec_module import AutosecModule, AutosecModuleInformation
 from autosec.core.ressources import AutosecRessource, CanInterface, IsoTPService
