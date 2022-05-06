@@ -125,7 +125,8 @@ class AutosecModule(ABC):
         @return: a boolean wether the attack is possible or detailed
         information about expected runtime and success rate
         '''
-        for req in self.get_required_ressources():
+        required = self.get_required_ressources()
+        for req in required:
             given_amount = self.get_ressources(inputs, req)
             required_amount = len([x for x in required if x == req])
             if given_amount < required_amount:
