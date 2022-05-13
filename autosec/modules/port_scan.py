@@ -46,6 +46,5 @@ class PortService(AutosecModule):
             response = sr1(ipPkt/tcpPkt, timeout=15, verbose = 0)
             if response is not None and response.haslayer(TCP):
                 if response.getlayer(TCP).flags == "SA":
-                    open_ports.append(InternetService(device= InternetDevice(ipv6=ip_address) if (in6_isvalid(ip_address)) else ip.InternetDevice(ipv4=ip_address), 
-                                                        port=port))
+                    open_ports.append(InternetService(device= device, port=port))
         return open_ports

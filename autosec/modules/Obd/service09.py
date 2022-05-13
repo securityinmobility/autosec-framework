@@ -4,9 +4,9 @@ such as the country, manufacturer, region and years.
 '''
 import logging
 
-from scapy.all import load_contrib
+from scapy.all import load_contrib, ISOTPSocket, ISOTP
 from scapy.main import load_layer
-
+from autosec.core.ressources.can import IsoTPService
 from vininfo import Vin
 
 logger = logging.getLogger("autosec.modules.Obd.service09")
@@ -20,7 +20,7 @@ def get_vin(interface):
     load_layer("can")
 
     try:
-        socket = ISOTPSocket(interface, sid=0x7E0, did=0x7E8)
+        socket = IsoTPService(interface, tx_id=0x7E0, tx_id=0x7E8).get_socket()
         msg = ISOTP(data=b'\x09\x02')
         socket.send(msg)
     except OSError as err:
