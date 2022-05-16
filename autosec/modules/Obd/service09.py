@@ -20,7 +20,7 @@ def get_vin(interface):
     load_layer("can")
 
     try:
-        socket = IsoTPService(interface, tx_id=0x7E0, tx_id=0x7E8).get_socket()
+        socket = IsoTPService(interface, tx_id=0x7E0, tr_id=0x7E8).get_socket()
         msg = ISOTP(data=b'\x09\x02')
         socket.send(msg)
     except OSError as err:

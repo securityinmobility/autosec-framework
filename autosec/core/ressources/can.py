@@ -1,6 +1,6 @@
 from .base import AutosecRessource, NetworkInterface
 from scapy.layers.can import CAN
-from scapy.contrib.cansocket import CANSocket
+from scapy.contrib.cansocket import CANSocket, ISOTPSocket
 
 class CanInterface(NetworkInterface):
     _interface: CANSocket
@@ -32,6 +32,22 @@ class CanDevice(AutosecRessource):
 
     def request_data():
         pass # TODO remote transmission request
+
+
+class CanOverride1(AutosecRessource):
+
+    def __init__(self, indexStart: int, values: bytes, data: bytes):
+        super().__init__()
+        self.start = indexStart
+        self.values = values
+        data = data
+
+    def changeData(self) -> bytes:
+        data = list(self.data)
+        values = list(self.values)
+        new_data = data[:self.start] + values + data[self.start+len(values)::]
+        return bytes(new_data)
+
 
 class IsoTPService(AutosecRessource):
     _interface: CanInterface

@@ -3,13 +3,10 @@ from autosec.core.ressources import AutosecRessource, NetworkInterface
 
 class ObdInfo(AutosecRessource):
 
-    def __init__(self, info, data):
+    def __init__(self, info):
         super().__init__()
-        self.infoDict = info
-        self.rawDataDict = data
+        self.info = info
 
     def getInfo(self) -> dict:
-        return self.infoDict
+        return self.info
     
-    def getData(self) -> dict:
-        return self.rawDataDict
