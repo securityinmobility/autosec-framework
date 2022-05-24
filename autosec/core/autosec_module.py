@@ -127,7 +127,7 @@ class AutosecModule(ABC):
         '''
         required = self.get_required_ressources()
         for req in required:
-            given_amount = self.get_ressources(inputs, req)
+            given_amount = len(self.get_ressources(inputs, req))
             required_amount = len([x for x in required if x == req])
             if given_amount < required_amount:
                 return False

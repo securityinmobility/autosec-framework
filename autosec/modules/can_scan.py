@@ -1,19 +1,18 @@
-from this import d
 from autosec.core.autosec_module import AutosecModule, AutosecModuleInformation
 from autosec.core.ressources import AutosecRessource
 from typing import List
 
-from autosec.core.ressources.can import CanInterface
+from autosec.core.ressources.can import CanInterface, CanDevice
 
 
 def load_module():
     """
     Method to provide the module to the framework
     """
-    return [CanService()]
+    return [CanScan()]
 
 
-class CanService(AutosecModule):
+class CanScan(AutosecModule):
     """
     Class that provides a CAN scan
     """
@@ -31,7 +30,7 @@ class CanService(AutosecModule):
         )
     
     def get_produced_outputs(self) -> List[AutosecRessource]:
-        return [CanService]
+        return [CanDevice]
     
     def get_required_ressources(self) -> List[AutosecRessource]:
         return [CanInterface]
@@ -40,10 +39,5 @@ class CanService(AutosecModule):
         interface = self.get_ressource(inputs, CanInterface)
         socket = interface.get_socket()
         pkts = socket.sniff(timeout=5)
-        result = []
-        for p in pkts:
-            data = p.get_field("data")
-            identifier = p.get_field("identifier")
-            result.add(CanService(identifier, data))
-
-        return result
+        result = set(p.getfieldval("identifier") for p in pkts)
+        return [CanDevice(interface, addr) for addr in result]
