@@ -3,10 +3,8 @@ Module for scanning CAN bus for ISO-TP endpoints
 '''
 
 from typing import List
-from scapy.all import conf, load_contrib, ISOTPScan
-
-from autosec.core.autosec_module import AutosecModule, AutosecModuleInformation
 from autosec.core.ressources import AutosecRessource, CanInterface, IsoTPService
+from autosec.core.autosec_module import AutosecModule, AutosecModuleInformation
 
 def load_module():
     '''
@@ -34,11 +32,6 @@ class IsoTpServices(AutosecModule):
         return [CanInterface]
 
     def run(self, inputs: List[AutosecRessource]) -> List[IsoTPService]:
-        conf.contribs['ISOTP'] = {'use-can-isotp-kernel-module': True}
-        conf.contribs['CANSocket'] = {'use-python-can': False}
-        load_contrib('cansocket')
-        load_contrib('isotp')
-
         can = self.get_ressource(inputs, CanInterface)
         socks = ISOTPScan(can.get_socket(), extended_addressing=False)
         # TODO extended addressing. In separate module(?)

@@ -1,6 +1,13 @@
 from .base import AutosecRessource, NetworkInterface
+from scapy.all import conf, load_contrib
+
+conf.contribs['ISOTP'] = {'use-can-isotp-kernel-module': True}
+conf.contribs['CANSocket'] = {'use-python-can': False}
+load_contrib('cansocket')
+load_contrib('isotp')
+
 from scapy.layers.can import CAN
-from scapy.contrib.cansocket import CANSocket, ISOTPSocket
+from scapy.contrib.cansocket import CANSocket
 
 class CanInterface(NetworkInterface):
     _interface: CANSocket
@@ -56,7 +63,6 @@ class CanService(AutosecRessource):
         self.service = service
         self.data = data
 
-    
 
 class IsoTPService(AutosecRessource):
     _interface: CanInterface
