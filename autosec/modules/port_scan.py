@@ -2,6 +2,7 @@ from scapy.all import RandShort, conf, sr1, IP, TCP, in6_isvalid, L3RawSocket
 from autosec.core.autosec_module import AutosecModule, AutosecModuleInformation
 from autosec.core.ressources import ip, AutosecRessource, InternetDevice, InternetService, InternetInterface
 from typing import List
+import socket
 
 
 def load_module():
@@ -46,5 +47,9 @@ class PortService(AutosecModule):
             response = sr1(ipPkt/tcpPkt, timeout=15, verbose = 0)
             if response is not None and response.haslayer(TCP):
                 if response.getlayer(TCP).flags == "SA":
-                    open_ports.append(InternetService(device= device, port=port))
+                    try:
+                        port_service_name = socket.getservbyport(port)
+                    except:
+                        port_service_name = "unknown" 
+                    open_ports.append(InternetService(device= device, port=port, service_name=port_service_name))
         return open_ports

@@ -41,16 +41,21 @@ class InternetDevice(AutosecRessource):
 class InternetService(AutosecRessource):
     _device: InternetDevice
     _port: int
+    _service_name: str
 
-    def __init__(self, device: InternetDevice, port: int):
+    def __init__(self, device: InternetDevice, port: int, service_name = "unknown"):
         self._device = device
         self._port = port
+        self._service_name = service_name
 
     def get_device(self) -> InternetDevice:
         return self._device
     
     def get_port(self) -> int:
         return self._port
+
+    def get_service_name(self):
+        return self._service_name
 
     def connect(self) -> 'InternetConnection':
         return InternetConnection(self)

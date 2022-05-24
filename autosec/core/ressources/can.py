@@ -49,6 +49,15 @@ class CanOverride1(AutosecRessource):
         return bytes(new_data)
 
 
+class CanService(AutosecRessource):
+
+    def __init__(self, service, data):
+        super().__init__()
+        self.service = service
+        self.data = data
+
+    
+
 class IsoTPService(AutosecRessource):
     _interface: CanInterface
     _tx_id: int
