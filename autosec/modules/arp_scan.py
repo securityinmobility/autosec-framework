@@ -1,6 +1,6 @@
-from scapy.all import ARP, Ether, srp, in6_isvalid
+from scapy.all import ARP, Ether, srp, in6_isvalid, arping, sr
 from autosec.core.autosec_module import AutosecModule, AutosecModuleInformation
-from autosec.core.ressources import ip, InternetDevice, InternetInterface
+from autosec.core.ressources.ip import InternetDevice, InternetInterface
 from typing import List
 
 from autosec.core.ressources.base import AutosecRessource
@@ -40,15 +40,17 @@ class ArpService(AutosecModule):
     
     
     def run(self,inputs: List[AutosecRessource]) -> List[InternetDevice]:
-        interface = self.get_ressources(inputs, InternetInterface)
-        results = []
-        for input in interface:
-            arp_request = ARP(pdst=input.get_address())
-            broadcast = Ether(dst=self.ether_broadcast)
-            arp_request_broadcast = broadcast/arp_request
-            answered, _ = srp(arp_request_broadcast, timeout=2)
-            result = [InternetDevice(ipv6=received.psrc) if (in6_isvalid(received)) else InternetDevice(ipv4=received.psrc)  for received,_ in answered]
-            results += result
+        
+        interface = self.get_ressource(inputs, InternetInterface)
+       
+        arp_request = ARP(pdst=interface.get_network_address())
+        broadcast = Ether(dst=self.ether_broadcast)
+        arp_request_broadcast = broadcast/arp_request
+        answered, _ = srp(arp_request_broadcast, timeout=5) #iface=interface.get_interface_name()
+        #ans, _ = arping(interface.get_network_address(), timeout=2)
+        addresses  = set(received.psrc for received,_ in answered)
+        results = [InternetDevice(input,ipv6=address) if (in6_isvalid(address)) else InternetDevice(input,ipv4=address) for address in addresses]
+        
         return results
 
     

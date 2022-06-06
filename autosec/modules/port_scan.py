@@ -1,6 +1,7 @@
-from scapy.all import RandShort, conf, sr1, IP, TCP, in6_isvalid, L3RawSocket
+from scapy.all import IP, TCP, L3RawSocket,sr
 from autosec.core.autosec_module import AutosecModule, AutosecModuleInformation
-from autosec.core.ressources import ip, AutosecRessource, InternetDevice, InternetService, InternetInterface
+from autosec.core.ressources.ip import InternetDevice, InternetService, InternetInterface
+from autosec.core.ressources.base import AutosecRessource
 from typing import List
 import socket
 
@@ -36,20 +37,19 @@ class PortService(AutosecModule):
     
     
     def run(self, inputs: List[AutosecRessource]) -> List[InternetService]:
-        conf.L3socket = L3RawSocket
+        #conf.L3socket = L3RawSocket
         device = self.get_ressource(inputs, InternetDevice)
         ip_address = device.get_address()
-        src_port = RandShort()
-        open_ports = []
-        for port in range(1, 65536):
-            ipPkt = IP(dst=ip_address)
-            tcpPkt = TCP(sport=src_port, dport=port, flags="S")
-            response = sr1(ipPkt/tcpPkt, timeout=15, verbose = 0)
-            if response is not None and response.haslayer(TCP):
-                if response.getlayer(TCP).flags == "SA":
-                    try:
-                        port_service_name = socket.getservbyport(port)
-                    except:
-                        port_service_name = "unknown" 
-                    open_ports.append(InternetService(device= device, port=port, service_name=port_service_name))
-        return open_ports
+     
+        res, uns = sr(IP(dst=ip_address)/TCP(flags="S",dport=(1,80)))
+        a = res.filter(lambda s,r: (r.haslayer(TCP) and (r.getlayer(TCP).flags & 2)))
+        open_ports = [answer.getlayer(TCP).sport for query, answer in a]
+        service_name = []
+        for port in open_ports:
+            try:
+                port_service_name = socket.getservbyport(port)
+            except:
+                port_service_name = "unknown"
+            service_name.append(port_service_name)
+
+        return [InternetService(device=device, port=p, service_name=s) for p, s in zip(open_ports, service_name)]

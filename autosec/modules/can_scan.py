@@ -1,5 +1,5 @@
 from autosec.core.autosec_module import AutosecModule, AutosecModuleInformation
-from autosec.core.ressources import AutosecRessource
+from autosec.core.ressources.base import AutosecRessource
 from typing import List
 
 from autosec.core.ressources.can import CanInterface, CanDevice

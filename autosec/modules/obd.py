@@ -6,7 +6,7 @@ from autosec.core.autosec_module import AutosecModule, AutosecModuleInformation
 from autosec.core.ressources import AutosecRessource, CanInterface
 from autosec.core.ressources.can import IsoTPService
 from autosec.modules.Obd import service01, service09
-from autosec.modules.Obd.obdInfo import ObdInfo
+from autosec.core.ressources.obdInfo import ObdInfo
 from typing import List
 
 
@@ -48,50 +48,25 @@ class ObdServices(AutosecModule):
         resp_9 = isoTpSocket.sr1(req_9)  # -> show() 
         dump_9 = resp_9.show(dump=True)
         results.add(ObdInfo(dump_9, 9, 0x02))
+
         # service 1
+        pid_list = [0x00, 0x21, 0x1C, 0x0D, 0x0C, 0x05, 0x04, 0x03, 0x01]
+        """ 
+        0x00: get supported pid
+        0x21: Distance traveled with malfunction indicator lamp (MIL) on
+        0x1C: OBD standards this vehicle conforms to
+        0x0D: Vehicle speed 
+        0x0C: Engine speed
+        0x05: Engine coolant temperature
+        0x04: Calculated engine load 
+        0x03: Fuel system status
+        0x01:  Monitor status since DTCs cleared. (Includes malfunction indicator lamp (MIL)
+        """
 
-        req_00 = OBD()/OBD_S01(pid=[0x00])  # get supported pid
-        resp_00 = isoTpSocket.sr1(req_00)
-        dump_00 = resp_00.show(dump=True)
-
-        req_21 = OBD()/OBD_S01(pid=[0x21])  # Distance traveled with malfunction indicator lamp (MIL) on 
-        resp_21 = isoTpSocket.sr1(req_21)
-        dump_21 = resp_21.show(dump=True)
-        results.add(dump_21, 1, 0x21)
-
-        req_1C = OBD()/OBD_S01(pid=[0x1C])  # OBD standards this vehicle conforms to
-        resp_1C = isoTpSocket.sr1(req_1C)
-        dump_1C = resp_1C.show(dump=True)
-        results.add(ObdInfo(dump_1C))
-
-        req_0D = OBD()/OBD_S01(pid=[0x0D])  # Vehicle speed 
-        resp_0D = isoTpSocket.sr1(req_0D)
-        dump_0D = resp_0D.show(dump=True)
-        results.add(ObdInfo(dump_0D, 1, 0x0D))
-
-        req_0C = OBD()/OBD_S01(pid=[0x0C])  # Engine speed 
-        resp_0C = isoTpSocket.sr1(req_0C)
-        dump_0C = resp_0C.show(dump=True)
-        results.add(ObdInfo(dump_0C, 1, 0x0C))
-
-        req_05 = OBD()/OBD_S01(pid=[0x05])  # Engine coolant temperature
-        resp_05 = isoTpSocket.sr1(req_05)
-        dump_05 = resp_05.show(dump=True)
-        results.add(ObdInfo(dump_05, 1, 0x05))
-
-        req_04 = OBD()/OBD_S01(pid=[0x04])  # Calculated engine load 
-        resp_04 = isoTpSocket.sr1(req_04)
-        dump_04 = resp_04.show(dump=True)
-        results.add(ObdInfo(dump_04, 1, 0x04))
-
-        req_03 = OBD()/OBD_S01(pid=[0x03])  # Fuel system status
-        resp_03 = isoTpSocket.sr1(req_03)
-        dump_03 = resp_03.show(dump=True)
-        results.add(ObdInfo(dump_03, 1, 0x03))
-
-        req_01 = OBD()/OBD_S01(pid=[0x01])  # Monitor status since DTCs cleared. (Includes malfunction indicator lamp (MIL)
-        resp_01 = isoTpSocket.sr1(req_01)
-        dump_01 = resp_01.show(dump=True)
-        results.add(ObdInfo(dump_01, 1 , 0x01))
+        for pId in pid_list:
+            req = OBD()/OBD_S01(pid=[pId])
+            resp = isoTpSocket.sr1(req)
+            dump = resp.show(dump=True)
+            results.add(ObdInfo(dump, 1, pId))
 
         return results
