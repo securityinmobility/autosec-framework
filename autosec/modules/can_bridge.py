@@ -9,7 +9,7 @@ messages (e.g. with certain IDs) can be manipulated.
 
 from scapy.all import load_layer, load_contrib, conf, CAN, CANSocket, bridge_and_sniff
 from autosec.core.autosec_module import AutosecModule, AutosecModuleInformation
-from autosec.core.ressources import AutosecRessource, CanInterface, CanOverride1
+from autosec.core.ressources import AutosecRessource, CanInterface, CanOverride1, CanService
 from typing import List
 
 def load_module():
@@ -41,34 +41,32 @@ class CanBridge(AutosecModule):
     def get_required_ressources(self) -> List[AutosecRessource]:
         return [CanInterface, CanInterface]
 
-    def run(self, inputs: List[AutosecRessource]) -> List[AutosecRessource]:
+    def run(self, inputs: List[AutosecRessource], change=False,direction=12,start_idx=1,values=b'pwned') -> List[AutosecRessource]:
         conf.contribs['CANSocket'] = {'use-python-can': False}
         load_contrib('cansocket')
+        self.change = change
+        self.direction = direction
+        self.idx = start_idx
+        self.values = values
 
         interfaces = self.get_ressources(inputs, CanInterface)
         socket1 = interfaces[0].get_socket()
         socket2 = interfaces[1].get_socket()
-        bridge_and_sniff(if1=socket1, if2=socket2, xfrm12=self.forwarding12, xfrm21=self.forwarding21, timeout=1)
 
-        #socket1.close()
-        #socket2.close()
-        return []
+        pkts = bridge_and_sniff(if1=socket1, if2=socket2, xfrm12=self.forwarding12, xfrm21=self.forwarding21, timeout=1)
+        result = [(p.getfieldval("data"), p.getfieldval("identifier"), )for p in pkts]
+        return [CanService(i,d) for d,i in result]
+
 
     def forwarding12(self, pkt):
-        data = pkt.data
-        msg_id = pkt.identifier
-        interface = 2
-        self.logger.debug("Received message on %s with id %03x and data %s", interface, msg_id, data)
-        # filters could be implemented to change the data
-        new_pkt = CAN(identifier=msg_id, length=len(data), data=data)
-        return new_pkt
+        if self.change and self.direction == 12:
+            override = CanOverride1(indexStart=self.idx,values=self.values)
+            pkt.data = override.changeData(pkt.data)
+        return pkt
     
     def forwarding21(self, pkt):
-        data = pkt.data
-        msg_id = pkt.identifier
-        interface = 1
-        self.logger.debug("Received message on %s with id %03x and data %s", interface, msg_id, data)
-        # filters could be implemented to change the data
-        new_pkt = CAN(identifier=msg_id, length=len(data), data=data)
-        return new_pkt
+        if self.change and self.direction == 121:
+            override = CanOverride1(indexStart=self.idx,values=self.values)
+            pkt.data = override.changeData(pkt.data)
+        return pkt
 

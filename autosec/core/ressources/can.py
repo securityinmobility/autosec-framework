@@ -43,17 +43,22 @@ class CanDevice(AutosecRessource):
 
 class CanOverride1(AutosecRessource):
 
-    def __init__(self, indexStart: int, values: bytes, data: bytes):
+    def __init__(self, indexStart: int, values: bytes):
         super().__init__()
         self.start = indexStart
         self.values = values
-        data = data
 
-    def changeData(self) -> bytes:
-        data = list(self.data)
+    def changeData(self, data: bytes) -> bytes:
+        if type(self.values) != bytes:
+            print("Values have to be bytes.")
+            exit
+        if self.start + len(self.values) > 8:
+            print("Only 8 bytes")
+            exit
+        data = list(data)
         values = list(self.values)
         new_data = data[:self.start] + values + data[self.start+len(values)::]
-        return bytes(new_data)
+        return bytes(new_data)  
 
 
 class CanService(AutosecRessource):
@@ -62,6 +67,12 @@ class CanService(AutosecRessource):
         super().__init__()
         self.service = service
         self.data = data
+    
+    def get_data(self):
+        return self.data
+    
+    def get_service(self):
+        return self.service
 
 
 class IsoTPService(AutosecRessource):

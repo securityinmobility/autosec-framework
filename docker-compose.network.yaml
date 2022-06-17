@@ -1,0 +1,47 @@
+version: "3"
+
+services:
+
+  HostA:
+    #build: #./ubuntu_base This entry indicates that the container image's folder name, and will use the Dockerfile inside to build a container image.
+    image: ubuntu:20.04 #The name of the image is specified in this entry. Without this entry, docker will generate a name for this image.
+    container_name: host-10.9.0.5
+    tty: true  #indicate that when running the container, use the -t option, which is necessary for getting a shell prompt on the container later on.
+    cap_add:
+      - ALL
+    networks:
+      net-10.9.0.0:
+        ipv4_address: 10.9.0.5  
+
+  
+  HostB:
+    image: ubuntu:20.04
+    container_name: host-10.9.0.6
+    tty: true
+    cap_add:
+      - ALL
+    networks:
+      net-10.9.0.0:
+        ipv4_address: 10.9.0.6
+
+  HostC:
+    image: ubuntu:20.04
+    container_name: host-10.9.0.7
+    tty: true
+    cap_add:
+      - ALL
+    networks:
+      net-10.9.0.0:
+        ipv4_address: 10.9.0.7
+
+networks:
+  net-10.9.0.0:
+    name: net-10.9.0.0
+    ipam:
+      config:
+        - subnet: 10.9.0.0/24
+
+#When Docker creates a network, it automatically attaches the host machine (i.e., the VM) to the network, and gives the .1 as its IP address. Namely, for the 10.9.0.0/24 network, the host machine's IP address is 10.9.0.1. Therefore, the host machine can directly communicate with all the containers.
+        
+        
+        
