@@ -3,7 +3,7 @@ This file interprets some messages received from the OBD-II service 01.
 '''
 import logging
 import can
-
+from autosec.core.ressources import base
 from tabulate import tabulate
 
 logger = logging.getLogger("autosec.modules.Obd.service01")
@@ -95,7 +95,7 @@ def get_supported_pid(interface, pid):
     valid = [0x00, 0x20, 0x40, 0x60, 0x80, 0xA0, 0xC0]
     if pid not in valid:
         raise ValueError("Valid PIDs:", [hex(i) for i in valid])
-    bus = can.interface.Bus(bustype='socketcan', channel=interface,
+    bus = can.interface.Bus(bustype='socketcan', channel=interface.get_interface_name(),
                             can_filters=[{"can_id": 0x7E8, "can_mask":0x7FF}])
 
     msg_pid = can.Message(
@@ -173,7 +173,7 @@ def get_mil_status(interface, pid):
     Monitor status sice DTCs cleared. Includes malfunction indicator lamp status
     and number of DTCs.
     '''
-    bus = can.interface.Bus(bustype='socketcan', channel=interface,
+    bus = can.interface.Bus(bustype='socketcan', channel=interface.get_interface_name(),
                             can_filters=[{"can_id": 0x7E8, "can_mask":0x7FF}])
 
     msg = can.Message(
@@ -252,7 +252,7 @@ def get_fuelsystem_status(interface, pid):
     PID 03
     Fuel system status
     '''
-    bus = can.interface.Bus(bustype='socketcan', channel=interface,
+    bus = can.interface.Bus(bustype='socketcan', channel=interface.get_interface_name(),
                             can_filters=[{"can_id": 0x7E8, "can_mask":0x7FF}])
 
     msg = can.Message(
@@ -306,7 +306,7 @@ def get_engine_load(interface, pid):
     PID 04
     Calculated engine load
     '''
-    bus = can.interface.Bus(bustype='socketcan', channel=interface,
+    bus = can.interface.Bus(bustype='socketcan', channel=interface.get_interface_name(),
                             can_filters=[{"can_id": 0x7E8, "can_mask":0x7FF}])
 
     msg = can.Message(
@@ -335,7 +335,7 @@ def get_engine_coolant_temp(interface, pid):
     PID 05
     Engine coolant temperature
     '''
-    bus = can.interface.Bus(bustype='socketcan', channel=interface,
+    bus = can.interface.Bus(bustype='socketcan', channel=interface.get_interface_name(),
                             can_filters=[{"can_id": 0x7E8, "can_mask":0x7FF}])
 
     msg = can.Message(
@@ -364,7 +364,7 @@ def get_engine_speed(interface, pid):
     PID 0C
     Engine speed
     '''
-    bus = can.interface.Bus(bustype='socketcan', channel=interface,
+    bus = can.interface.Bus(bustype='socketcan', channel=interface.get_interface_name(),
                             can_filters=[{"can_id": 0x7E8, "can_mask":0x7FF}])
 
     msg = can.Message(
@@ -393,7 +393,7 @@ def get_vehicle_speed(interface, pid):
     PID 0D
     Vehicle Speed
     '''
-    bus = can.interface.Bus(bustype='socketcan', channel=interface,
+    bus = can.interface.Bus(bustype='socketcan', channel=interface.get_interface_name(),
                             can_filters=[{"can_id": 0x7E8, "can_mask":0x7FF}])
 
     msg = can.Message(
@@ -422,7 +422,7 @@ def get_obd_standard(interface, pid):
     PID 1C
     Get OBD standard this vehicle conforms to
     '''
-    bus = can.interface.Bus(bustype='socketcan', channel=interface,
+    bus = can.interface.Bus(bustype='socketcan', channel=interface.get_interface_name(),
                             can_filters=[{"can_id": 0x7E8, "can_mask":0x7FF}])
 
     msg = can.Message(
@@ -487,7 +487,7 @@ def get_distance_with_mil(interface, pid):
     PID 21
     Distance traveled with MIL on
     '''
-    bus = can.interface.Bus(bustype='socketcan', channel=interface,
+    bus = can.interface.Bus(bustype='socketcan', channel=interface.get_interface_name(),
                             can_filters=[{"can_id": 0x7E8, "can_mask":0x7FF}])
 
     msg = can.Message(

@@ -1,9 +1,11 @@
 '''
-Load ISO TP modules
+Module for scanning CAN bus for ISO-TP endpoints
 '''
-from autosec.core.autosec_module import AutosecModule
-from autosec.modules.Obd import isotp_endpoints
 
+from typing import List
+from autosec.core.ressources import AutosecRessource, CanInterface, IsoTPService
+from autosec.core.autosec_module import AutosecModule, AutosecModuleInformation
+from scapy.all import ISOTPScan
 
 def load_module():
     '''
@@ -13,63 +15,27 @@ def load_module():
 
 class IsoTpServices(AutosecModule):
     '''
-    Class that provides the isotp endpoints scan.
+    Class that provides the isotp endpoint scan.
     '''
-    def __init__(self):
-        super().__init__()
-
-        #self.logger = logging.getLogger("autosec.modules.obd")
-        #self.logger.setLevel(logging.WARNING)
-
-        self._add_option("interface",
-            description="Interface for the IsoTpServices",
-            required=True)
-
-        self._add_option("scanType",
-            description="Scan Type for normal, extended or both",
-            required=False,
-            default="both",
-            value="both")
-
-        self._add_option("scanRange",
-            description="Set scan range",
-            required=True)
-
-        self._add_option("extendedRange",
-            description="Set scan range for extended IDs, required if scanType is extended or both",
-            required=False)
-
-        self.interface = None
-        self.scan_type = None
-        self.scan_range = None
-        self.extended_range = None
 
     def get_info(self):
-        return(dict(
-            name = "IsoTpServices",
-            source = "autosec",
-            type = "payload",
-            interface = "CAN",
-            description = "Module that interprets services that run over ISO TP"))
+        return AutosecModuleInformation(
+            name = "IsoTPServiceScan",
+            description = "Module that interprets services that run over ISO TP",
+            dependencies = [],
+            tags = ["CAN", "ISOTP", "scan"]
+        )
 
-    def run(self):
-        if (self._options["scanType"]["value"] == "extended" or
-                self._options["scanType"]["value"] == "both"):
-            self._options["extendedRange"]["required"] = True
-        else:
-            self._options["extendedRange"]["required"] = False
+    def get_produced_outputs(self) -> List[IsoTPService]:
+        return [IsoTPService]
 
-        try:
-            super().run()
-        except ValueError as error:
-            self.logger.warning(error)
-            return
+    def get_required_ressources(self) -> List[AutosecRessource]:
+        return [CanInterface]
 
-        self.interface = self._options["interface"]["value"]
-        self.scan_type = self._options["scanType"]["value"]
-        # example: range(0x700,0x7ff), ext: range(0x40,0x5a)
-        self.scan_range = self._options["scanRange"]["value"]
-        self.extended_range = self._options["extendedRange"]["value"]
-
-        isotp_endpoints.scan_endpoints(self.interface, self.scan_type,
-                                       self.scan_range, self.extended_range)
+    def run(self, inputs: List[AutosecRessource]) -> List[IsoTPService]:
+        can = self.get_ressource(inputs, CanInterface)
+        #  scan_range=range(0x7ff + 1)
+        socks = ISOTPScan(can.get_socket(), can_interface=can.get_interface_name(), sniff_time=0.1)
+        # TODO extended addressing. In separate module(?)
+        #return [IsoTPService(can, x.tx_id, x.rx_id) for x in socks]
+        return [IsoTPService(can, x.src, x.dst) for x in socks]

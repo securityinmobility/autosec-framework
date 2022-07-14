@@ -1,6 +1,8 @@
-ipython>=7.30.1
+ipython==8.4.0
+pytest==7.1.2
 scapy>=2.4.5
 python-can>=3.3.4
 tabulate>=0.8.9
 vininfo>=1.7.0
 pymetasploit3>=1.0.3
+traitlets==5.1.1

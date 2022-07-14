@@ -1,8 +1,13 @@
 '''
 Load Obd modules
 '''
-from autosec.core.autosec_module import AutosecModule
+from scapy.all import OBD, OBD_S09, OBD_S01, OBD_S09_Enumerator, OBD_S01_Enumerator, print_payload
+from autosec.core.autosec_module import AutosecModule, AutosecModuleInformation
+from autosec.core.ressources import AutosecRessource, CanInterface
+from autosec.core.ressources.can import IsoTPService
 from autosec.modules.Obd import service01, service09
+from autosec.core.ressources.obdInfo import ObdInfo
+from typing import List
 
 
 def load_module():
@@ -18,84 +23,66 @@ class ObdServices(AutosecModule):
     def __init__(self):
         super().__init__()
 
-        #self.logger = logging.getLogger("autosec.modules.obd")
-        #self.logger.setLevel(logging.WARNING)
-
-        self._add_option("interface",
-            description="Interface for the ObdServices",
-            required=True)
-
-        self._add_option("checkPID",
-            description="Run a check for available ECU PIDs and runs the corresponding functions",
-            required=False,
-            default=True,
-            value=True)
-
-        self.interface = None
-        self.check_pids = True
-
-        self.functions = {
-            0x01: service01.get_mil_status,
-            0x03: service01.get_fuelsystem_status,
-            0x04: service01.get_engine_load,
-            0x05: service01.get_engine_coolant_temp,
-            0x0C: service01.get_engine_speed,
-            0x0D: service01.get_vehicle_speed,
-            0x1C: service01.get_obd_standard,
-            0x21: service01.get_distance_with_mil,
-        }
-
-        self.info_dict = {}
-        self.raw_data = {}
 
     def get_info(self):
-        return(dict(
+        return AutosecModuleInformation(
             name = "ObdServices",
-            source = "autosec",
-            type = "payload",
-            interface = "CAN",
-            description = "Module that interprets OBD-II service 01 and 09 PIDs"))
+            description = "Module that interprets OBD-II service 01 and 09 PIDs",
+            tags = ["Obd", "CAN", "service", "payload"])
 
-    def run(self):
-        try:
-            super().run()
-        except ValueError as error:
-            self.logger.warning(error)
-            return error
 
-        self.interface = self._options["interface"]["value"]
-        self.check_pids = self._options["checkPID"]["value"]
+    def get_produced_outputs(self) -> List[AutosecRessource]:
+        return [ObdInfo]
 
-        vin_results = service09.get_vin(self.interface)
-        self.info_dict = {}
-        self.raw_data = {}
-        if vin_results:
-            self.info_dict.update(vin_results[0])
-            self.raw_data.update(vin_results[1])
+    def get_required_ressources(self) -> List[AutosecRessource]:
+        return [CanInterface, IsoTPService]
 
-        if self.check_pids is True:
-            self.info_dict = self._check_pid_and_run()
-            return self.info_dict
 
-        self.logger.warning("Running all functions, not checking for ECU PIDs")
-        for pid, function in self.functions.items():
-            func_info = function(self.interface, pid)
-            if func_info:
-                self.info_dict.update(func_info[0])
-                self.raw_data.update(func_info[1])
-        return self.info_dict, self.raw_data
+    def run(self, inputs: List[AutosecRessource]) -> List[ObdInfo]:
+        isoTpSocket = self.get_ressource(inputs, [IsoTPService]).get_socket()
 
-    def _check_pid_and_run(self):
-        pids = [0x00, 0x20, 0x40, 0x60, 0x80, 0xA0, 0xC0]
-        for pid in pids:
-            pid_list = service01.get_supported_pid(self.interface, pid)
-            if pid_list:
-                self.raw_data.update(pid_list[1])
-                self.logger.warning(self.raw_data)
-                for available_pid in pid_list[0]:
-                    if available_pid in self.functions:
-                        func_info = self.functions[available_pid](self.interface, available_pid)
-                        if func_info:
-                            self.info_dict.update(func_info[0])
-                            self.raw_data.update(func_info[1])
-        return self.info_dict, self.raw_data
+        results = []
+        """
+        # service 9, request vin
+        req_9 = OBD()/OBD_S09(iid=[0x02])
+        resp_9 = isoTpSocket.sr1(req_9)  # -> show() 
+        dump_9 = resp_9.show(dump=True)
+        results.add(ObdInfo(dump_9, 9, 0x02))
+
+        # service 1
+        pid_list = [0x00, 0x21, 0x1C, 0x0D, 0x0C, 0x05, 0x04, 0x03, 0x01]
+        """
+        """ 
+        0x00: get supported pid
+        0x21: Distance traveled with malfunction indicator lamp (MIL) on
+        0x1C: OBD standards this vehicle conforms to
+        0x0D: Vehicle speed 
+        0x0C: Engine speed
+        0x05: Engine coolant temperature
+        0x04: Calculated engine load 
+        0x03: Fuel system status
+        0x01:  Monitor status since DTCs cleared. (Includes malfunction indicator lamp (MIL)
+        """
+        """
+        for pId in pid_list:
+            req = OBD()/OBD_S01(pid=[pId])
+            resp = isoTpSocket.sr1(req)
+            dump = resp.show(dump=True)
+            results.add(ObdInfo(dump, 1, pId))
+        """
+
+
+        enumerator_9 = OBD_S09_Enumerator(sock=isoTpSocket, exit_scan_on_first_negative_response =True, timeout=0.2)
+        pkts_9 = enumerator_9._get_initial_requests()
+        loads_9 = [(p.getfieldval("iid"), print_payload(p)) for p in pkts_9]
+        for p in loads_9:
+            results.add(ObdInfo(p[1], 9, p[0]))
+        
+
+        enumerator_1 = OBD_S01_Enumerator(sock=isoTpSocket, exit_scan_on_first_negative_response =True, timeout=0.2)
+        pkts_1 = enumerator_1._get_initial_requests()
+        loads_1 = [(p.getfieldval("pid"), print_payload(p)) for p in pkts_1]
+        for p in loads_1:
+            results.add(ObdInfo(p[1], 1, p[0]))
+
+        return results

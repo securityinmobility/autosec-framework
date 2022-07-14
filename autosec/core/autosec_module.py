@@ -4,21 +4,66 @@ modules to the autosec framework. This module also introduces some functionality
 may help to create modules faster.
 '''
 import logging
-from typing import TypedDict
+from typing import TypedDict, List, Union
+from abc import ABC, abstractmethod
+from .ressources.base import AutosecRessource
 
 class AutosecModuleInformation(TypedDict):
     '''
-    Typed dictionary class holding meta information about an autosec module
+    Typed dictionary holding meta information about an autosec module
+    '''
+
+    '''
+    name of the module
     '''
     name: str
-    source: str
-    type: str
-    interface: str
+
+    '''
+    description of the module
+    '''
     description: str
 
-class AutosecModule():
     '''
-    Class the modules should inherit from
+    list of (python-)modules this module is based on
+    '''
+    dependencies: List[str]
+
+    '''
+    list with tags for identifying the actions of this module
+    e.g. "CAN", "TCP", "CVE", "hash", "scan", ...
+    '''
+    tags: List[str]
+
+class AutosecExpectedMetrics(TypedDict):
+    '''
+    Typed dictionary holding information wether meta information about
+    possibility, complexity and success expectance of an attack given specific
+    ressources as input
+    '''
+
+    '''
+    Wether it is possible to run the attack with the given ressources
+    '''
+    can_run: bool
+
+    '''
+    Expected runtime of the attack in seconds.
+    The actual runtime can depend on numerous factors. This is merely a guess
+    based on the given ressources 
+    '''
+    expected_runtime: float
+
+    '''
+    Expected chance for the attack to succeed.
+    Floating point number between 0 and 1
+    '''
+    expected_success: float
+
+
+
+class AutosecModule(ABC):
+    '''
+    Class all modules of the framework should inherit from
     '''
 
     def __init__(self):
@@ -27,8 +72,8 @@ class AutosecModule():
         '''
         self._module_name = str(self.__class__).rsplit(".", maxsplit=1)[:-2]
         self.logger = logging.getLogger(f"autosec.modules.{self._module_name}")
-        self._options = {}
 
+    @abstractmethod
     def get_info(self) -> AutosecModuleInformation:
         '''
         This method returns information about the module, e.g. name, package / type, interface,
@@ -43,63 +88,55 @@ class AutosecModule():
         '''
         raise NotImplementedError
 
-    def get_options(self) -> dict:
+    @abstractmethod
+    def get_produced_outputs(self) -> List[AutosecRessource]:
         '''
-        return the specific options this module has with a description
+        return the list of potentially produced outputs
+        '''
+        raise NotImplementedError
 
-        @return: specific options as list of dictionaries with the following keys:
-        name (name or ID of the option)
-        required (flag if the option is required or not)
-        default (default value if available)
-        unit (unit of the option)
-        range
-        description
-        value (value that is currently set if so)
+    @abstractmethod
+    def get_required_ressources(self) -> List[AutosecRessource]:
         '''
-        return self._options.copy()
+        return the minimal ressources required to run this attack
+        '''
+        raise NotImplementedError
 
-    def set_options(self, *options):
+    def get_optional_ressources(self) -> List[AutosecRessource]:
         '''
-        Method to store options for this module. The Options are given within a list of
-        tuples with the name and the value.
-        TBD: check Range and value of the option (if these requirements are available)
+        returns a list of optional ressources, which, when given might improve
+        performance or increase the success rate
         '''
+        return []
 
-        for option in options:
-            if len(option) != 2:
-                self.logger.warning("Could not insert option %s due to wrong format", option)
-                continue
-            key = option[0]
-            value = option[1]
-            try:
-                self._options[key]["value"] = value
-            except KeyError:
-                self.logger.warning("Could not insert option with key %s. Value was %s", key, value)
+    @staticmethod
+    def get_ressources(inputs: List[AutosecRessource], kind: AutosecRessource):
+        return [x for x in inputs if isinstance(x, kind)]
 
-    def run(self):
-        '''
-        Method to run the module.
-        '''
-        for key, option in self._options.items():
-            if option["value"] is None and option["default"] is not None:
-                option["value"] = option["default"]
-            if  option["required"] and option["value"] is None:
-                raise ValueError(f"Required option {key} is not set")
+    @staticmethod
+    def get_ressource(inputs: List[AutosecRessource], kind: AutosecRessource):
+        return AutosecModule.get_ressources(inputs, kind)[0]
 
-    #pylint: disable=too-many-arguments
-    def _add_option(
-        self,
-        name: str,
-        description: str = "",
-        required: bool = False,
-        default = None,
-        value = None
-    ):
+    def can_run(self, inputs: List[AutosecRessource]) -> Union[bool, AutosecExpectedMetrics]:
         '''
-        Adds an option to the _options dictionary
-        By using this structure, the set_options method can be used
+        This method returns expected metrics of running the attack with the
+        given 
+
+        @return: a boolean wether the attack is possible or detailed
+        information about expected runtime and success rate
         '''
-        self._options[name] = dict(description = description,
-            required = required,
-            default = default,
-            value = value)
+        required = self.get_required_ressources()
+        for req in required:
+            given_amount = len(self.get_ressources(inputs, req))
+            required_amount = len([x for x in required if isinstance(x, req)])
+            if given_amount < required_amount:
+                return False
+
+        return True
+
+    @abstractmethod
+    def run(self, inputs: List[AutosecRessource]) -> List[AutosecRessource]:
+        '''
+        Method to perform the attack.
+        '''
+        raise NotImplementedError
