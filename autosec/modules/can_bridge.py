@@ -9,7 +9,7 @@ messages (e.g. with certain IDs) can be manipulated.
 
 from scapy.all import load_layer, load_contrib, conf, CAN, CANSocket, bridge_and_sniff
 from autosec.core.autosec_module import AutosecModule, AutosecModuleInformation
-from autosec.core.ressources import AutosecRessource, CanInterface, CanOverride1, CanService
+from autosec.core.ressources import AutosecRessource, CanInterface, CanOverride, CanService
 from typing import List
 
 def load_module():
@@ -60,13 +60,13 @@ class CanBridge(AutosecModule):
 
     def forwarding12(self, pkt):
         if self.change and self.direction == 12:
-            override = CanOverride1(indexStart=self.idx,values=self.values)
-            pkt.data = override.changeData(pkt.data)
+            override = CanOverride(indexStart=self.idx,values=self.values)
+            pkt.data = override.change_data(pkt.data)
         return pkt
     
     def forwarding21(self, pkt):
         if self.change and self.direction == 121:
-            override = CanOverride1(indexStart=self.idx,values=self.values)
-            pkt.data = override.changeData(pkt.data)
+            override = CanOverride(indexStart=self.idx,values=self.values)
+            pkt.data = override.change_data(pkt.data)
         return pkt
 

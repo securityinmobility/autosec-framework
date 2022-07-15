@@ -1,8 +1,8 @@
 from autosec.core.ressources.base import AutosecRessource, NetworkInterface
 from scapy.all import conf, load_contrib
 
-conf.contribs['ISOTP'] = {'use-can-isotp-kernel-module': True}
-conf.contribs['CANSocket'] = {'use-python-can': True}
+conf.contribs['ISOTP'] = {'use-can-isotp-kernel-module': False}
+conf.contribs['CANSocket'] = {'use-python-can': False}
 load_contrib('cansocket')
 load_contrib('isotp')
 
@@ -41,20 +41,18 @@ class CanDevice(AutosecRessource):
         pass # TODO remote transmission request
 
 
-class CanOverride1(AutosecRessource):
+class CanOverride(AutosecRessource):
 
     def __init__(self, indexStart: int, values: bytes):
         super().__init__()
         self.start = indexStart
         self.values = values
 
-    def changeData(self, data: bytes) -> bytes:
+    def change_data(self, data: bytes) -> bytes:
         if type(self.values) != bytes:
-            print("Values have to be bytes.")
-            exit
+            raise Exception("Values have to be bytes.")
         if self.start + len(self.values) > 8:
-            print("Only 8 bytes")
-            exit
+            raise Exception("Only 8 bytes")
         data = list(data)
         values = list(self.values)
         new_data = data[:self.start] + values + data[self.start+len(values)::]
@@ -96,4 +94,4 @@ class IsoTPService(AutosecRessource):
         return self._rx_id
 
     def get_socket(self) -> 'ISOTPSocket':
-        return ISOTPSocket(self._interface, self._tx_id, self._rx_id)
+        return ISOTPSocket(self._interface.get_socket(), self._tx_id, self._rx_id)

@@ -37,5 +37,5 @@ class IsoTpServices(AutosecModule):
         #  scan_range=range(0x7ff + 1)
         socks = ISOTPScan(can.get_socket(), can_interface=can.get_interface_name(), sniff_time=0.1)
         # TODO extended addressing. In separate module(?)
-        #return [IsoTPService(can, x.tx_id, x.rx_id) for x in socks]
+
         return [IsoTPService(can, x.src, x.dst) for x in socks]
