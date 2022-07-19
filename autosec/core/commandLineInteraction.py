@@ -4,7 +4,7 @@ from typing import List
 from autosec.core.userInteraction import userInteraction
 
 
-class CommandLineInteracton(userInteraction):
+class CommandLineInteraction(userInteraction):
     """
     class that provides a command line user interaction interface
     """
