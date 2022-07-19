@@ -1,10 +1,10 @@
 import sys
 from typing import List
 
-from autosec.core.userInteraction import userInteraction
+from autosec.core.UserInteraction import UserInteraction
 
 
-class CommandLineInteraction(userInteraction):
+class CommandLineInteraction(UserInteraction):
     """
     class that provides a command line user interaction interface
     """
@@ -13,7 +13,7 @@ class CommandLineInteraction(userInteraction):
         super().__init__()
 
     def yesNoAnswer(self) -> str:
-        print(self.getQuestion(self) + "\t [y]es, [n]o \n")
+        print(self.getQuestion() + "\t [y]es, [n]o \n")
         answer = str(sys.argv[1])
         if answer not in ["y", "n"]:
             print("Please choose from: [y]es, [n]o \n")
@@ -22,13 +22,13 @@ class CommandLineInteraction(userInteraction):
         return answer
 
     def stringAnswer(self) -> str:
-        print(self.getQuestion(self) + "\n")
+        print(self.getQuestion() + "\n")
         answer = str(sys.argv[1])
         self._answer = answer
         return answer
 
     def integerAnswer(self) -> int:
-        print(self.getQuestion(self) + "\n")
+        print(self.getQuestion() + "\n")
         try:
             answer = int(sys.argv[1])
         except:
@@ -38,7 +38,7 @@ class CommandLineInteraction(userInteraction):
         return answer
 
     def checkListAnswer(self, inputs: List[str]) -> str:
-        print(self.getQuestion(self) + "\n")
+        print(self.getQuestion() + "\n")
         print("Options to choose from: \n")
         for option in range(len(inputs)):
             print("%s \t %s" % (option, inputs[option]))

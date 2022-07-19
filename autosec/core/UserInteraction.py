@@ -1,24 +1,21 @@
 from abc import ABC, abstractmethod
 from typing import List
+
 """
 Basic interface to handle user interactions. 
 """
 
-class userInteraction(ABC):
 
+class UserInteraction(ABC):
     _answer = ""
     _question = ""
-        
 
-    @staticmethod
     def setQuestion(self, question):
         self._question = question
 
-    @staticmethod
     def getQuestion(self):
         return self._question
 
-    @staticmethod
     def getAnswer(self):
         return self._answer
 
@@ -51,12 +48,8 @@ class userInteraction(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def feedback(self, feedback : str):
+    def feedback(self, feedback: str):
         """
         Method to provide feedback to the user if e.g. an attack has failed/succeeded
         """
         raise NotImplementedError
-
-    
-
-    
