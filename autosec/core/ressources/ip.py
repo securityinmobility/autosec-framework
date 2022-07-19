@@ -12,7 +12,7 @@ class InternetInterface(NetworkInterface):
     def __init__(self, interface, network_addr: str=""):
         super().__init__(interface)
         self.network_addr = network_addr
-    
+
     def get_network_address(self):
         return self.network_addr
 
@@ -22,11 +22,20 @@ class InternetDevice(AutosecRessource):
     _interface: InternetInterface
     _ipv4: Optional[str]
     _ipv6: Optional[str]
+    _mac: Optional[str]
+    _manufacturer: Optional[str]
 
-    def __init__(self, interface: InternetInterface, ipv4: str = None, ipv6: str = None):
+    def __init__(self, interface: InternetInterface, ipv4: str = None, ipv6: str = None, mac: str = None,
+                 manufacturer: str = None):
+        """
+        :param mac: The MAC address of the device
+        :param manufacturer: The manufacturer of the device
+        """
         self._interface = interface
         self._ipv4 = ipv4
         self._ipv6 = ipv6
+        self._mac = mac
+        self._manufacturer = manufacturer
 
     def get_interface(self) -> InternetInterface:
         return self._interface
@@ -51,6 +60,61 @@ class InternetDevice(AutosecRessource):
         else:
             raise ValueError("Trying to get non existent Address from an InternetDevice")
 
+    def set_mac(self, mac: str):
+        """
+        :param mac: The new MAC address
+        """
+        self._mac = mac
+
+    def get_mac(self) -> str:
+        """
+        :return: The MAC address
+        """
+        if self._mac is None:
+            raise ValueError("Trying to get non existent MAC from an InternetDevice")
+        return self._mac
+
+    def set_manufacturer(self, manufacturer: str):
+        """
+        :param manufacturer: The new manufacturer
+        """
+        self._manufacturer = manufacturer
+
+    def get_manufacturer(self) -> str:
+        """
+        :return: The manufacturer
+        """
+        if self._manufacturer is None:
+            raise ValueError("Trying to get non existent manufacturer from an InternetDevice")
+        return self._manufacturer
+
+
+class PortRange(AutosecRessource):
+    """
+    A range of ports used for tcp scanning
+    """
+    _start: int
+    _end: int
+
+    def __init__(self, start: int = 1, end: int = 65535):
+        """
+        :param start: The start port (included)
+        :param end: The end port (included)
+        """
+        self._start = start
+        self._end = end
+
+    def get_start(self) -> int:
+        """
+        :return: The start port
+        """
+        return self._start
+
+    def get_end(self) -> int:
+        """
+        :return: The end port
+        """
+        return self._end
 
 
 class InternetService(AutosecRessource):
@@ -65,7 +129,7 @@ class InternetService(AutosecRessource):
 
     def get_device(self) -> InternetDevice:
         return self._device
-    
+
     def get_port(self) -> int:
         return self._port
 
