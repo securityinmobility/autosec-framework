@@ -7,7 +7,7 @@ from autosec.core.ressources import AutosecRessource
 __author__: str = "Michael Weichenrieder"
 
 
-class ComPort(AutosecRessource):
+class COMPort(AutosecRessource):
     """
     A COM port
     """
