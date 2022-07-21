@@ -13,19 +13,19 @@ class InternetInterface(NetworkInterface):
 
     _ipv4_address: str
     _subnet_length: int
-    _network_interface: Optional[NetInterface]
+    _scapy_interface: Optional[NetInterface]
 
-    def __init__(self, interface, ipv4_address: str, subnet_length: int, network_interface: NetInterface = None):
+    def __init__(self, interface, ipv4_address: str, subnet_length: int, scapy_interface: NetInterface = None):
         """
         :param interface: Interface name
         :param ipv4_address: Local ipv4 address of the current device
         :param subnet_length: Int representation of subnet mask (e.g. 24 for 255.255.255.0 od 16 for 255.255.0.0)
-        :param network_interface: Scapy network interface object
+        :param scapy_interface: Scapy network interface object
         """
         super().__init__(interface)
         self._ipv4_address = ipv4_address
         self._subnet_length = subnet_length
-        self._network_interface = network_interface
+        self._scapy_interface = scapy_interface
 
     def get_network_address(self) -> str:
         """
@@ -45,11 +45,11 @@ class InternetInterface(NetworkInterface):
         """
         return self._subnet_length
 
-    def get_network_interface(self) -> Optional[NetInterface]:
+    def get_scapy_interface(self) -> Optional[NetInterface]:
         """
         :return: The optional scapy network interface object
         """
-        return self._network_interface
+        return self._scapy_interface
 
 
 class InternetDevice(AutosecRessource):
