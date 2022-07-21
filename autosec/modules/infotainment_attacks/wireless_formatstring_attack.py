@@ -2,7 +2,7 @@
 Wireless formatstring attack module
 """
 import logging
-from typing import List, Union
+from typing import List, Union, Type
 
 from autosec.core.UserInteraction import UserInteraction
 from autosec.core.autosec_module import AutosecModule, AutosecModuleInformation, AutosecExpectedMetrics
@@ -115,11 +115,7 @@ class WirelessFormatstringAttack(AutosecModule):
         :return: The results (WirelessFormatstringResult)
         """
         # Get com port from input resources
-        com_port: str = ""
-        for res in inputs:
-            if isinstance(res, COMPort):
-                com_port = res.get_port()
-                break
+        com_port: str = self.get_ressource(inputs, Type[COMPort]).get_port()
 
         # Init serial connection
         formatstring_protocol: FormatstringProtocol = FormatstringProtocol(port=com_port)
