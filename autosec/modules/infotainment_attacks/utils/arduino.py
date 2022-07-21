@@ -18,7 +18,7 @@ class ArduinoSerial:
 
         :param port: The port to connect to
         """
-        self.arduino_serial: Serial = serial.Serial(port=port, baudrate=9600, timeout=10)
+        self._arduino_serial: Serial = serial.Serial(port=port, baudrate=9600, timeout=10)
 
     def send_line(self, line: bytes) -> bool:
         """
@@ -27,12 +27,12 @@ class ArduinoSerial:
         :param line: The line to send
         :return: True for success, else false
         """
-        self.arduino_serial.write(line)
-        self.arduino_serial.write(bytes("\n", "utf-8"))
-        self.arduino_serial.flush()
+        self._arduino_serial.write(line)
+        self._arduino_serial.write(bytes("\n", "utf-8"))
+        self._arduino_serial.flush()
 
         # Read and remove "\r\n"
-        read: bytes = self.arduino_serial.readline()[:-2]
+        read: bytes = self._arduino_serial.readline()[:-2]
         if read == line:
             return True
         return False
