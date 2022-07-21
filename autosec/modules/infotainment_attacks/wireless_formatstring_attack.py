@@ -44,8 +44,8 @@ class WirelessFormatstringAttack(AutosecModule):
         Initialize logger in constructor
         """
         super().__init__()
-        self.logger = logging.getLogger("autosec.modules.infotainment_attacks.wireless_formatstring_attack")
-        self.logger.setLevel(logging.INFO)
+        self._logger = logging.getLogger("autosec.modules.infotainment_attacks.wireless_formatstring_attack")
+        self._logger.setLevel(logging.INFO)
 
     def get_info(self) -> AutosecModuleInformation:
         """
@@ -148,7 +148,7 @@ class WirelessFormatstringAttack(AutosecModule):
                 if success in [1, 2]:
                     if success == 1:
                         vulnerabilities += 1
-                        self.logger.info(
+                        self._logger.info(
                             f"Formatstring {formatstring} revealed a vulnerability via {wireless_type} name")
                     results.append(
                         WirelessFormatstringResult(
@@ -158,5 +158,5 @@ class WirelessFormatstringAttack(AutosecModule):
                     )
 
         # Return summary
-        self.logger.info(f"'Wireless formatstring attack done. Successful formatstring tests: {vulnerabilities}")
+        self._logger.info(f"'Wireless formatstring attack done. Successful formatstring tests: {vulnerabilities}")
         return results
