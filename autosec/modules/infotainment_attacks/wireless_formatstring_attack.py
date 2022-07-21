@@ -2,7 +2,7 @@
 Wireless formatstring attack module
 """
 import logging
-from typing import List, Union, Type
+from typing import Union, Type
 
 from autosec.core.UserInteraction import UserInteraction
 from autosec.core.autosec_module import AutosecModule, AutosecModuleInformation, AutosecExpectedMetrics
@@ -56,7 +56,7 @@ class WirelessFormatstringAttack(AutosecModule):
             tags=["wireless", "wlan", "bluetooth", "formatstring"]
         )
 
-    def get_produced_outputs(self) -> List[AutosecRessource]:
+    def get_produced_outputs(self) -> [AutosecRessource]:
         """
         :return: Output resource examples
         """
@@ -83,7 +83,7 @@ class WirelessFormatstringAttack(AutosecModule):
             )
         ]
 
-    def get_required_ressources(self) -> List[AutosecRessource]:
+    def get_required_ressources(self) -> [AutosecRessource]:
         """
         :return: Required input resource example
         """
@@ -93,7 +93,7 @@ class WirelessFormatstringAttack(AutosecModule):
             )
         ]
 
-    def can_run(self, inputs: List[AutosecRessource]) -> Union[bool, AutosecExpectedMetrics]:
+    def can_run(self, inputs: [AutosecRessource]) -> Union[bool, AutosecExpectedMetrics]:
         """
         :return: If the attack can run and metrics if it can
         """
@@ -105,7 +105,7 @@ class WirelessFormatstringAttack(AutosecModule):
             )
         return False
 
-    def run(self, inputs: List[AutosecRessource]) -> List[AutosecRessource]:
+    def run(self, inputs: [AutosecRessource]) -> [AutosecRessource]:
         """
         Run the attack
 
@@ -113,13 +113,13 @@ class WirelessFormatstringAttack(AutosecModule):
         :return: The results (WirelessFormatstringResult)
         """
         # Get com port from input resources
-        com_port: str = self.get_ressource(inputs, Type[COMPort]).get_port()
+        com_port: COMPort = self.get_ressource(inputs, Type[COMPort])
 
-        # Init serial connection
-        formatstring_protocol: FormatstringProtocol = FormatstringProtocol(port=com_port)
+        # Init serial connection and interaction
+        formatstring_protocol: FormatstringProtocol = FormatstringProtocol(port=com_port.get_port())
         user_interaction: UserInteraction = CommandLineInteraction()
 
-        # Success summary
+        # Prepare results data
         results: [WirelessFormatstringResult] = []
         vulnerabilities: int = 0
 
@@ -147,7 +147,7 @@ class WirelessFormatstringAttack(AutosecModule):
                     if success == 1:
                         vulnerabilities += 1
                         self._logger.info(
-                            f"Formatstring {formatstring} revealed a vulnerability via {wireless_type} name")
+                            f'Formatstring "{formatstring}" revealed a vulnerability via {wireless_type} name')
                     results.append(
                         WirelessFormatstringResult(
                             wireless_type=wireless_type,
@@ -155,6 +155,6 @@ class WirelessFormatstringAttack(AutosecModule):
                             success=True if success == 1 else False)
                     )
 
-        # Return summary
+        # Return results
         self._logger.info(f"'Wireless formatstring attack done. Successful formatstring tests: {vulnerabilities}")
         return results

@@ -106,6 +106,13 @@ class NetworkSniffer(Thread):
         # Don't store to keep RAM free
         sniff(prn=self.handle_sniffed_packet, iface=self._internet_interface.get_scapy_interface(), store=0)
 
+    def stop(self) -> None:
+        """
+        Stop the sniffer
+        """
+        # TODO: Implement somehow
+        pass
+
 
 class HttpSniffer(Thread):
     """
@@ -148,6 +155,13 @@ class HttpSniffer(Thread):
         with HTTPServer(("", self._port), HttpSniffer.HttpHandler) as httpd:
             httpd.serve_forever()
 
+    def stop(self) -> None:
+        """
+        Stop the sniffer
+        """
+        # TODO: Implement somehow
+        pass
+
 
 class PingSniffer(Thread):
     """
@@ -183,3 +197,10 @@ class PingSniffer(Thread):
         """
         # Don't store to keep RAM free
         sniff(prn=self.handle_sniffed_packet, filter="icmp", iface=self._network_interface, store=0)
+
+    def stop(self) -> None:
+        """
+        Stop the sniffer
+        """
+        # TODO: Implement somehow
+        pass
