@@ -1,7 +1,6 @@
 """
 Utils for arduino serial connection
 """
-import serial
 from serial import Serial
 
 __author__: str = "Michael Weichenrieder"
@@ -18,7 +17,7 @@ class ArduinoSerial:
 
         :param port: The port to connect to
         """
-        self._arduino_serial: Serial = serial.Serial(port=port, baudrate=9600, timeout=10)
+        self._arduino_serial: Serial = Serial(port=port, baudrate=9600, timeout=10)
 
     def send_line(self, line: bytes) -> bool:
         """

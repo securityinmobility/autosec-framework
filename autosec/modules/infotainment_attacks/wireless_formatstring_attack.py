@@ -7,10 +7,8 @@ from typing import List, Union, Type
 from autosec.core.UserInteraction import UserInteraction
 from autosec.core.autosec_module import AutosecModule, AutosecModuleInformation, AutosecExpectedMetrics
 from autosec.core.commandLineInteraction import CommandLineInteraction
-from autosec.core.ressources import AutosecRessource
-from autosec.core.ressources.infotainment_attacks import WirelessFormatstringResult
-from autosec.core.ressources.serial import COMPort
-from utils.arduino import FormatstringProtocol
+from autosec.core.ressources import AutosecRessource, WirelessFormatstringResult, COMPort
+from utils import FormatstringProtocol
 
 __author__: str = "Michael Weichenrieder"
 
