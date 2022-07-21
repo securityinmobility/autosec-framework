@@ -12,26 +12,26 @@ class InternetInterface(NetworkInterface):
     """
 
     _ipv4_address: str
-    _subnet_mask: int
+    _subnet_length: int
     _network_interface: Optional[NetInterface]
 
-    def __init__(self, interface, ipv4_address: str, subnet_mask: int, network_interface: NetInterface = None):
+    def __init__(self, interface, ipv4_address: str, subnet_length: int, network_interface: NetInterface = None):
         """
         :param interface: Interface name
         :param ipv4_address: Local ipv4 address of the current device
-        :param subnet_mask: Int representation of subnet mask (e.g. 24 for 255.255.255.0 od 16 for 255.255.0.0)
+        :param subnet_length: Int representation of subnet mask (e.g. 24 for 255.255.255.0 od 16 for 255.255.0.0)
         :param network_interface: Scapy network interface object
         """
         super().__init__(interface)
         self._ipv4_address = ipv4_address
-        self._subnet_mask = subnet_mask
+        self._subnet_length = subnet_length
         self._network_interface = network_interface
 
     def get_network_address(self) -> str:
         """
-        :return: Network address with subnet mask
+        :return: Network address with subnet length
         """
-        return f"{self._ipv4_address}/{self._subnet_mask}"
+        return f"{self._ipv4_address}/{self._subnet_length}"
 
     def get_ipv4_address(self) -> str:
         """
@@ -39,11 +39,11 @@ class InternetInterface(NetworkInterface):
         """
         return self._ipv4_address
 
-    def get_subnet_mask(self) -> int:
+    def get_subnet_length(self) -> int:
         """
         :return: Subnet mask as int representation (e.g. 24 for 255.255.255.0 od 16 for 255.255.0.0)
         """
-        return self._subnet_mask
+        return self._subnet_length
 
     def get_network_interface(self) -> Optional[NetInterface]:
         """
