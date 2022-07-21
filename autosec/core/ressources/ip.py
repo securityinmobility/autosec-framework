@@ -1,21 +1,55 @@
 import socket
+
+from scapy.interfaces import NetworkInterface as NetInterface
+
 from .base import AutosecRessource, NetworkInterface
 from typing import Optional
 
 
-
 class InternetInterface(NetworkInterface):
-    #pass
+    """
+    Internet network interface ressource
+    """
 
-    network_addr: Optional[str]
+    _ipv4_address: str
+    _subnet_mask: int
+    _network_interface: Optional[NetInterface]
 
-    def __init__(self, interface, network_addr: str=""):
+    def __init__(self, interface, ipv4_address: str, subnet_mask: int, network_interface: NetInterface = None):
+        """
+        :param interface: Interface name
+        :param ipv4_address: Local ipv4 address of the current device
+        :param subnet_mask: Int representation of subnet mask (e.g. 24 for 255.255.255.0 od 16 for 255.255.0.0)
+        :param network_interface: Scapy network interface object
+        """
         super().__init__(interface)
-        self.network_addr = network_addr
+        self._ipv4_address = ipv4_address
+        self._subnet_mask = subnet_mask
+        self._network_interface = network_interface
 
-    def get_network_address(self):
-        return self.network_addr
+    def get_network_address(self) -> str:
+        """
+        :return: Network address with subnet mask
+        """
+        return f"{self._ipv4_address}/{self._subnet_mask}"
 
+    def get_ipv4_address(self) -> str:
+        """
+        :return: Local ipv4 address of framework
+        """
+        return self._ipv4_address
+
+    def get_subnet_mask(self) -> int:
+        """
+        :return: Subnet mask as int representation (e.g. 24 for 255.255.255.0 od 16 for 255.255.0.0)
+        """
+        return self._subnet_mask
+
+    def get_network_interface(self) -> Optional[NetInterface]:
+        """
+        :return: The optional scapy network interface object
+        """
+        return self._network_interface
 
 
 class InternetDevice(AutosecRessource):
