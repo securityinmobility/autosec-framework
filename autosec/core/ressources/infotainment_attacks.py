@@ -11,9 +11,6 @@ class WirelessFormatstringResult(AutosecRessource):
     """
     A result of a wireless formatstring attack
     """
-    _wireless_type: str
-    _formatstring: str
-    _success: bool
 
     def __init__(self, wireless_type: str, formatstring: str, success: bool):
         """
@@ -21,9 +18,9 @@ class WirelessFormatstringResult(AutosecRessource):
         :param formatstring: The used formatstring
         :param success: True for success, else False
         """
-        self._wireless_type = wireless_type
-        self._formatstring = formatstring
-        self._success = success
+        self._wireless_type: str = wireless_type
+        self._formatstring: str = formatstring
+        self._success: bool = success
 
     def get_wireless_type(self) -> str:
         """
@@ -48,9 +45,6 @@ class KeystrokeInjectionResult(AutosecRessource):
     """
     A result of a keystroke injection attack
     """
-    _keyboard_layout: str
-    _injected_command: str
-    _success: bool
 
     def __init__(self, keyboard_layout: str, injected_command: str, success: bool):
         """
@@ -58,9 +52,9 @@ class KeystrokeInjectionResult(AutosecRessource):
         :param injected_command: The injected command
         :param success: True for success, else False
         """
-        self._keyboard_layout = keyboard_layout
-        self._injected_command = injected_command
-        self._success = success
+        self._keyboard_layout: str = keyboard_layout
+        self._injected_command: str = injected_command
+        self._success: bool = success
 
     def get_keyboard_layout(self) -> str:
         """

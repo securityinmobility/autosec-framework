@@ -11,13 +11,12 @@ class COMPort(AutosecRessource):
     """
     A COM port
     """
-    _port: str
 
     def __init__(self, port: str):
         """
         :param port: The COM port
         """
-        self._port = port
+        self._port: str = port
 
     def get_port(self) -> str:
         """
