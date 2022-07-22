@@ -146,7 +146,7 @@ class WirelessFormatstringAttack(AutosecModule):
                 if success in [1, 2]:
                     if success == 1:
                         vulnerabilities += 1
-                        self._logger.info(
+                        self._logger.warning(
                             f'Formatstring "{formatstring}" revealed a vulnerability via {wireless_type} name')
                     results.append(
                         WirelessFormatstringResult(

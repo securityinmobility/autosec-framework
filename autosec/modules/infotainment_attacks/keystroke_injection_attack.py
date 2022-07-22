@@ -216,7 +216,7 @@ class KeystrokeInjectionAttack(AutosecModule):
                     if success in [1, 2]:
                         if success == 1:
                             vulnerabilities += 1
-                            self._logger.info(
+                            self._logger.warning(
                                 f'Keystroke injection "{command}" revealed a vulnerability via layout "{layout}"')
                         results.append(
                             KeystrokeInjectionResult(
