@@ -130,6 +130,11 @@ class KeystrokeInjectionAttack(AutosecModule):
         return [
             COMPort(
                 port="COM6"
+            ),
+            InternetInterface(
+                interface="eth0",
+                ipv4_address="192.168.90.125",
+                subnet_length=16
             )
         ]
 
