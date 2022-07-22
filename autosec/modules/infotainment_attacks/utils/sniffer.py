@@ -92,7 +92,7 @@ class NetworkSniffer(Thread):
         """
         Get the discovered devices
 
-        :return: A map with ip keys and mac values
+        :return: A list of discovered devices
         """
         # Create list
         device_list: [InternetDevice] = []
