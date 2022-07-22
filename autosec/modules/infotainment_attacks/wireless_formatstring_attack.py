@@ -156,5 +156,5 @@ class WirelessFormatstringAttack(AutosecModule):
                     )
 
         # Return results
-        self._logger.info(f"'Wireless formatstring attack done. Successful formatstring tests: {vulnerabilities}")
+        self._logger.info(f"Wireless formatstring attack done. Successful formatstring tests: {vulnerabilities}")
         return results

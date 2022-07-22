@@ -231,5 +231,5 @@ class KeystrokeInjectionAttack(AutosecModule):
         ping_sniffer.stop()
 
         # Return results
-        self._logger.info(f"'Keystroke injection attack done. Successful keystroke injection tests: {vulnerabilities}")
+        self._logger.info(f"Keystroke injection attack done. Successful keystroke injection tests: {vulnerabilities}")
         return results
