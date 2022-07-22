@@ -41,6 +41,7 @@ class NetworkSniffer(Thread):
         self._sniff_ip_packets: bool = sniff_ip_packets
         self._internet_interface = internet_interface
         self._discovered_devices: {str, str} = {}
+        self._stopped = False
 
         # Exit when main thread exits
         super().setDaemon(True)
@@ -81,6 +82,12 @@ class NetworkSniffer(Thread):
             if IPAddress(ip).is_private():
                 self.save_discovered_device(ip, sniffed.src)
 
+    def stop_filter(self) -> bool:
+        """
+        :return: True on stop
+        """
+        return self._stopped
+
     def get_discovered_devices(self) -> [InternetDevice]:
         """
         Get the discovered devices
@@ -104,14 +111,14 @@ class NetworkSniffer(Thread):
         Thread contents
         """
         # Don't store to keep RAM free
-        sniff(prn=self.handle_sniffed_packet, iface=self._internet_interface.get_scapy_interface(), store=0)
+        sniff(prn=self.handle_sniffed_packet, iface=self._internet_interface.get_scapy_interface(), store=0,
+              stop_filter=self.stop_filter())
 
     def stop(self) -> None:
         """
         Stop the sniffer
         """
-        # TODO: Implement somehow
-        pass
+        self._stopped = True
 
 
 class HttpSniffer(Thread):
@@ -145,6 +152,9 @@ class HttpSniffer(Thread):
         super().__init__()
         self._port = port
         type(self).user_interaction = user_interaction
+        self._stopped = False
+
+        # Exit when main thread exits
         super().setDaemon(True)
         self.start()
 
@@ -153,14 +163,14 @@ class HttpSniffer(Thread):
         Thread contents
         """
         with HTTPServer(("", self._port), HttpSniffer.HttpHandler) as httpd:
-            httpd.serve_forever()
+            while not self._stopped:
+                httpd.handle_request()
 
     def stop(self) -> None:
         """
         Stop the sniffer
         """
-        # TODO: Implement somehow
-        pass
+        self._stopped = True
 
 
 class PingSniffer(Thread):
@@ -178,6 +188,9 @@ class PingSniffer(Thread):
         super().__init__()
         self._network_interface: NetworkInterface = internet_interface.get_scapy_interface()
         self._user_interaction = user_interaction
+        self._stopped = False
+
+        # Exit when main thread exits
         super().setDaemon(True)
         self.start()
 
@@ -191,16 +204,22 @@ class PingSniffer(Thread):
         if ICMP in sniffed and sniffed[ICMP].type == 8:
             self._user_interaction.feedback(f"Received PING: {sniffed.src} >> {sniffed[IP].src}")
 
+    def stop_filter(self) -> bool:
+        """
+        :return: True on stop
+        """
+        return self._stopped
+
     def run(self) -> None:
         """
         Thread contents
         """
         # Don't store to keep RAM free
-        sniff(prn=self.handle_sniffed_packet, filter="icmp", iface=self._network_interface, store=0)
+        sniff(prn=self.handle_sniffed_packet, filter="icmp", iface=self._network_interface, store=0,
+              stop_filter=self.stop_filter())
 
     def stop(self) -> None:
         """
         Stop the sniffer
         """
-        # TODO: Implement somehow
-        pass
+        self._stopped = True
