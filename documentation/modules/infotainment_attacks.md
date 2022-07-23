@@ -88,8 +88,7 @@
 
 ### Input Resources
 
-- The connected internet interface (InternetInterface)
-- The device to scan (InternetDevice)
+- The device to scan (InternetDevice including the connected InternetInterface)
 - The range of tcp ports to scan (PortRange)
 
 ### Procedure

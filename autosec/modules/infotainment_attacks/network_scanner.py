@@ -5,6 +5,7 @@ Scapy documentation: https://scapy.readthedocs.io/en/latest/usage.html
 Scan types: https://www.hackingarticles.in/nmap-for-pentester-ping-scan
 """
 import logging
+import math
 from time import sleep
 from typing import Union, Type
 
@@ -175,7 +176,7 @@ class NetworkScanner(AutosecModule):
             internet_interface: InternetInterface = self.get_ressource(inputs, Type[InternetInterface])
             try:
                 internet_interface.get_scapy_interface()
-                chunk_count: int = (2 ** (32 - internet_interface.get_subnet_length())) / self._chunk_size
+                chunk_count: int = math.ceil((2 ** (32 - internet_interface.get_subnet_length())) / self._chunk_size)
                 seconds_per_chunk: float = 4.5  # Constant from tests
                 return AutosecExpectedMetrics(
                     can_run=True,
