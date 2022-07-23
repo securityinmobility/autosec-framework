@@ -4,7 +4,7 @@ Utils for network actions
 from os.path import dirname, join
 from typing import IO
 
-from autosec.core.ressources import InternetDevice, InternetInterface
+from autosec.core.ressources import InternetDevice
 
 __author__: str = "Michael Weichenrieder"
 
