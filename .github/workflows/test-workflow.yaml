@@ -38,7 +38,7 @@ jobs:
       - name: setup
         uses: actions/checkout@v3
       - name: ip_test
-        run: python ./autosec/test/ip_tests.py
+        run: python autosec/test/ip_tests.py
 
 
   canSniffTest:
@@ -48,7 +48,7 @@ jobs:
       - name: setup
         uses: actions/checkout@v3
       - name: can_sniff_test
-        run: python ./autosec/test/can-sniff-test.py  
+        run: python autosec/test/can-sniff-test.py  
 
 
   isotpTest:
@@ -58,5 +58,5 @@ jobs:
       - name: setup
         uses: actions/checkout@v3
       - name: isotp_test
-        run: python ./autosec/test/isotp_test.py
+        run: python autosec/test/isotp_test.py
 
