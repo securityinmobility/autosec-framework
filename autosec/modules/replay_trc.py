@@ -1,4 +1,3 @@
-
 import sys 
 sys.path.append("../autosec-framework-module-automation")
 
@@ -50,8 +49,7 @@ class TrcService(AutosecModule):
             time_offset = d.get("time offset")
             data = d.get("data [hex]")
             print(data, len(data))
-            msg_id = int(d.get("message number"))
-            print(type(data))
+            msg_id = int(d.get("ID"), 16)
             time.sleep(time_offset-t)
             interface.send_message(msg_id=msg_id, data=data)
             #interface.send(CAN(identifier))
@@ -59,5 +57,3 @@ class TrcService(AutosecModule):
             t = time_offset
 
         return []
-
-
