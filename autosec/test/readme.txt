@@ -29,11 +29,7 @@ isotp_test.py:
     -   start the isotp_test (test may take a while)
 
 ip_test.py: 
-    -   start the docker-compose.network.yaml file to initialize the network:
-        sudo docker compose -f docker-compose.network.yaml build
-        sudo docker compose -f docker-compose.network.yaml up
     -   start ip_tests with the sudo command
-    -   shut down container: sudo docker compose -f docker-compose.network.yaml down
 
 
 automatic_execution_test.py:
@@ -41,11 +37,7 @@ automatic_execution_test.py:
         sudo modprobe vcan
         sudo ip link add name vcan0 type vcan
         sudo ip link set dev vcan0 up
-    -   start the docker-compose.network.yaml file to initialize the network:
-        sudo docker compose -f docker-compose.network.yaml build
-        sudo docker compose -f docker-compose.network.yaml up
     -   start automatic_execution_test.py in sudo mode
-    -   shut down container: sudo docker compose -f docker-compose.network.yaml down
 
 replay_trc_test.py:
     -   set up one vcan on Linux terminal:

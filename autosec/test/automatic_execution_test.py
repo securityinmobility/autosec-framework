@@ -8,6 +8,18 @@ from autosec.core.ressources.can import CanInterface
 import autosec.modules.automatic_execution as automatic_execution
 from scapy.all import *
 import subprocess
+from multiprocessing import Process
+from python_on_whales import DockerClient
+
+
+def docker_setup(finish=False):
+    if not finish:
+        client = DockerClient(compose_files="./docker-compose.network.yaml")
+        client.compose.build()
+        client.compose.up()
+    else:
+        client.compose.down()
+
 
 class AutomaticExecutionTest(unittest.TestCase):
 
@@ -30,7 +42,10 @@ class AutomaticExecutionTest(unittest.TestCase):
         p2 = subprocess.Popen([sys.executable, './autosec/test/endpoints_sim.py'], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         # start subprocess to run script to replay can data
         p3 = subprocess.Popen([sys.executable, './autosec/test/replay_trc_test.py'], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-        
+        # start docker compose file
+        p = Process(target=docker_setup)
+
+
         results = module.run([self.interface, self.device, self.can_interface])
         
         # arp scan
@@ -56,7 +71,7 @@ class AutomaticExecutionTest(unittest.TestCase):
         self.assertTrue(len(result_can_devices_lst)>0)
         self.assertTrue(len(result_can_services_lst)>0)
 
-
+        p = Process(target=docker_setup, args=(False,))
         p2.kill()
         p3.kill()
 
@@ -64,3 +79,4 @@ class AutomaticExecutionTest(unittest.TestCase):
 
 if __name__ == "__main__": 
     unittest.main()
+    
