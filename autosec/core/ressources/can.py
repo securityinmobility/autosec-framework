@@ -7,14 +7,14 @@ load_contrib('cansocket')
 load_contrib('isotp')
 
 from scapy.layers.can import CAN
-from scapy.contrib.cansocket import CANSocket
+from scapy.contrib.cansocket_native import CANSocket
 
 class CanInterface(NetworkInterface):
     _interface: CANSocket
 
     def __init__(self, interface_name: str):
         super().__init__(interface_name)
-        self._interface = CANSocket(channel=interface_name)
+        self._interface = CANSocket(interface_name)
 
     def get_socket(self) -> CANSocket:
         return self._interface
