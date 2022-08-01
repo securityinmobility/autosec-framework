@@ -25,11 +25,11 @@ class KeystrokeInjectionAttack(AutosecModule):
 
     # Payload array with lambda to build command (with ip and port parameters) and success question
     _payloads: [(Any, str)] = [
-        (lambda ip, port: "ping -c 5 " + ip,
+        (lambda ip, port: f"ping -c 5 {ip}",
          "Was a PING request received? (message here in console)"),
-        (lambda ip, port: "wget -qO- " + ip + ":" + str(port),
+        (lambda ip, port: f"wget -qO- {ip}:{port}",
          "Was a WGET request received? (message here in console)"),
-        (lambda ip, port: "curl " + ip + ":" + str(port),
+        (lambda ip, port: f"curl {ip}:{port}",
          "Was a CURL request received? (message here in console)"),
         (lambda ip, port: "gnome-terminal",
          "Was a terminal window visibly opened on target device?"),
