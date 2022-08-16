@@ -1,4 +1,4 @@
-from scapy.all import ARP, Ether, srp, in6_isvalid, arping, sr
+from scapy.all import in6_isvalid, arping
 from autosec.core.autosec_module import AutosecModule, AutosecModuleInformation
 from autosec.core.ressources.ip import InternetDevice, InternetInterface
 from typing import List

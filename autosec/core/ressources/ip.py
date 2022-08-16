@@ -1,3 +1,4 @@
+
 import socket
 from .base import AutosecRessource, NetworkInterface
 from typing import Optional
@@ -15,6 +16,9 @@ class InternetInterface(NetworkInterface):
     
     def get_network_address(self):
         return self.network_addr
+
+    def __eq__(self, other) -> bool:
+        return self.get_network_address() == other.get_network_address()
 
 
 
@@ -51,6 +55,10 @@ class InternetDevice(AutosecRessource):
         else:
             raise ValueError("Trying to get non existent Address from an InternetDevice")
 
+    def __eq__(self, other) -> bool:
+        tmp_1 = self.get_interface().__eq__(other.get_interface())
+        tmp_2 = self.get_address() == other.get_address()
+        return tmp_1 and tmp_2
 
 
 class InternetService(AutosecRessource):
@@ -75,7 +83,10 @@ class InternetService(AutosecRessource):
     def connect(self) -> 'InternetConnection':
         return InternetConnection(self)
 
-
+    def __eq__(self, other) -> bool:
+        tmp_1 = self.get_device().__eq__(other.get_device())
+        tmp_2 = self.get_port() == other.get_port()
+        return tmp_1 and tmp_2
 
 
 class InternetConnection(AutosecRessource):
@@ -100,3 +111,4 @@ class InternetConnection(AutosecRessource):
 
             if curr == stop:
                 return result
+

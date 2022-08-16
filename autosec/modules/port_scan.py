@@ -1,4 +1,4 @@
-from scapy.all import IP, TCP, L3RawSocket,sr
+from scapy.all import IP, TCP, sr
 from autosec.core.autosec_module import AutosecModule, AutosecModuleInformation
 from autosec.core.ressources.ip import InternetDevice, InternetService, InternetInterface
 from autosec.core.ressources.base import AutosecRessource

@@ -1,22 +1,18 @@
+
 import sys, os 
 sys.path.append("../autosec-framework-master")
 import unittest
 
 from autosec.core.ressources.ip import InternetDevice, InternetInterface
-import autosec.modules.port_scan as port_scan
 import autosec.modules.arp_scan as arp_scan
 from scapy.all import *
-import subprocess
-from python_on_whales import docker, DockerClient
+from python_on_whales import DockerClient
 from multiprocessing import Process
 
-def docker_setup(down=False):
-    if not down:
-        client = DockerClient(compose_files="./docker-compose.network.yaml")
-        client.compose.build()
-        client.compose.up()
-    else:
-        client.compose.down()
+def docker_setup():
+    client = DockerClient(compose_files="./docker-compose.network.yaml")
+    client.compose.build()
+    client.compose.up()
 
 
 
@@ -36,13 +32,19 @@ class IP_tests(unittest.TestCase):
 
     def testArpScan(self):
         self.assertTrue(self.module_arp.can_run([self.interface, self.network_address])), "Not enough ressources. (InternetInterface, InternetDevice)"
- 
+
+        # start docker network
         p = Process(target=docker_setup)
+        p.start()
+        time.sleep(10)
+
         device_lst = self.module_arp.run([self.interface])
         result_lst = ['10.9.0.7', '10.9.0.5', '10.9.0.6']
         test_lst = [devices.get_address() for devices in device_lst]
-        p = Process(target=docker_setup, args=(False,))
 
+        # remove docker
+        os.system("docker compose -f ./docker-compose.network.yaml down")
+        
         self.assertTrue(all([True if d in result_lst else False for d in test_lst])), "ARP-Scan test failed"
         self.assertEqual(len(test_lst), len(result_lst)),  "ARP-Scan test failed"
 
@@ -60,6 +62,3 @@ class IP_tests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-    
-
-

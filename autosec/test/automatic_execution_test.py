@@ -12,13 +12,10 @@ from multiprocessing import Process
 from python_on_whales import DockerClient
 
 
-def docker_setup(finish=False):
-    if not finish:
-        client = DockerClient(compose_files="./docker-compose.network.yaml")
-        client.compose.build()
-        client.compose.up()
-    else:
-        client.compose.down()
+def docker_setup():
+    client = DockerClient(compose_files="./docker-compose.network.yaml")
+    client.compose.build()
+    client.compose.up()
 
 
 class AutomaticExecutionTest(unittest.TestCase):
@@ -42,11 +39,18 @@ class AutomaticExecutionTest(unittest.TestCase):
         p2 = subprocess.Popen([sys.executable, './autosec/test/endpoints_sim.py'], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         # start subprocess to run script to replay can data
         p3 = subprocess.Popen([sys.executable, './autosec/test/replay_trc_test.py'], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-        # start docker compose file
+        # start docker network
         p = Process(target=docker_setup)
+        p.start()
+        time.sleep(10)
 
 
         results = module.run([self.interface, self.device, self.can_interface])
+
+        # remove docker
+        os.system("docker compose -f ./docker-compose.network.yaml down")
+        p2.kill()
+        p3.kill()
         
         # arp scan
         result_internet_devices = [devices.get_address() for devices in results.get('internet devices')]
@@ -54,7 +58,6 @@ class AutomaticExecutionTest(unittest.TestCase):
         self.assertTrue(all([True if d in ground_truth_internet_devices else False for d in result_internet_devices])), "ARP-Scan test failed"
         self.assertEqual(len(result_internet_devices), len(ground_truth_internet_devices)),  "ARP-Scan test failed"
         
-
         # isotp scan
         ground_truth_isotp_services = [("vcan0", 1793, 1792), ("vcan0", 1795, 1962), ("vcan0", 1799, 1801), ("vcan0", 1861, 1945), ("vcan0", 1928, 1820), ("vcan0", 1979, 1996)]
         result_isopt_services = [(s.get_interface().get_interface_name(), s.get_tx_id(), s.get_rx_id()) for s in results.get('isotp services')]
@@ -70,10 +73,6 @@ class AutomaticExecutionTest(unittest.TestCase):
         self.assertTrue(all([True if i in ground_truth_can_services_lst else False for i in result_can_services_lst]))
         self.assertTrue(len(result_can_devices_lst)>0)
         self.assertTrue(len(result_can_services_lst)>0)
-
-        p = Process(target=docker_setup, args=(False,))
-        p2.kill()
-        p3.kill()
 
        
 

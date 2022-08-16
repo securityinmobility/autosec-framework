@@ -1,9 +1,8 @@
 from autosec.core.autosec_module import AutosecModule, AutosecModuleInformation
-from autosec.core.ressources.ip import InternetDevice, InternetInterface, InternetService
-from autosec.core.ressources import AutosecRessource, CanInterface, CanOverride, CanService, CanDevice, IsoTPService
-from autosec.modules import can_scan, isotp_scan, port_scan, arp_scan
-from typing import List, Tuple
-import subprocess
+from autosec.core import load_modules
+from autosec.core.ressources import AutosecRessource
+from typing import List
+
 
 
 def load_module():
@@ -43,56 +42,31 @@ class AutomaticExecution(AutosecModule):
         return []
 
 
-    def arp_test(self, inputs: List[AutosecRessource]) -> List[InternetDevice]: #InternetInterface
-        module_arp = arp_scan.load_module()[0]
-        possible = module_arp.can_run(inputs)
-        if possible:
-            self._internet_device_lst = module_arp.run(inputs)
-        return None
-
-
-    def port_test(self, inputs: List[AutosecRessource]) -> List[InternetService]: #InternetInterface, InternetDevice
-        module_port = port_scan.load_module()[0]
-        possible = module_port.can_run(inputs)
-        if possible:
-            self._internet_service_lst = module_port.run(inputs)
-        return None
-
-
-    def can_test(self, inputs: List[AutosecRessource]) -> Tuple[CanDevice, CanService]: #CanInterface
-        module = can_scan.load_module()[0]
-        possible = module.can_run(inputs)
-        if possible:
-            self._can_device_lst, self._can_service_lst = module.run(inputs)
-        return None
-
-
-    def isotp_test(self, inputs: List[AutosecRessource]) -> List[IsoTPService]: #CanInterface
-        module = isotp_scan.load_module()[0]
-        possible = module.can_run(inputs)
-        if possible:
-            self._isotpService_lst = module.run(inputs)
-        return None
-
-
     def run(self, inputs: List[AutosecRessource]) -> List[AutosecRessource]:
+        ressources_lst = inputs
+        modules = load_modules.load_all_modules()
+        end = False
+        while not end:
+            found_new = False
+            # check which modules are available
+            available_modules = [module for module in modules if module.can_run(ressources_lst)]
+            for module in available_modules:
+                results = module.run(ressources_lst)
+                # check if found ressources are new
+                if results:
+                    for result in results:
+                        # check if ressources are the same class
+                        ressources_to_check = [result.__eq__(ressource) for ressource in ressources_lst if type(result) == type(ressource)]
         
-       # internet_interface_name = ""
-       # network_address = ""
+                        if not ressources_to_check:
+                            ressources_lst.append(result)
+                            found_new = True
 
-      #  self._can_interface = CanInterface(interface_name="vcan0")
-      #  self._internet_interface = InternetInterface(internet_interface_name, network_address)
+                        elif not any(ressources_to_check) and len(ressources_to_check) > 0:
+                            ressources_lst.append(result)
+                            found_new = True
+            # stopp if no new ressources where found
+            if not found_new:
+                end = True
 
-        #inputs = inputs.append(self._can_interface)
-        self.can_test(inputs)
-        self.isotp_test(inputs)
-        #args = "/bin/python3 from automatic_execution.py import arp_test; arp_test(%s)" %(inputs)
-        #returncode = subprocess.call(["/usr/bin/sudo", args])
-        #print(returncode)
-        self.arp_test(inputs)
-        if self._internet_device_lst is not None:
-            inputs.append(self._internet_device_lst)
-        #self.port_test(inputs)
-
-        result = {'internet devices':self._internet_device_lst, 'internet services':self._internet_service_lst, 'can devices':self._can_device_lst, 'can services':self._can_service_lst , 'isotp services':self._isotpService_lst, 'can interface':self._can_interface, 'internet interface':self._internet_interface}
-        return result
+        return ressources_lst

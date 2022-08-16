@@ -33,7 +33,6 @@ jobs:
 
   ipTest:
     runs-on: ubuntu-latest
-
     steps:
       - name: setup
         uses: actions/checkout@v3
@@ -43,7 +42,7 @@ jobs:
 
   canSniffTest:
     runs-on: ubuntu-latest
-
+    needs: setup
     steps:
       - name: setup
         uses: actions/checkout@v3
@@ -53,10 +52,20 @@ jobs:
 
   isotpTest:
     runs-on: ubuntu-latest
-
+    needs: setup
     steps:
       - name: setup
         uses: actions/checkout@v3
       - name: isotp_test
         run: python ../autosec/test/isotp_test.py
+
+  
+  auotmaticExecutionTest:
+    runs-on: ubuntu-latest
+    needs: setup
+    steps:
+      - name: setup
+        uses: actions/checkout@v3
+      - name: automatic_execution_test
+        run: python ../autosec/test/automatic_execution_test.py
 
