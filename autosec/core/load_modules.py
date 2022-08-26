@@ -1,9 +1,7 @@
-
 import sys
 sys.path.append("../autosec-framework-master")
 
 
-from inspect import getmembers, isfunction
 from autosec.core.autosec_module import AutosecModule
 from autosec.modules import *
 import importlib, pathlib
@@ -18,10 +16,7 @@ def load_all_modules():
                     if file.endswith(".py")
                     and not file == "__init__.py"
                     and not file == "test_module_interfaces.py"
-                    and not file == "obd.py"
-                    and not file == "replay_trc.py"
-                    and not file == "automatic_execution.py"
-                    and not file == "can_bridge.py"]
+                    and not file == "obd.py"]
    
    
     result = []
