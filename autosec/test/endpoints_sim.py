@@ -5,6 +5,7 @@ import logging
 import time
 
 from scapy.all import conf, load_contrib
+from scapy.contrib.isotp import ISOTPSocket, ISOTP
 
 conf.contribs['ISOTP'] = {'use-can-isotp-kernel-module': True}
 conf.contribs['CANSocket'] = {'use-python-can': False}

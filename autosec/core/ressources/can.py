@@ -8,6 +8,7 @@ load_contrib('isotp')
 
 from scapy.layers.can import CAN
 from scapy.contrib.cansocket import CANSocket
+from scapy.contrib.isotp import ISOTPSocket
 
 class CanInterface(NetworkInterface):
     _interface: CANSocket
@@ -37,7 +38,7 @@ class CanDevice(AutosecRessource):
     def get_address(self) -> int:
         return self._address
 
-    def request_data():
+    def request_data(self):
         pass # TODO remote transmission request
 
 

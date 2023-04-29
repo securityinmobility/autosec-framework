@@ -10,11 +10,11 @@ from scapy.all import *
 
 conf.use_pcap=True
 
-network_address = '10.9.0.0/24' 
+network_address = '10.9.0.0/24'
 interface_name= "ether"
-ip = "10.9.0.5"   
+ip = "10.9.0.5"
 
-interface = InternetInterface(interface_name, network_address)
+interface = InternetInterface(interface=interface_name, ipv4_address=network_address, subnet_length=24)
 device = InternetDevice(interface, ip)
 
 #conf.iface = interface.get_interface_name()

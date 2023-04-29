@@ -7,7 +7,7 @@ messages (e.g. with certain IDs) can be manipulated.
 
 
 
-from scapy.all import load_layer, load_contrib, conf, CAN, CANSocket, bridge_and_sniff
+from scapy.all import load_contrib, conf, bridge_and_sniff
 from autosec.core.autosec_module import AutosecModule, AutosecModuleInformation
 from autosec.core.ressources import AutosecRessource, CanInterface, CanOverride, CanService
 from typing import List
