@@ -1,17 +1,18 @@
-'''
+"""
 This is the basic interface that has to be implemented by all adapters that introduce
 modules to the autosec framework. This module also introduces some functionality, that
 may help to create modules faster.
-'''
+"""
 import logging
 from typing import TypedDict, List, Union
 from abc import ABC, abstractmethod
 from .ressources.base import AutosecRessource
 
+
 class AutosecModuleInformation(TypedDict):
-    '''
+    """
     Typed dictionary holding meta information about an autosec module
-    '''
+    """
 
     '''
     name of the module
@@ -34,12 +35,13 @@ class AutosecModuleInformation(TypedDict):
     '''
     tags: List[str]
 
+
 class AutosecExpectedMetrics(TypedDict):
-    '''
+    """
     Typed dictionary holding information wether meta information about
     possibility, complexity and success expectance of an attack given specific
     ressources as input
-    '''
+    """
 
     '''
     Wether it is possible to run the attack with the given ressources
@@ -60,22 +62,21 @@ class AutosecExpectedMetrics(TypedDict):
     expected_success: float
 
 
-
 class AutosecModule(ABC):
-    '''
+    """
     Class all modules of the framework should inherit from
-    '''
+    """
 
     def __init__(self):
-        '''
+        """
         Initialize the module, create logger and empty options dictionary
-        '''
+        """
         self._module_name = str(self.__class__).rsplit(".", maxsplit=1)[:-2]
         self.logger = logging.getLogger(f"autosec.modules.{self._module_name}")
 
     @abstractmethod
     def get_info(self) -> AutosecModuleInformation:
-        '''
+        """
         This method returns information about the module, e.g. name, package / type, interface,
         purpose etc.
 
@@ -85,28 +86,28 @@ class AutosecModule(ABC):
         type (e.g. sniffer, scanner, exploit, payload, attack ...)
         interface (e.g. ethernet, CAN, LIN, Flexray ...)
         description (textual description)
-        '''
+        """
         raise NotImplementedError
 
     @abstractmethod
     def get_produced_outputs(self) -> List[AutosecRessource]:
-        '''
+        """
         return the list of potentially produced outputs
-        '''
+        """
         raise NotImplementedError
 
     @abstractmethod
     def get_required_ressources(self) -> List[AutosecRessource]:
-        '''
+        """
         return the minimal ressources required to run this attack
-        '''
+        """
         raise NotImplementedError
 
     def get_optional_ressources(self) -> List[AutosecRessource]:
-        '''
+        """
         returns a list of optional ressources, which, when given might improve
         performance or increase the success rate
-        '''
+        """
         return []
 
     @staticmethod
@@ -118,13 +119,13 @@ class AutosecModule(ABC):
         return AutosecModule.get_ressources(inputs, kind)[0]
 
     def can_run(self, inputs: List[AutosecRessource]) -> Union[bool, AutosecExpectedMetrics]:
-        '''
+        """
         This method returns expected metrics of running the attack with the
-        given 
+        given
 
         @return: a boolean wether the attack is possible or detailed
         information about expected runtime and success rate
-        '''
+        """
         required = self.get_required_ressources()
         for req in required:
             given_amount = len(self.get_ressources(inputs, req))
@@ -136,7 +137,7 @@ class AutosecModule(ABC):
 
     @abstractmethod
     def run(self, inputs: List[AutosecRessource]) -> List[AutosecRessource]:
-        '''
+        """
         Method to perform the attack.
-        '''
+        """
         raise NotImplementedError
