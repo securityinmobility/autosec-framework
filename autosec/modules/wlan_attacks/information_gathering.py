@@ -90,6 +90,9 @@ def _display_filter(packet: Packet, res: Dict[str, dict]) -> None:
         network_stats: dict = packet[Dot11Beacon].network_stats()
         channel: int = network_stats.get("channel")
         enc: str = network_stats.get("crypto").pop()
+        group_cipher_suite: str = "OPN" if enc == "OPN" else _get_group_cipher_suite(packet=packet)
+        pairwise_cipher_suites: str = "OPN" if enc == "OPN" else _get_pairwise_cipher_suites(packet=packet)
+        akm_suites: str = "OPN" if enc == "OPN" else _get_akm_suites(packet=packet)
         init: dict = {
             "|BSSID|": bssid,
             "|SSID|": ssid,
@@ -97,9 +100,9 @@ def _display_filter(packet: Packet, res: Dict[str, dict]) -> None:
             "|#Beacons|": 0,
             "|Channel|": channel,
             "|ENC|": enc,
-            "|Group Cipher Suite|": _get_group_cipher_suite(packet=packet),
-            "|Pairwise Cipher Suites|": _get_pairwise_cipher_suites(packet=packet),
-            "|AKM Suites|": _get_akm_suites(packet=packet)
+            "|Group Cipher Suite|": group_cipher_suite,
+            "|Pairwise Cipher Suites|": pairwise_cipher_suites,
+            "|AKM Suites|": akm_suites
         }
         if bssid not in res.keys():
             res[bssid] = init
