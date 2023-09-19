@@ -1,9 +1,11 @@
+from typing import List
 import os
 import subprocess
 import autosec.modules.wlan_attacks.information_gathering_service as information_gathering_service
 import autosec.modules.wlan_attacks.handshake_deauth_service as handshake_deauth_service
 import autosec.modules.wlan_attacks.dictionary_attack_service as dictionary_attack_service
 from autosec.core.autosec_module import AutosecModule
+from autosec.core.ressources import AutosecRessource
 from autosec.core.ressources.base import NetworkInterface
 from autosec.core.ressources.wifi import WifiInformation
 
@@ -27,10 +29,10 @@ info.run(
 print()
 
 
-# ----------specifie wifi information----------
-print("-------------------------")
-print("Specifie wifi information")
-print("-------------------------")
+# ----------specify wifi information----------
+print("------------------------")
+print("Specify wifi information")
+print("------------------------")
 wifi_information: WifiInformation = WifiInformation(
     ssid=input("SSID: "),
     bssid_mac=input("BSSID: "),
@@ -44,7 +46,7 @@ print("------------------------------------------------------------")
 print("Send deauthentication packets to capture the 4-way-handshake")
 print("------------------------------------------------------------")
 handshake: AutosecModule = handshake_deauth_service.load_module()[0]
-handshake.run(
+result_handshake: List[AutosecRessource] = handshake.run(
     inputs=[
         network_interface,
         wifi_information
@@ -57,6 +59,7 @@ os.system("clear")
 dictAttack: AutosecModule = dictionary_attack_service.load_module()[0]
 dictAttack.run(
     inputs=[
-        wifi_information
+        wifi_information,
+        result_handshake[0]
     ]
 )

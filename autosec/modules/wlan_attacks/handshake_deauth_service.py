@@ -1,9 +1,9 @@
-from typing import List
+from typing import List, Union
 import time
 from autosec.core.autosec_module import AutosecModule, AutosecModuleInformation
 from autosec.core.ressources import AutosecRessource
 from autosec.core.ressources.base import NetworkInterface
-from autosec.core.ressources.wifi import WifiInformation
+from autosec.core.ressources.wifi import WifiInformation, FourWayHandshake
 from .deauthentication import Deauthentication
 from .capture_handshake import CaptureHandshake
 
@@ -26,7 +26,9 @@ class HandshakeDeauthService(AutosecModule):
         )
 
     def get_produced_outputs(self) -> List[AutosecRessource]:
-        return []
+        return [
+            FourWayHandshake(handshake=Union[None])
+        ]
 
     def get_required_ressources(self) -> List[AutosecRessource]:
         return [
@@ -65,5 +67,8 @@ class HandshakeDeauthService(AutosecModule):
             pass
         deauth.stop()
         time.sleep(5)
-        handshake.stop()
-        return []
+        return [
+            FourWayHandshake(
+                handshake=handshake.stop()
+            )
+        ]

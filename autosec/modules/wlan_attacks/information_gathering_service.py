@@ -27,7 +27,9 @@ class InformationGatheringService(AutosecModule):
         return []
 
     def get_required_ressources(self) -> List[AutosecRessource]:
-        return [NetworkInterface(interface="wlo1")]
+        return [
+            NetworkInterface(interface="wlo1")
+        ]
 
     def run(self, inputs: List[AutosecRessource]) -> List[AutosecRessource]:
         network_interface: NetworkInterface = self.get_ressource(

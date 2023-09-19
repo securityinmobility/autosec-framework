@@ -1,8 +1,8 @@
-from typing import List
+from typing import List, Union
 import os
 from autosec.core.autosec_module import AutosecModule, AutosecModuleInformation
 from autosec.core.ressources import AutosecRessource
-from autosec.core.ressources.wifi import WifiInformation
+from autosec.core.ressources.wifi import WifiInformation, FourWayHandshake, WlanPSW
 from .dictionary_attack import DictionaryAttack
 
 
@@ -24,7 +24,9 @@ class DictionaryAttackService(AutosecModule):
         )
 
     def get_produced_outputs(self) -> List[AutosecRessource]:
-        return []
+        return [
+            WlanPSW(wlan_psw="secret psw")
+        ]
 
     def get_required_ressources(self) -> List[AutosecRessource]:
         return [
@@ -32,7 +34,8 @@ class DictionaryAttackService(AutosecModule):
                 ssid="hack_me",
                 bssid_mac="ff:ff:ff:ff:ff:ff",
                 channel=1
-            )
+            ),
+            FourWayHandshake(handshake=Union[None])
         ]
 
     def run(self, inputs: List[AutosecRessource]) -> List[AutosecRessource]:
@@ -40,8 +43,17 @@ class DictionaryAttackService(AutosecModule):
             inputs=inputs,
             kind=WifiInformation
         )
-        DictionaryAttack(
+        handshake: FourWayHandshake = self.get_ressource(
+            inputs=inputs,
+            kind=FourWayHandshake
+        )
+        dictionary_attack: DictionaryAttack = DictionaryAttack(
             ssid=wifi_information.get_ssid(),
+            handshake=handshake.get_handshake(),
             dictionary_folder=f"{os.getcwd()}/autosec/modules/wlan_attacks/dictionary/my_wordlists"
         )
-        return []
+        return [
+            WlanPSW(
+                wlan_psw=dictionary_attack.get_wlan_psw()
+            )
+        ]

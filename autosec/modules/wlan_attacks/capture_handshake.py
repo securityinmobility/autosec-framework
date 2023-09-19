@@ -1,7 +1,9 @@
+import os
+import time
 from typing import List, Union
 from threading import Thread
-from scapy.all import wrpcap
-from scapy.layers.dot11 import Packet, Dot11
+from scapy.all import wrpcap, rdpcap
+from scapy.layers.dot11 import Packet, Dot11, PacketList
 from scapy.layers.eap import EAPOL
 from .utils import WlanSniffer, MonitorMode, EAPOLParser, _pcap_path
 
@@ -10,6 +12,8 @@ class CaptureHandshake(Thread):
 
     def __init__(self, iface: str, channel: int) -> None:
         super().__init__()
+        if os.path.exists(path=_pcap_path):
+            os.remove(path=_pcap_path)
         filter_packets: List[Packet] = []
         self._monitor: MonitorMode = MonitorMode(
             iface=iface,
@@ -24,14 +28,18 @@ class CaptureHandshake(Thread):
         self._running: bool = True
         self.start()
 
-    def stop(self) -> None:
+    def stop(self) -> PacketList:
         self._sniffer.stop()
         self._monitor.stop()
         self._running = False
+        if os.path.exists(path=_pcap_path):
+            return rdpcap(filename=_pcap_path)
+        else:
+            return Union[None]
 
     def run(self) -> None:
         while self._running:
-            pass
+            time.sleep(1)
 
 
 def _display_filter(packet: Packet, res: List[Packet]) -> None:
