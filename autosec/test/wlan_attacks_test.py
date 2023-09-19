@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, cast
 import os
 import subprocess
 import autosec.modules.wlan_attacks.information_gathering_service as information_gathering_service
@@ -21,7 +21,7 @@ network_interface: NetworkInterface = NetworkInterface(
 
 # ----------information gathering----------
 info: AutosecModule = information_gathering_service.load_module()[0]
-info.run(
+result_info: List[AutosecRessource] = info.run(
     inputs=[
         network_interface
     ]
@@ -33,11 +33,23 @@ print()
 print("------------------------")
 print("Specify wifi information")
 print("------------------------")
-wifi_information: WifiInformation = WifiInformation(
-    ssid=input("SSID: "),
-    bssid_mac=input("BSSID: "),
-    channel=int(input("Channel: "))
-)
+bssid_mac: str = input("BSSID: ")
+wifi_information: None = None
+for res_info in result_info:
+    ap_info: WifiInformation = cast(WifiInformation, res_info)
+    if ap_info.get_bssid_mac() == bssid_mac:
+        wifi_information: WifiInformation = WifiInformation(
+            ssid=ap_info.get_ssid(),
+            bssid_mac=ap_info.get_bssid_mac(),
+            channel=ap_info.get_channel(),
+            pwr=ap_info.get_pwr(),
+            beacon_count=ap_info.get_beacon_count(),
+            enc=ap_info.get_enc(),
+            group_cipher_suite=ap_info.get_group_cipher_suite(),
+            pairwise_cipher_suites=ap_info.get_pairwise_cipher_suites(),
+            akm_suites=ap_info.get_akm_suites()
+        )
+        break
 os.system("clear")
 
 

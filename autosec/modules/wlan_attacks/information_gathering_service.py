@@ -3,6 +3,7 @@ import time
 from autosec.core.autosec_module import AutosecModule, AutosecModuleInformation
 from autosec.core.ressources import AutosecRessource
 from autosec.core.ressources.base import NetworkInterface
+from autosec.core.ressources.wifi import WifiInformation
 from .information_gathering import InformationGathering
 
 
@@ -24,7 +25,19 @@ class InformationGatheringService(AutosecModule):
         )
 
     def get_produced_outputs(self) -> List[AutosecRessource]:
-        return []
+        return [
+            WifiInformation(
+                ssid="hack_me",
+                bssid_mac="ff:ff:ff:ff:ff:ff",
+                channel=1,
+                pwr=-80,
+                beacon_count=1,
+                enc="WPA2/PSK",
+                group_cipher_suite="[CCMP-128]",
+                pairwise_cipher_suites="[CCMP-128]",
+                akm_suites="[PSK]"
+            )
+        ]
 
     def get_required_ressources(self) -> List[AutosecRessource]:
         return [
@@ -46,4 +59,19 @@ class InformationGatheringService(AutosecModule):
             pass
         info.stop()
         time.sleep(5)
-        return []
+        wifi_ap_information: List[WifiInformation] = []
+        for _, ap_info in info.get_access_points_information().items():
+            wifi_ap_information.append(
+                WifiInformation(
+                    ssid=ap_info["|SSID|"],
+                    bssid_mac=ap_info["|BSSID|"],
+                    channel=ap_info["|Channel|"],
+                    pwr=ap_info["|PWR|"],
+                    beacon_count=ap_info["|#Beacons|"],
+                    enc=ap_info["|ENC|"],
+                    group_cipher_suite=ap_info["|Group Cipher Suite|"],
+                    pairwise_cipher_suites=ap_info["|Pairwise Cipher Suites|"],
+                    akm_suites=ap_info["|AKM Suites|"]
+                )
+            )
+        return wifi_ap_information

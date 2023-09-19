@@ -81,6 +81,9 @@ class InformationGathering(Thread):
         else:
             print(data_frame)
 
+    def get_access_points_information(self) -> Dict[str, dict]:
+        return self._filter_packets
+
 
 def _display_filter(packet: Packet, res: Dict[str, dict]) -> None:
     if Dot11Beacon in packet:
