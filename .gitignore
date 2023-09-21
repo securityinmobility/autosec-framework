@@ -5,3 +5,6 @@ venv/
 __pycache__
 
 logfiles/
+.idea/
+autosec/modules/wlan_attacks/dictionary/Wordlists/
+*.pcap

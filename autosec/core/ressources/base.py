@@ -1,6 +1,7 @@
-class AutosecRessource():
+class AutosecRessource:
     def get_name(self) -> str:
         return "AutosecRessource {}".format(self.__class__)
+
 
 class NetworkInterface(AutosecRessource):
     _interface_name: str
