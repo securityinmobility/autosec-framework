@@ -24,25 +24,10 @@ class DictionaryAttackService(AutosecModule):
         )
 
     def get_produced_outputs(self) -> List[AutosecRessource]:
-        return [
-            WlanPSW(wlan_psw="secret psw")
-        ]
+        return [WlanPSW]
 
     def get_required_ressources(self) -> List[AutosecRessource]:
-        return [
-            WifiInformation(
-                ssid="hack_me",
-                bssid_mac="ff:ff:ff:ff:ff:ff",
-                channel=1,
-                pwr=-80,
-                beacon_count=1,
-                enc="WPA2/PSK",
-                group_cipher_suite="[CCMP-128]",
-                pairwise_cipher_suites="[CCMP-128]",
-                akm_suites="[PSK]"
-            ),
-            FourWayHandshake(handshake=Union[None])
-        ]
+        return [WifiInformation, FourWayHandshake]
 
     def run(self, inputs: List[AutosecRessource]) -> List[AutosecRessource]:
         wifi_information: WifiInformation = self.get_ressource(

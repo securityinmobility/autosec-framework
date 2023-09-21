@@ -26,25 +26,10 @@ class HandshakeDeauthService(AutosecModule):
         )
 
     def get_produced_outputs(self) -> List[AutosecRessource]:
-        return [
-            FourWayHandshake(handshake=Union[None])
-        ]
+        return [FourWayHandshake]
 
     def get_required_ressources(self) -> List[AutosecRessource]:
-        return [
-            NetworkInterface(interface="wlo1"),
-            WifiInformation(
-                ssid="hack_me",
-                bssid_mac="ff:ff:ff:ff:ff:ff",
-                channel=1,
-                pwr=-80,
-                beacon_count=1,
-                enc="WPA2/PSK",
-                group_cipher_suite="[CCMP-128]",
-                pairwise_cipher_suites="[CCMP-128]",
-                akm_suites="[PSK]"
-            )
-        ]
+        return [NetworkInterface, WifiInformation]
 
     def run(self, inputs: List[AutosecRessource]) -> List[AutosecRessource]:
         network_interface: NetworkInterface = self.get_ressource(
