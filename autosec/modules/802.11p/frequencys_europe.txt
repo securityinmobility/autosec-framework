@@ -1,0 +1,8 @@
+# Channel centre frequency, channdel width
+5860,10
+5870,10
+5880,10
+5890,10
+5900,10
+5910,10
+5920,10
