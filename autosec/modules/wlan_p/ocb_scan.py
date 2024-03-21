@@ -7,9 +7,9 @@ from autosec.core.ressources.wifi import WifiInformation
 
 
 def load_module() -> List[AutosecModule]:
-    return [OcbModeScan()]
+    return [OcbInterface()]
 
-class OcbModeScan(AutosecModule):
+class OcbInterface(AutosecModule):
     def __init__(self) -> None:
         super().__init__()
 

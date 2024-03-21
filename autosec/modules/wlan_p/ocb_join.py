@@ -1,5 +1,6 @@
 import csv
 from dataclasses import dataclass
+import os
 import re
 import subprocess
 import time
@@ -7,7 +8,9 @@ from typing import List
 from autosec.core.autosec_module import AutosecModule, AutosecModuleInformation
 from autosec.core.ressources import AutosecRessource
 from autosec.core.ressources.base import NetworkInterface
+from autosec.core.ressources.ip import InternetInterface
 from autosec.core.ressources.wifi import WifiInformation
+from autosec.modules.wlan_p.ocb_scan import OcbInterface
 
 #TODO: This module joins a network interface into an ocb network. 
 # Requires the frequencies and channel width in europe, a wifi card with access to these channels and a modified regulatory database
@@ -39,9 +42,9 @@ def load_module() -> List[AutosecModule]:
 
 class OcbModeJoin(AutosecModule):
 
-    def __init__(self, iface: str) -> None:
+    def __init__(self, interface: InternetInterface) -> None:
         super().__init__()
-        self._iface: str = iface
+        self._iface: str = interface.get_interface_name()
 
     def get_info(self) -> AutosecModuleInformation:
         return AutosecModuleInformation(
@@ -52,14 +55,20 @@ class OcbModeJoin(AutosecModule):
         )
 
     def get_produced_outputs(self) -> List[AutosecRessource]:
-        return [WifiInformation]
+        return [OcbInterface]
 
     def get_required_ressources(self) -> List[AutosecRessource]:
-        return [NetworkInterface]
+        return [InternetInterface]
 
-    def run(self, inputs: List[AutosecRessource]) -> List[AutosecRessource]:
-        
-        return 0
+    def run(self) -> List[AutosecRessource]:
+        channels = self.get_usable_channels()
+
+        # Join first available channel
+        self.set_ocb_mode()
+        self.leave_channel()
+        self.join_channel(channels[1])
+
+        return [OcbInterface]
     
     def _get_supported_channels(self) -> List[WifiChannel]:
         """"
@@ -107,7 +116,7 @@ class OcbModeJoin(AutosecModule):
         """
         usable_channels: List[WifiChannel] = []
         supported_channels = self._get_supported_channels()
-        europe_channels = self._get_europe_channels('./frequencys_europe.txt')
+        europe_channels = self._get_europe_channels(f"{os.getcwd()}/autosec/modules/wlan_p/frequencys_europe.txt")
 
         for eu_channel in europe_channels:
             for supported_channel in supported_channels:
@@ -123,7 +132,23 @@ class OcbModeJoin(AutosecModule):
         else:
             return usable_channels
     
+    def set_ocb_mode(self) -> None:
+        """"
+        Set the interface into ocb mode (needs to be done once in the beginning)
+        """
+        command_result: List[str] = subprocess.run(
+            ["iw", "dev", self._iface, "set", "type", "ocb"],
+            capture_output=True,
+            #text=True
+        )\
+            .stdout \
+            .decode("UTF-8") \
+            .splitlines()
+
     def join_channel(self, channel: WifiChannel) -> None:
+        """"
+        Joins the interface to a specific wifi channel with the defined width, receiving data is possible after this (if successfull)
+        """
         command_result: List[str] = subprocess.run(
             ["iw", "dev", self._iface, "ocb", "join", channel.centre_frequency, channel.channel_width],
             capture_output=True,
@@ -134,6 +159,9 @@ class OcbModeJoin(AutosecModule):
             .splitlines()
     
     def leave_channel(self) -> None:
+        """"
+        Leaves the ocb channel, new channel can only be joined after leaving the old one
+        """
         command_result: List[str] = subprocess.run(
             ["iw", "dev", self._iface, "ocb", "leave"],
             capture_output=True,
