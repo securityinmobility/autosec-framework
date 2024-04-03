@@ -1,17 +1,24 @@
-import time
+"""
+Not yet implemented module for some OCB sniffing
+"""
 from typing import List
 from autosec.core.autosec_module import AutosecModule, AutosecModuleInformation
 from autosec.core.ressources import AutosecRessource
-from autosec.core.ressources.base import NetworkInterface
-from autosec.core.ressources.wifi import WifiInformation
 
 
 def load_module() -> List[AutosecModule]:
+    """
+    Load module
+    """
     return [OcbInterface()]
 
 class OcbInterface(AutosecModule):
-    def __init__(self) -> None:
-        super().__init__()
+    """
+    This module is supposed to scan though 
+    OCB channels for data
+    """
+#    def __init__(self) -> None:
+#       super().__init__()
 
     def get_info(self) -> AutosecModuleInformation:
         return AutosecModuleInformation(
@@ -22,11 +29,19 @@ class OcbInterface(AutosecModule):
         )
 
     def get_produced_outputs(self) -> List[AutosecRessource]:
-        return 0
-    
+        """
+        Not Implemented
+        """
+        return NotImplementedError
+
     def get_required_ressources(self) -> List[AutosecRessource]:
-        return 0
+        """
+        Not Implemented
+        """
+        return NotImplementedError
 
     def run(self, inputs: List[AutosecRessource]) -> List[AutosecRessource]:
-        
-        return 0
+        """
+        Not Implemented
+        """
+        return NotImplementedError
