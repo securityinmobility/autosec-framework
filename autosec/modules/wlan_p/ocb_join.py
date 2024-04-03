@@ -92,11 +92,13 @@ class OcbModeJoin(AutosecModule):
     def run(self, inputs: [AutosecRessource]) -> List[AutosecRessource]:
         channels = self.get_usable_channels()
 
-        # Join first available channel
-        self.set_ocb_mode()
-        self.leave_channel()
-        self.join_channel(channels[1])
-
+        if len(channels) > 0:
+            # Join first available channel (Not very sophisticated. Split in 2 modules or keep a list inside the class?)
+            self.set_ocb_mode()
+            self.leave_channel()
+            self.join_channel(channels[0])
+        else:
+            return []
         return [OcbInterface]
 
     def _get_supported_channels(self) -> List[WifiChannel]:
@@ -112,7 +114,6 @@ class OcbModeJoin(AutosecModule):
             check=True
         )\
             .stdout \
-            .decode("UTF-8") \
             .splitlines()
         supported_channels: List[WifiChannel] = []
         for channel_result in command_result:
@@ -162,7 +163,7 @@ class OcbModeJoin(AutosecModule):
         # Could not find any channel supported by the wifi card(s)
         # TODO: How to handle no supported channels?
         # Exception or is it done with giving an empty output?
-        raise NotImplementedError('No Channels')
+        return []
 
     def set_ocb_mode(self) -> None:
         """"
