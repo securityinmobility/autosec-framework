@@ -3,6 +3,10 @@ This module starts the vanetza application and the dependencies
 Dependencies:
 mqtt server (currently using mosquitto)
 """
+import os
+import signal
+import subprocess
+import psutil
 from typing import List
 from autosec.core.autosec_module import AutosecModule, AutosecModuleInformation
 from autosec.core.ressources import AutosecRessource
@@ -17,10 +21,17 @@ def load_module() -> List[AutosecModule]:
 
 class Vanetza(AutosecModule):
     """
-    This module starts the NAP vanetza application
+    This module starts the NAP vanetza application.
+    Everytime the wifi interface is joined a new network this app need to be restarted
     """
-#    def __init__(self) -> None:
-#       super().__init__()
+    def __init__(self, executable: str = '/usr/local/bin/socktap', config_file: str = '') -> None:
+       super().__init__()
+       self._executable = executable
+       self._config_file = config_file
+
+    # Default installation directory from vanetza tool socktap
+    _executable: str = '/usr/local/bin/socktap'
+    _config_file: str = ''
 
     def get_info(self) -> AutosecModuleInformation:
         return AutosecModuleInformation(
@@ -47,11 +58,32 @@ class Vanetza(AutosecModule):
         Not Implemented
         """
         return NotImplementedError
+    
+    def start_vanetza(self):
+        self._executable: str = '/home/user/jaf0789/nap-vanetza/vanetza_src/bin/socktap'
+        self._config_file: str = '/home/user/jaf0789/nap-vanetza/vanetza_src/tools/socktap/config.ini'
+        proc = subprocess.Popen([
+            self._executable, \
+            '-c', \
+            self._config_file
+        ], 
+        # capture_output=False,
+        # check=False,
+        )
 
 class MQTTserver(AutosecModule):
     """
     This module handels the startup of the mosquitto MQTT server
     """
+    _type: str = 'listener'
+    _port: int = 1883
+    _bind_address: str = '0.0.0.0'
+    _allow_anonymous: bool = True
+
+    _executable: str = '/usr/sbin/mosquitto'
+    _config_file: str = ''
+    _pid: int = 0
+
     def get_info(self) -> AutosecModuleInformation:
         return AutosecModuleInformation(
             name=self.__class__.__name__,
@@ -62,18 +94,57 @@ class MQTTserver(AutosecModule):
 
     def get_produced_outputs(self) -> List[AutosecRessource]:
         """
-        Not Implemented
+        Output is the mqtt server
         """
         return [MQTTserver]
 
     def get_required_ressources(self) -> List[AutosecRessource]:
         """
-        Requirement is a configured WiFi interface
+        No requirements, only starts local mqtt server
         """
-        return [OcbModeJoin]
+        return []
 
     def run(self, inputs: List[AutosecRessource]) -> List[AutosecRessource]:
         """
         Not Implemented
         """
         return NotImplementedError
+
+    def write_config(self):
+        """
+        Writes the configuration for the mqtt server.
+        """
+        curr_dir = os.path.dirname(__file__)
+        self._config_file = os.path.join(curr_dir, 'mosquitto.conf')
+        with open(self._config_file, "w", encoding='UTF-8') as file_handle:
+            file_handle.writelines(self._type + ' ' + \
+                            str(self._port) + ' ' + \
+                            self._bind_address + '\n')
+            file_handle.writelines('allow_anonymous ' + \
+                            str(self._allow_anonymous).lower() )
+
+    def start_mosquitto(self):
+        """
+        Starts the mosquitto server in the background
+        Attention: _executable can be misused for arbitrary code execution
+        """
+        process = subprocess.run(
+            [self._executable, \
+                "-c", 
+                self._config_file, \
+                "-d"],
+            # capture_output=False,
+            # check=True
+        )
+        # self._pid = process.pid
+        # print(self._pid)
+
+    def stop_mosquitto(self):
+        """
+        Stops the mosquitto server
+        """
+        parent = psutil.Process(self._pid)
+        for child in parent.children(recursive=True):
+            child.terminate()
+        parent.terminate
+        # os.kill(self._pid, signal.SIGTERM)

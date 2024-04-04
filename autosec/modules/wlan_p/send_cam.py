@@ -62,8 +62,8 @@ class SendCam(AutosecModule):
         """
         curr_dir = os.path.dirname(__file__)
         filename = os.path.join(curr_dir, rel_filepath)
-        json_message_fd = open(filename, encoding='UTF-8')
-        self._json_message = json.load(json_message_fd)
+        with open(filename, encoding='UTF-8') as json_message_fd:
+            self._json_message = json.load(json_message_fd)
 
     def connect_mqtt(self) -> None:
         """
