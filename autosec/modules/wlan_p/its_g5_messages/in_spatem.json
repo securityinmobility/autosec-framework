@@ -1,0 +1,83 @@
+{
+    "intersections": [
+        {
+            "id": {
+                "id": 1
+            },
+            "revision": 1,
+            "states": [
+                {
+                    "signalGroup": 1,
+                    "state-time-speed": [
+                        {
+                            "eventState": 3,
+                            "timing": {
+                                "minEndTime": 28372
+                            }
+                        }
+                    ]
+                },
+                {
+                    "signalGroup": 2,
+                    "state-time-speed": [
+                        {
+                            "eventState": 3,
+                            "timing": {
+                                "minEndTime": 28372
+                            }
+                        }
+                    ]
+                },
+                {
+                    "signalGroup": 3,
+                    "state-time-speed": [
+                        {
+                            "eventState": 3,
+                            "timing": {
+                                "minEndTime": 28342
+                            }
+                        }
+                    ]
+                },
+                {
+                    "signalGroup": 4,
+                    "state-time-speed": [
+                        {
+                            "eventState": 3,
+                            "timing": {
+                                "minEndTime": 28342
+                            }
+                        }
+                    ]
+                },
+                {
+                    "signalGroup": 5,
+                    "state-time-speed": [
+                        {
+                            "eventState": 3,
+                            "timing": {
+                                "minEndTime": 28342
+                            }
+                        }
+                    ]
+                }
+            ],
+            "status": {
+                "failureFlash": false,
+                "failureMode": false,
+                "fixedTimeOperation": false,
+                "manualControlIsEnabled": false,
+                "noValidMAPisAvailableAtThisTime": false,
+                "noValidSPATisAvailableAtThisTime": false,
+                "off": false,
+                "preemptIsActive": false,
+                "recentChangeInMAPassignedLanesIDsUsed": false,
+                "recentMAPmessageUpdate": false,
+                "signalPriorityIsActive": false,
+                "standbyOperation": false,
+                "stopTimeIsActivated": false,
+                "trafficDependentOperation": false
+            }
+        }
+    ]
+}

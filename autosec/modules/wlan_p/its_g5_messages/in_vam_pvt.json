@@ -1,0 +1,37 @@
+{
+    "generationDeltaTime": 52264,
+    "timestamp": 545319799848,
+    "sequenceNumber": 1,
+    "vamParameters": {
+        "stationType": 1,
+        "referencePosition": {
+            "latitude": 4064012009,
+            "longitude": -865381009,
+            "positionConfidenceEllipse": {
+                "semiMajorConfidence": 0,
+                "semiMinorConfidence": 0,
+                "semiMajorOrientation": 0
+            },
+            "altitude": {
+                "altitudeValue": 0,
+                "altitudeConfidence": "alt-000-01"
+            }
+        },
+        "heading": {
+            "headingValue": 33509033984,
+            "headingConfidence": 0
+        },
+        "sizeClass": "size-below2metersquared",
+        "weightClass": "weight-below40kg",
+        "speed": {
+            "speedValue": 271646944,
+            "speedConfidence": 1
+        },
+        "direction": "unavailable",
+        "orientation": {
+            "roll": -223794672,
+            "pitch": 3652,
+            "yaw": -3810
+        }
+    }
+}

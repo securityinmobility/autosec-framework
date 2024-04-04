@@ -1,0 +1,324 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "properties": {
+      "camParameters": {
+        "type": "object",
+        "properties": {
+          "basicContainer": {
+            "type": "object",
+            "properties": {
+              "referencePosition": {
+                "type": "object",
+                "properties": {
+                  "altitude": {
+                    "type": "object",
+                    "properties": {
+                      "altitudeConfidence": {
+                        "type": "number"
+                      },
+                      "altitudeValue": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "altitudeConfidence",
+                      "altitudeValue"
+                    ]
+                  },
+                  "latitude": {
+                    "type": "number"
+                  },
+                  "longitude": {
+                    "type": "number"
+                  },
+                  "positionConfidenceEllipse": {
+                    "type": "object",
+                    "properties": {
+                      "semiMajorConfidence": {
+                        "type": "number"
+                      },
+                      "semiMajorOrientation": {
+                        "type": "number"
+                      },
+                      "semiMinorConfidence": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "semiMajorConfidence",
+                      "semiMajorOrientation",
+                      "semiMinorConfidence"
+                    ]
+                  }
+                },
+                "required": [
+                  "altitude",
+                  "latitude",
+                  "longitude",
+                  "positionConfidenceEllipse"
+                ]
+              },
+              "stationType": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "referencePosition",
+              "stationType"
+            ]
+          },
+          "highFrequencyContainer": {
+            "type": "object",
+            "properties": {
+              "basicVehicleContainerHighFrequency": {
+                "type": "object",
+                "properties": {
+                  "accelerationControl": {
+                    "type": "object",
+                    "properties": {
+                      "accEngaged": {
+                        "type": "boolean"
+                      },
+                      "brakePedalEngaged": {
+                        "type": "boolean"
+                      },
+                      "collisionWarningEngaged": {
+                        "type": "boolean"
+                      },
+                      "cruiseControlEngaged": {
+                        "type": "boolean"
+                      },
+                      "emergencyBrakeEngaged": {
+                        "type": "boolean"
+                      },
+                      "gasPedalEngaged": {
+                        "type": "boolean"
+                      },
+                      "speedLimiterEngaged": {
+                        "type": "boolean"
+                      }
+                    },
+                    "required": [
+                      "accEngaged",
+                      "brakePedalEngaged",
+                      "collisionWarningEngaged",
+                      "cruiseControlEngaged",
+                      "emergencyBrakeEngaged",
+                      "gasPedalEngaged",
+                      "speedLimiterEngaged"
+                    ]
+                  },
+                  "curvature": {
+                    "type": "object",
+                    "properties": {
+                      "curvatureConfidence": {
+                        "type": "number"
+                      },
+                      "curvatureValue": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "curvatureConfidence",
+                      "curvatureValue"
+                    ]
+                  },
+                  "curvatureCalculationMode": {
+                    "type": "number"
+                  },
+                  "driveDirection": {
+                    "type": "number"
+                  },
+                  "heading": {
+                    "type": "object",
+                    "properties": {
+                      "headingConfidence": {
+                        "type": "number"
+                      },
+                      "headingValue": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "headingConfidence",
+                      "headingValue"
+                    ]
+                  },
+                  "longitudinalAcceleration": {
+                    "type": "object",
+                    "properties": {
+                      "longitudinalAccelerationConfidence": {
+                        "type": "number"
+                      },
+                      "longitudinalAccelerationValue": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "longitudinalAccelerationConfidence",
+                      "longitudinalAccelerationValue"
+                    ]
+                  },
+                  "speed": {
+                    "type": "object",
+                    "properties": {
+                      "speedConfidence": {
+                        "type": "number"
+                      },
+                      "speedValue": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "speedConfidence",
+                      "speedValue"
+                    ]
+                  },
+                  "vehicleLength": {
+                    "type": "object",
+                    "properties": {
+                      "vehicleLengthConfidenceIndication": {
+                        "type": "number"
+                      },
+                      "vehicleLengthValue": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "vehicleLengthConfidenceIndication",
+                      "vehicleLengthValue"
+                    ]
+                  },
+                  "vehicleWidth": {
+                    "type": "number"
+                  },
+                  "yawRate": {
+                    "type": "object",
+                    "properties": {
+                      "yawRateConfidence": {
+                        "type": "number"
+                      },
+                      "yawRateValue": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "yawRateConfidence",
+                      "yawRateValue"
+                    ]
+                  },
+                  "lanePosition": { 
+                    "type": "integer"
+                  },
+                  "steeringWheelAngle": { 
+                    "type": "object",
+                    "properties": {
+                      "steeringWheelAngleValue": {
+                        "type": "number"
+                      },
+                      "steeringWheelAngleConfidence": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "steeringWheelAngleValue",
+                      "steeringWheelAngleConfidence"
+                    ]
+                  },
+                  "lateralAcceleration": { 
+                    "type": "object",
+                    "properties": {
+                      "lateralAccelerationValue": {
+                        "type": "number"
+                      },
+                      "lateralAccelerationConfidence": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "lateralAccelerationValue",
+                      "lateralAccelerationConfidence"
+                    ]
+                  },
+                  "verticalAcceleration": { 
+                    "type": "object",
+                    "properties": {
+                      "verticalAccelerationValue": {
+                        "type": "number"
+                      },
+                      "verticalAccelerationConfidence": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "verticalAccelerationValue",
+                      "verticalAccelerationConfidence"
+                    ]
+                  },
+                  "performanceClass": { 
+                    "type": "integer"
+                  },
+                  "cenDsrcTollingZone": { 
+                    "type": "object",
+                    "properties": {
+                      "protectedZoneLatitude": {
+                        "type": "number"
+                      },
+                      "protectedZoneLongitude": {
+                        "type": "number"
+                      },
+                      "cenDsrcTollingZoneID": {
+                        "type": "integer"
+                      }
+                    },
+                    "required": [
+                      "protectedZoneLatitude",
+                      "protectedZoneLongitude"
+                    ],
+                    "optional": [
+                      "cenDsrcTollingZoneID"
+                    ]
+                  }
+                },
+                "required": [
+                  "curvature",
+                  "curvatureCalculationMode",
+                  "driveDirection",
+                  "heading",
+                  "longitudinalAcceleration",
+                  "speed",
+                  "vehicleLength",
+                  "vehicleWidth",
+                  "yawRate"
+                ],
+                "optional": [
+                  "accelerationControl",
+                  "lanePosition",
+                  "steeringWheelAngle",
+                  "lateralAcceleration",
+                  "verticalAcceleration",
+                  "performanceClass",
+                  "cenDsrcTollingZone"
+                ]
+              }
+            },
+            "required": [
+              "basicVehicleContainerHighFrequency"
+            ]
+          }
+        },
+        "required": [
+          "basicContainer",
+          "highFrequencyContainer"
+        ]
+      },
+      "generationDeltaTime": {
+        "type": "number"
+      }
+    },
+    "required": [
+      "camParameters",
+      "generationDeltaTime"
+    ]
+  }

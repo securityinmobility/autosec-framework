@@ -1,0 +1,101 @@
+{
+    "fields": {
+        "header": {
+            "messageID": 4,
+            "protocolVersion": 2,
+            "stationID": 158
+        },
+        "spat": {
+            "intersections": [
+                {
+                    "id": {
+                        "id": 1
+                    },
+                    "revision": 1,
+                    "states": [
+                        {
+                            "signalGroup": 1,
+                            "state-time-speed": [
+                                {
+                                    "eventState": 3,
+                                    "timing": {
+                                        "minEndTime": 28372
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "signalGroup": 2,
+                            "state-time-speed": [
+                                {
+                                    "eventState": 3,
+                                    "timing": {
+                                        "minEndTime": 28372
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "signalGroup": 3,
+                            "state-time-speed": [
+                                {
+                                    "eventState": 3,
+                                    "timing": {
+                                        "minEndTime": 28342
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "signalGroup": 4,
+                            "state-time-speed": [
+                                {
+                                    "eventState": 3,
+                                    "timing": {
+                                        "minEndTime": 28342
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "signalGroup": 5,
+                            "state-time-speed": [
+                                {
+                                    "eventState": 3,
+                                    "timing": {
+                                        "minEndTime": 28342
+                                    }
+                                }
+                            ]
+                        }
+                    ],
+                    "status": {
+                        "failureFlash": false,
+                        "failureMode": false,
+                        "fixedTimeOperation": false,
+                        "manualControlIsEnabled": false,
+                        "noValidMAPisAvailableAtThisTime": false,
+                        "noValidSPATisAvailableAtThisTime": false,
+                        "off": false,
+                        "preemptIsActive": false,
+                        "recentChangeInMAPassignedLanesIDsUsed": false,
+                        "recentMAPmessageUpdate": false,
+                        "signalPriorityIsActive": false,
+                        "standbyOperation": false,
+                        "stopTimeIsActivated": false,
+                        "trafficDependentOperation": false
+                    }
+                }
+            ]
+        }
+    },
+    "newInfo": true,
+    "receiverID": 143,
+    "receiverType": 15,
+    "rssi": -32,
+    "stationID": 158,
+    "test": {
+        "json_timestamp": 1675867693.978001
+    },
+    "timestamp": 1675867693.966406
+}

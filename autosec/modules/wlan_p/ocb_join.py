@@ -16,7 +16,7 @@ from autosec.core.ressources import AutosecRessource
 #from autosec.core.ressources.base import NetworkInterface
 from autosec.core.ressources.ip import InternetInterface
 #from autosec.core.ressources.wifi import WifiInformation
-from autosec.modules.wlan_p.ocb_scan import OcbInterface
+#from autosec.modules.wlan_p.ocb_scan import OcbInterface
 
 # TODO: This module joins a network interface into an ocb network.
 # Requires the frequencies and channel width in europe, a wifi card with access to
@@ -84,22 +84,23 @@ class OcbModeJoin(AutosecModule):
         )
 
     def get_produced_outputs(self) -> List[AutosecRessource]:
-        return [OcbInterface]
+        return [OcbModeJoin]
 
     def get_required_ressources(self) -> List[AutosecRessource]:
         return [InternetInterface]
 
-    def run(self, inputs: [AutosecRessource]) -> List[AutosecRessource]:
+    def run(self, inputs: AutosecRessource) -> List[AutosecRessource]:
         channels = self.get_usable_channels()
 
         if len(channels) > 0:
-            # Join first available channel (Not very sophisticated. Split in 2 modules or keep a list inside the class?)
+            # Join first available channel (Not very sophisticated.
+            # Split in 2 modules or keep a list inside the class?)
             self.set_ocb_mode()
             self.leave_channel()
             self.join_channel(channels[0])
         else:
             return []
-        return [OcbInterface]
+        return [self]
 
     def _get_supported_channels(self) -> List[WifiChannel]:
         """"

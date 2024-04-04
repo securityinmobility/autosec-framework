@@ -1,0 +1,80 @@
+{
+    "camParameters": {
+        "basicContainer": {
+            "referencePosition": {
+                "altitude": {
+                    "altitudeConfidence": 15,
+                    "altitudeValue": 800001
+                },
+                "latitude": 40.0000000,
+                "longitude": -8.0000000,
+                "positionConfidenceEllipse": {
+                    "semiMajorConfidence": 4095,
+                    "semiMajorOrientation": 3601,
+                    "semiMinorConfidence": 4095
+                }
+            },
+            "stationType": 5
+        },
+        "highFrequencyContainer": {
+            "basicVehicleContainerHighFrequency": {
+                "accelerationControl": {
+                    "accEngaged": true,
+                    "brakePedalEngaged": true,
+                    "collisionWarningEngaged": true,
+                    "cruiseControlEngaged": true,
+                    "emergencyBrakeEngaged": true,
+                    "gasPedalEngaged": false,
+                    "speedLimiterEngaged": true
+                },
+                "curvature": {
+                    "curvatureConfidence": 7,
+                    "curvatureValue": 1023
+                },
+                "curvatureCalculationMode": 0,
+                "driveDirection": 0,
+                "heading": {
+                    "headingConfidence": 127,
+                    "headingValue": 3601
+                },
+                "longitudinalAcceleration": {
+                    "longitudinalAccelerationConfidence": 0,
+                    "longitudinalAccelerationValue": 0
+                },
+                "speed": {
+                    "speedConfidence": 127,
+                    "speedValue": 16383
+                },
+                "vehicleLength": {
+                    "vehicleLengthConfidenceIndication": 0.5,
+                    "vehicleLengthValue": 10.0
+                },
+                "vehicleWidth": 3.0,
+                "yawRate": {
+                    "yawRateConfidence": 0,
+                    "yawRateValue": 0
+                },
+                "lanePosition": 0,
+                "steeringWheelAngle": {
+                  "steeringWheelAngleValue": 0,
+                  "steeringWheelAngleConfidence": 1
+                },
+                "lateralAcceleration": {
+                  "lateralAccelerationValue": 0.0,
+                  "lateralAccelerationConfidence": 0.0
+                },
+                "verticalAcceleration": {
+                  "verticalAccelerationValue": 0.0,
+                  "verticalAccelerationConfidence": 0.0
+                },
+                "performanceClass": 0,
+                "cenDsrcTollingZone": {
+                  "protectedZoneLatitude": 0.0,
+                  "protectedZoneLongitude": 0.0,
+                  "cenDsrcTollingZoneID": 0
+                }
+            }
+        }
+    },
+    "generationDeltaTime": 2907
+}

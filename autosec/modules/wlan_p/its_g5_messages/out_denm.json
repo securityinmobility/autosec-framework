@@ -1,0 +1,51 @@
+{
+    "fields": {
+        "denm": {
+            "management": {
+                "actionID": {
+                    "originatingStationID": 1798587532,
+                    "sequenceNumber": 0
+                },
+                "detectionTime": 1626453837,
+                "eventPosition": {
+                    "altitude": {
+                        "altitudeConfidence": 1,
+                        "altitudeValue": 0.0
+                    },
+                    "latitude": 40.6377992,
+                    "longitude": -8.6523533,
+                    "positionConfidenceEllipse": {
+                        "semiMajorConfidence": 0,
+                        "semiMajorOrientation": 0.0,
+                        "semiMinorConfidence": 0
+                    }
+                },
+                "referenceTime": 1626453837,
+                "stationType": 0,
+                "validityDuration": 0
+            },
+            "situation": {
+                "eventType": {
+                    "causeCode": 14,
+                    "subCauseCode": 14
+                },
+                "informationQuality": 7
+            }
+        },
+        "header": {
+            "messageID": 1,
+            "protocolVersion": 2,
+            "stationID": 143
+        }
+    },
+    "newInfo": true,
+    "receiverID": 158,
+    "receiverType": 6,
+    "rssi": -45,
+    "stationID": 143,
+    "test": {
+        "json_timestamp": 1675772865.224855,
+        "packet_size": 103
+    },
+    "timestamp": 1675772865.22377
+}

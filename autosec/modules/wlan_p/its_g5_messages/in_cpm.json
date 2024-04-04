@@ -1,0 +1,288 @@
+{
+    "generationDeltaTime": 44258,
+    "cpmParameters": {
+        "managementContainer": {
+            "stationType": 15,
+            "referencePosition": {
+                "latitude": 40.64088,
+                "longitude": -8.65397,
+                "positionConfidenceEllipse": {
+                    "semiMajorConfidence": 4095,
+                    "semiMinorConfidence": 4095,
+                    "semiMajorOrientation": 0.0
+                },
+                "altitude": {
+                    "altitudeValue": 2.9,
+                    "altitudeConfidence": 14
+                }
+            }
+        },
+        "stationDataContainer": {
+            "originatingVehicleContainer": {
+                "heading": {
+                    "headingValue": 3601,
+                    "headingConfidence": 127
+                },
+                "speed": {
+                    "speedValue": 16383,
+                    "speedConfidence": 127
+                },
+                "driveDirection": 0
+            }
+        },
+        "sensorInformationContainer": [
+            {
+                "sensorID": 1,
+                "type": 1,
+                "detectionArea": {
+                    "stationarySensorRectangle": {
+                        "semiMajorRangeLength": 750,
+                        "semiMinorRangeLength": 20,
+                        "semiMajorRangeOrientation": 3601
+                    }
+                }
+            },
+            {
+                "sensorID": 2,
+                "type": 12,
+                "detectionArea": {
+                    "stationarySensorRadial": {
+                        "range": 100,
+                        "stationaryHorizontalOpeningAngleStart": 3601,
+                        "stationaryHorizontalOpeningAngleEnd": 3601
+                    }
+                }
+            },
+            {
+                "sensorID": 3,
+                "type": 10,
+                "detectionArea": {
+                    "stationarySensorRadial": {
+                        "range": 100,
+                        "stationaryHorizontalOpeningAngleStart": 3601,
+                        "stationaryHorizontalOpeningAngleEnd": 3601
+                    }
+                }
+            },
+            {
+                "sensorID": 4,
+                "type": 11,
+                "detectionArea": {
+                    "stationarySensorRadial": {
+                        "range": 100,
+                        "stationaryHorizontalOpeningAngleStart": 3601,
+                        "stationaryHorizontalOpeningAngleEnd": 3601
+                    }
+                }
+            }
+        ],
+        "perceivedObjectContainer": [
+            {
+                "objectID": 1,
+                "timeOfMeasurement": 0,
+                "objectConfidence": 0,
+                "xDistance": {
+                	"value": 1216.281028098143,
+                	"confidence": 1
+                },
+                "yDistance": {
+                	"value": 1216.281028098143,
+                	"confidence": 1
+                },
+                "xSpeed": {
+                    "value": 11.273405440822678,
+                    "confidence": 1
+                },
+                "ySpeed": {
+                    "value": 7.9592920392978215,
+                    "confidence": 1
+                },
+                "xAcceleration": {
+                    "longitudinalAccelerationValue": -0.0011505823066771444,
+                    "longitudinalAccelerationConfidence": 0
+                },
+                "yAcceleration": {
+                    "lateralAccelerationValue": -0.000812338440426394,
+                    "lateralAccelerationConfidence": 0
+                },
+                "objectRefPoint": 0,
+                "classification": [
+                    {
+                        "confidence": 0,
+                        "class": {
+                            "vehicle": {
+                                "type": 3,
+                                "confidence": 0
+                            }
+                        }
+                    }
+                ]
+            },
+            {
+                "objectID": 3,
+                "timeOfMeasurement": 0,
+                "objectConfidence": 0,
+                "xDistance": {
+                	"value": 1216.281028098143,
+                	"confidence": 1
+                },
+                "yDistance": {
+                	"value": 1216.281028098143,
+                	"confidence": 1
+                },
+                "xSpeed": {
+                    "value": 10.43868752795019,
+                    "confidence": 1
+                },
+                "ySpeed": {
+                    "value": 7.914783805879798,
+                    "confidence": 1
+                },
+                "xAcceleration": {
+                    "longitudinalAccelerationValue": 0.0009960579702242708,
+                    "longitudinalAccelerationConfidence": 0
+                },
+                "yAcceleration": {
+                    "lateralAccelerationValue": 0.0007552274623931226,
+                    "lateralAccelerationConfidence": 0
+                },
+                "objectRefPoint": 0,
+                "classification": [
+                    {
+                        "confidence": 0,
+                        "class": {
+                            "vehicle": {
+                                "type": 3,
+                                "confidence": 0
+                            }
+                        }
+                    }
+                ]
+            },
+            {
+                "objectID": 2,
+                "timeOfMeasurement": 0,
+                "objectConfidence": 0,
+                "xDistance": {
+                	"value": 1216.281028098143,
+                	"confidence": 1
+                },
+                "yDistance": {
+                	"value": 1216.281028098143,
+                	"confidence": 1
+                },
+                "xSpeed": {
+                    "value": -8.226938482767867,
+                    "confidence": 1
+                },
+                "ySpeed": {
+                    "value": -5.507039422480389,
+                    "confidence": 1
+                },
+                "xAcceleration": {
+                    "longitudinalAccelerationValue": -0.0,
+                    "longitudinalAccelerationConfidence": 0
+                },
+                "yAcceleration": {
+                    "lateralAccelerationValue": -0.0,
+                    "lateralAccelerationConfidence": 0
+                },
+                "objectRefPoint": 0,
+                "classification": [
+                    {
+                        "confidence": 0,
+                        "class": {
+                            "vehicle": {
+                                "type": 6,
+                                "confidence": 0
+                            }
+                        }
+                    }
+                ]
+            },
+            {
+                "objectID": 0,
+                "timeOfMeasurement": 0,
+                "objectConfidence": 0,
+                "xDistance": {
+                	"value": 1216.281028098143,
+                	"confidence": 1
+                },
+                "yDistance": {
+                	"value": 1216.281028098143,
+                	"confidence": 1
+                },
+                "xSpeed": {
+                    "value": -6.806298492436143,
+                    "confidence": 1
+                },
+                "ySpeed": {
+                    "value": -7.050836888757354,
+                    "confidence": 1
+                },
+                "xAcceleration": {
+                    "longitudinalAccelerationValue": -0.002893834393042587,
+                    "longitudinalAccelerationConfidence": 0
+                },
+                "yAcceleration": {
+                    "lateralAccelerationValue": -0.0029978047996417415,
+                    "lateralAccelerationConfidence": 0
+                },
+                "objectRefPoint": 0,
+                "classification": [
+                    {
+                        "confidence": 0,
+                        "class": {
+                            "vehicle": {
+                                "type": 3,
+                                "confidence": 0
+                            }
+                        }
+                    }
+                ]
+            },
+            {
+                "objectID": 4,
+                "timeOfMeasurement": 0,
+                "objectConfidence": 0,
+                "xDistance": {
+                	"value": 1216.281028098143,
+                	"confidence": 1
+                },
+                "yDistance": {
+                	"value": 1216.281028098143,
+                	"confidence": 1
+                },
+                "xSpeed": {
+                    "value": -0.5581092564671636,
+                    "confidence": 1
+                },
+                "ySpeed": {
+                    "value": -0.7060552795962012,
+                    "confidence": 1
+                },
+                "xAcceleration": {
+                    "longitudinalAccelerationValue": -0.0,
+                    "longitudinalAccelerationConfidence": 0
+                },
+                "yAcceleration": {
+                    "lateralAccelerationValue": -0.0,
+                    "lateralAccelerationConfidence": 0
+                },
+                "objectRefPoint": 0,
+                "classification": [
+                    {
+                        "confidence": 0,
+                        "class": {
+                            "other": {
+                                "type": 0,
+                                "confidence": 0
+                            }
+                        }
+                    }
+                ]
+            }
+        ],
+        "numberOfPerceivedObjects": 5
+    }
+}

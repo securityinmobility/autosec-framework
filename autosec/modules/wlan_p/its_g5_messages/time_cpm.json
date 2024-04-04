@@ -1,0 +1,140 @@
+{
+    "fields": {
+        "cpmParameters": {
+            "managementContainer": {
+                "referencePosition": {
+                    "altitude": {
+                        "altitudeConfidence": 15,
+                        "altitudeValue": 2.9
+                    },
+                    "latitude": 40.639705,
+                    "longitude": -8.652951,
+                    "positionConfidenceEllipse": {
+                        "semiMajorConfidence": 4095,
+                        "semiMajorOrientation": 0.0,
+                        "semiMinorConfidence": 4095
+                    }
+                },
+                "stationType": 15
+            },
+            "numberOfPerceivedObjects": 2,
+            "perceivedObjectContainer": [
+                {
+                    "classification": [
+                        {
+                            "class": {
+                                "person": {
+                                    "confidence": 93,
+                                    "type": 1
+                                }
+                            },
+                            "confidence": 0
+                        }
+                    ],
+                    "objectConfidence": 93,
+                    "objectID": 118,
+                    "objectRefPoint": 0,
+                    "sensorIDList": [
+                        3
+                    ],
+                    "timeOfMeasurement": 55,
+                    "xAcceleration": {
+                        "longitudinalAccelerationConfidence": 102,
+                        "longitudinalAccelerationValue": 161
+                    },
+                    "xDistance": {
+                        "confidence": 102,
+                        "value": 10.624296189670837
+                    },
+                    "xSpeed": {
+                        "confidence": 127,
+                        "value": 16383
+                    },
+                    "yAcceleration": {
+                        "lateralAccelerationConfidence": 102,
+                        "lateralAccelerationValue": 161
+                    },
+                    "yDistance": {
+                        "confidence": 102,
+                        "value": 4.999999999973049
+                    },
+                    "ySpeed": {
+                        "confidence": 127,
+                        "value": 16383
+                    }
+                },
+                {
+                    "classification": [
+                        {
+                            "class": {
+                                "person": {
+                                    "confidence": 60,
+                                    "type": 1
+                                }
+                            },
+                            "confidence": 0
+                        }
+                    ],
+                    "objectConfidence": 60,
+                    "objectID": 119,
+                    "objectRefPoint": 0,
+                    "sensorIDList": [
+                        3
+                    ],
+                    "timeOfMeasurement": 55,
+                    "xAcceleration": {
+                        "longitudinalAccelerationConfidence": 102,
+                        "longitudinalAccelerationValue": 161
+                    },
+                    "xDistance": {
+                        "confidence": 102,
+                        "value": 3.7943914963538363
+                    },
+                    "xSpeed": {
+                        "confidence": 127,
+                        "value": 16383
+                    },
+                    "yAcceleration": {
+                        "lateralAccelerationConfidence": 102,
+                        "lateralAccelerationValue": 161
+                    },
+                    "yDistance": {
+                        "confidence": 102,
+                        "value": 10.999999999624674
+                    },
+                    "ySpeed": {
+                        "confidence": 127,
+                        "value": 16383
+                    }
+                }
+            ],
+            "sensorInformationContainer": [
+                {
+                    "detectionArea": {
+                        "stationarySensorRadial": {
+                            "range": 30,
+                            "stationaryHorizontalOpeningAngleEnd": 3601,
+                            "stationaryHorizontalOpeningAngleStart": 3601
+                        }
+                    },
+                    "sensorID": 3,
+                    "type": 10
+                }
+            ]
+        },
+        "generationDeltaTime": 5148,
+        "test": {
+            "deadline": 0,
+            "genEvent": 1665579600.898637,
+            "publish": 1665579600.924821,
+            "replies": 1665579600.924492,
+            "request": 1665579600.899238
+        }
+    },
+    "receiverID": 18,
+    "receiverType": 15,
+    "test": {
+        "wave_timestamp": 1665579600.946253
+    },
+    "timestamp": 1665579600.941872
+}

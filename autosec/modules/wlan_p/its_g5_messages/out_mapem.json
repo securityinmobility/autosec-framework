@@ -1,0 +1,1140 @@
+{
+    "fields": {
+        "header": {
+            "messageID": 5,
+            "protocolVersion": 2,
+            "stationID": 158
+        },
+        "map": {
+            "intersections": [
+                {
+                    "id": {
+                        "id": 25
+                    },
+                    "laneSet": [
+                        {
+                            "connectsTo": [
+                                {
+                                    "connectingLane": {
+                                        "lane": 10,
+                                        "maneuver": {
+                                            "caution": false,
+                                            "goWithHalt": false,
+                                            "maneuverLaneChangeAllowed": false,
+                                            "maneuverLeftAllowed": false,
+                                            "maneuverLeftTurnOnRedAllowed": false,
+                                            "maneuverNoStoppingAllowed": false,
+                                            "maneuverRightAllowed": false,
+                                            "maneuverRightTurnOnRedAllowed": false,
+                                            "maneuverStraightAllowed": true,
+                                            "maneuverUTurnAllowed": false,
+                                            "reserved1": false,
+                                            "yieldAllwaysRequired": false
+                                        }
+                                    },
+                                    "signalGroup": 1
+                                }
+                            ],
+                            "laneAttributes": {
+                                "directionalUse": {
+                                    "egressPath": true,
+                                    "ingressPath": false
+                                },
+                                "laneType": {
+                                    "vehicle": {
+                                        "hasIRbeaconCoverage": false,
+                                        "hovLaneUseOnly": false,
+                                        "isVehicleFlyOverLane": true,
+                                        "isVehicleRevocableLane": false,
+                                        "permissionOnRequest": false,
+                                        "restrictedFromPublicUse": false,
+                                        "restrictedToBusUse": false,
+                                        "restrictedToTaxiUse": false
+                                    }
+                                },
+                                "sharedWith": {
+                                    "busVehicleTraffic": false,
+                                    "cyclistVehicleTraffic": false,
+                                    "individualMotorizedVehicleTraffic": false,
+                                    "multipleLanesTreatedAsOneLane": false,
+                                    "otherNonMotorizedTrafficTypes": false,
+                                    "overlappingLaneDescriptionProvided": false,
+                                    "pedestrianTraffic": false,
+                                    "pedestriansTraffic": false,
+                                    "taxiVehicleTraffic": false,
+                                    "trackedVehicleTraffic": false
+                                }
+                            },
+                            "laneID": 2,
+                            "nodeList": {
+                                "nodes": [
+                                    {
+                                        "delta": {
+                                            "node-LatLon": {
+                                                "lat": 40.6370439,
+                                                "lon": -8.6533401
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "delta": {
+                                            "node-LatLon": {
+                                                "lat": 40.6370439,
+                                                "lon": -8.6533401
+                                            }
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "connectsTo": [
+                                {
+                                    "connectingLane": {
+                                        "lane": 10,
+                                        "maneuver": {
+                                            "caution": false,
+                                            "goWithHalt": false,
+                                            "maneuverLaneChangeAllowed": false,
+                                            "maneuverLeftAllowed": false,
+                                            "maneuverLeftTurnOnRedAllowed": false,
+                                            "maneuverNoStoppingAllowed": false,
+                                            "maneuverRightAllowed": true,
+                                            "maneuverRightTurnOnRedAllowed": false,
+                                            "maneuverStraightAllowed": false,
+                                            "maneuverUTurnAllowed": false,
+                                            "reserved1": false,
+                                            "yieldAllwaysRequired": false
+                                        }
+                                    },
+                                    "signalGroup": 5
+                                },
+                                {
+                                    "connectingLane": {
+                                        "lane": 11,
+                                        "maneuver": {
+                                            "caution": false,
+                                            "goWithHalt": false,
+                                            "maneuverLaneChangeAllowed": false,
+                                            "maneuverLeftAllowed": false,
+                                            "maneuverLeftTurnOnRedAllowed": false,
+                                            "maneuverNoStoppingAllowed": false,
+                                            "maneuverRightAllowed": true,
+                                            "maneuverRightTurnOnRedAllowed": false,
+                                            "maneuverStraightAllowed": false,
+                                            "maneuverUTurnAllowed": false,
+                                            "reserved1": false,
+                                            "yieldAllwaysRequired": false
+                                        }
+                                    },
+                                    "signalGroup": 5
+                                },
+                                {
+                                    "connectingLane": {
+                                        "lane": 3,
+                                        "maneuver": {
+                                            "caution": false,
+                                            "goWithHalt": false,
+                                            "maneuverLaneChangeAllowed": false,
+                                            "maneuverLeftAllowed": true,
+                                            "maneuverLeftTurnOnRedAllowed": false,
+                                            "maneuverNoStoppingAllowed": false,
+                                            "maneuverRightAllowed": false,
+                                            "maneuverRightTurnOnRedAllowed": false,
+                                            "maneuverStraightAllowed": false,
+                                            "maneuverUTurnAllowed": false,
+                                            "reserved1": false,
+                                            "yieldAllwaysRequired": false
+                                        }
+                                    },
+                                    "signalGroup": 5
+                                },
+                                {
+                                    "connectingLane": {
+                                        "lane": 4,
+                                        "maneuver": {
+                                            "caution": false,
+                                            "goWithHalt": false,
+                                            "maneuverLaneChangeAllowed": false,
+                                            "maneuverLeftAllowed": true,
+                                            "maneuverLeftTurnOnRedAllowed": false,
+                                            "maneuverNoStoppingAllowed": false,
+                                            "maneuverRightAllowed": false,
+                                            "maneuverRightTurnOnRedAllowed": false,
+                                            "maneuverStraightAllowed": false,
+                                            "maneuverUTurnAllowed": false,
+                                            "reserved1": false,
+                                            "yieldAllwaysRequired": false
+                                        }
+                                    },
+                                    "signalGroup": 5
+                                }
+                            ],
+                            "laneAttributes": {
+                                "directionalUse": {
+                                    "egressPath": true,
+                                    "ingressPath": false
+                                },
+                                "laneType": {
+                                    "vehicle": {
+                                        "hasIRbeaconCoverage": false,
+                                        "hovLaneUseOnly": false,
+                                        "isVehicleFlyOverLane": true,
+                                        "isVehicleRevocableLane": false,
+                                        "permissionOnRequest": false,
+                                        "restrictedFromPublicUse": false,
+                                        "restrictedToBusUse": false,
+                                        "restrictedToTaxiUse": false
+                                    }
+                                },
+                                "sharedWith": {
+                                    "busVehicleTraffic": false,
+                                    "cyclistVehicleTraffic": false,
+                                    "individualMotorizedVehicleTraffic": false,
+                                    "multipleLanesTreatedAsOneLane": false,
+                                    "otherNonMotorizedTrafficTypes": false,
+                                    "overlappingLaneDescriptionProvided": false,
+                                    "pedestrianTraffic": false,
+                                    "pedestriansTraffic": false,
+                                    "taxiVehicleTraffic": false,
+                                    "trackedVehicleTraffic": false
+                                }
+                            },
+                            "laneID": 12,
+                            "nodeList": {
+                                "nodes": [
+                                    {
+                                        "delta": {
+                                            "node-LatLon": {
+                                                "lat": 40.6370439,
+                                                "lon": -8.6533401
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "delta": {
+                                            "node-LatLon": {
+                                                "lat": 40.6370439,
+                                                "lon": -8.6533401
+                                            }
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "connectsTo": [
+                                {
+                                    "connectingLane": {
+                                        "lane": 10,
+                                        "maneuver": {
+                                            "caution": false,
+                                            "goWithHalt": false,
+                                            "maneuverLaneChangeAllowed": false,
+                                            "maneuverLeftAllowed": true,
+                                            "maneuverLeftTurnOnRedAllowed": false,
+                                            "maneuverNoStoppingAllowed": false,
+                                            "maneuverRightAllowed": false,
+                                            "maneuverRightTurnOnRedAllowed": false,
+                                            "maneuverStraightAllowed": false,
+                                            "maneuverUTurnAllowed": false,
+                                            "reserved1": false,
+                                            "yieldAllwaysRequired": false
+                                        }
+                                    },
+                                    "signalGroup": 2
+                                },
+                                {
+                                    "connectingLane": {
+                                        "lane": 11,
+                                        "maneuver": {
+                                            "caution": false,
+                                            "goWithHalt": false,
+                                            "maneuverLaneChangeAllowed": false,
+                                            "maneuverLeftAllowed": true,
+                                            "maneuverLeftTurnOnRedAllowed": false,
+                                            "maneuverNoStoppingAllowed": false,
+                                            "maneuverRightAllowed": false,
+                                            "maneuverRightTurnOnRedAllowed": false,
+                                            "maneuverStraightAllowed": false,
+                                            "maneuverUTurnAllowed": false,
+                                            "reserved1": false,
+                                            "yieldAllwaysRequired": false
+                                        }
+                                    },
+                                    "signalGroup": 2
+                                },
+                                {
+                                    "connectingLane": {
+                                        "lane": 13,
+                                        "maneuver": {
+                                            "caution": false,
+                                            "goWithHalt": false,
+                                            "maneuverLaneChangeAllowed": false,
+                                            "maneuverLeftAllowed": false,
+                                            "maneuverLeftTurnOnRedAllowed": false,
+                                            "maneuverNoStoppingAllowed": false,
+                                            "maneuverRightAllowed": false,
+                                            "maneuverRightTurnOnRedAllowed": false,
+                                            "maneuverStraightAllowed": true,
+                                            "maneuverUTurnAllowed": false,
+                                            "reserved1": false,
+                                            "yieldAllwaysRequired": false
+                                        }
+                                    },
+                                    "signalGroup": 2
+                                }
+                            ],
+                            "laneAttributes": {
+                                "directionalUse": {
+                                    "egressPath": true,
+                                    "ingressPath": false
+                                },
+                                "laneType": {
+                                    "vehicle": {
+                                        "hasIRbeaconCoverage": false,
+                                        "hovLaneUseOnly": false,
+                                        "isVehicleFlyOverLane": true,
+                                        "isVehicleRevocableLane": false,
+                                        "permissionOnRequest": false,
+                                        "restrictedFromPublicUse": false,
+                                        "restrictedToBusUse": false,
+                                        "restrictedToTaxiUse": false
+                                    }
+                                },
+                                "sharedWith": {
+                                    "busVehicleTraffic": false,
+                                    "cyclistVehicleTraffic": false,
+                                    "individualMotorizedVehicleTraffic": false,
+                                    "multipleLanesTreatedAsOneLane": false,
+                                    "otherNonMotorizedTrafficTypes": false,
+                                    "overlappingLaneDescriptionProvided": false,
+                                    "pedestrianTraffic": false,
+                                    "pedestriansTraffic": false,
+                                    "taxiVehicleTraffic": false,
+                                    "trackedVehicleTraffic": false
+                                }
+                            },
+                            "laneID": 6,
+                            "nodeList": {
+                                "nodes": [
+                                    {
+                                        "delta": {
+                                            "node-LatLon": {
+                                                "lat": 40.6370439,
+                                                "lon": -8.6533401
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "delta": {
+                                            "node-LatLon": {
+                                                "lat": 40.6370439,
+                                                "lon": -8.6533401
+                                            }
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "connectsTo": [
+                                {
+                                    "connectingLane": {
+                                        "lane": 11,
+                                        "maneuver": {
+                                            "caution": false,
+                                            "goWithHalt": false,
+                                            "maneuverLaneChangeAllowed": false,
+                                            "maneuverLeftAllowed": false,
+                                            "maneuverLeftTurnOnRedAllowed": false,
+                                            "maneuverNoStoppingAllowed": false,
+                                            "maneuverRightAllowed": false,
+                                            "maneuverRightTurnOnRedAllowed": false,
+                                            "maneuverStraightAllowed": true,
+                                            "maneuverUTurnAllowed": false,
+                                            "reserved1": false,
+                                            "yieldAllwaysRequired": false
+                                        }
+                                    },
+                                    "signalGroup": 1
+                                },
+                                {
+                                    "connectingLane": {
+                                        "lane": 14,
+                                        "maneuver": {
+                                            "caution": false,
+                                            "goWithHalt": false,
+                                            "maneuverLaneChangeAllowed": false,
+                                            "maneuverLeftAllowed": false,
+                                            "maneuverLeftTurnOnRedAllowed": false,
+                                            "maneuverNoStoppingAllowed": false,
+                                            "maneuverRightAllowed": true,
+                                            "maneuverRightTurnOnRedAllowed": false,
+                                            "maneuverStraightAllowed": false,
+                                            "maneuverUTurnAllowed": false,
+                                            "reserved1": false,
+                                            "yieldAllwaysRequired": false
+                                        }
+                                    },
+                                    "signalGroup": 1
+                                }
+                            ],
+                            "laneAttributes": {
+                                "directionalUse": {
+                                    "egressPath": true,
+                                    "ingressPath": false
+                                },
+                                "laneType": {
+                                    "vehicle": {
+                                        "hasIRbeaconCoverage": false,
+                                        "hovLaneUseOnly": false,
+                                        "isVehicleFlyOverLane": true,
+                                        "isVehicleRevocableLane": false,
+                                        "permissionOnRequest": false,
+                                        "restrictedFromPublicUse": false,
+                                        "restrictedToBusUse": false,
+                                        "restrictedToTaxiUse": false
+                                    }
+                                },
+                                "sharedWith": {
+                                    "busVehicleTraffic": false,
+                                    "cyclistVehicleTraffic": false,
+                                    "individualMotorizedVehicleTraffic": false,
+                                    "multipleLanesTreatedAsOneLane": false,
+                                    "otherNonMotorizedTrafficTypes": false,
+                                    "overlappingLaneDescriptionProvided": false,
+                                    "pedestrianTraffic": false,
+                                    "pedestriansTraffic": false,
+                                    "taxiVehicleTraffic": false,
+                                    "trackedVehicleTraffic": false
+                                }
+                            },
+                            "laneID": 1,
+                            "nodeList": {
+                                "nodes": [
+                                    {
+                                        "delta": {
+                                            "node-LatLon": {
+                                                "lat": 40.6370439,
+                                                "lon": -8.6533401
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "delta": {
+                                            "node-LatLon": {
+                                                "lat": 40.6370439,
+                                                "lon": -8.6533401
+                                            }
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "connectsTo": [
+                                {
+                                    "connectingLane": {
+                                        "lane": 13,
+                                        "maneuver": {
+                                            "caution": false,
+                                            "goWithHalt": false,
+                                            "maneuverLaneChangeAllowed": false,
+                                            "maneuverLeftAllowed": true,
+                                            "maneuverLeftTurnOnRedAllowed": false,
+                                            "maneuverNoStoppingAllowed": false,
+                                            "maneuverRightAllowed": false,
+                                            "maneuverRightTurnOnRedAllowed": false,
+                                            "maneuverStraightAllowed": false,
+                                            "maneuverUTurnAllowed": false,
+                                            "reserved1": false,
+                                            "yieldAllwaysRequired": false
+                                        }
+                                    },
+                                    "signalGroup": 4
+                                },
+                                {
+                                    "connectingLane": {
+                                        "lane": 14,
+                                        "maneuver": {
+                                            "caution": false,
+                                            "goWithHalt": false,
+                                            "maneuverLaneChangeAllowed": false,
+                                            "maneuverLeftAllowed": true,
+                                            "maneuverLeftTurnOnRedAllowed": false,
+                                            "maneuverNoStoppingAllowed": false,
+                                            "maneuverRightAllowed": false,
+                                            "maneuverRightTurnOnRedAllowed": false,
+                                            "maneuverStraightAllowed": false,
+                                            "maneuverUTurnAllowed": false,
+                                            "reserved1": false,
+                                            "yieldAllwaysRequired": false
+                                        }
+                                    },
+                                    "signalGroup": 4
+                                }
+                            ],
+                            "laneAttributes": {
+                                "directionalUse": {
+                                    "egressPath": true,
+                                    "ingressPath": false
+                                },
+                                "laneType": {
+                                    "vehicle": {
+                                        "hasIRbeaconCoverage": false,
+                                        "hovLaneUseOnly": false,
+                                        "isVehicleFlyOverLane": true,
+                                        "isVehicleRevocableLane": false,
+                                        "permissionOnRequest": false,
+                                        "restrictedFromPublicUse": false,
+                                        "restrictedToBusUse": false,
+                                        "restrictedToTaxiUse": false
+                                    }
+                                },
+                                "sharedWith": {
+                                    "busVehicleTraffic": false,
+                                    "cyclistVehicleTraffic": false,
+                                    "individualMotorizedVehicleTraffic": false,
+                                    "multipleLanesTreatedAsOneLane": false,
+                                    "otherNonMotorizedTrafficTypes": false,
+                                    "overlappingLaneDescriptionProvided": false,
+                                    "pedestrianTraffic": false,
+                                    "pedestriansTraffic": false,
+                                    "taxiVehicleTraffic": false,
+                                    "trackedVehicleTraffic": false
+                                }
+                            },
+                            "laneID": 9,
+                            "nodeList": {
+                                "nodes": [
+                                    {
+                                        "delta": {
+                                            "node-LatLon": {
+                                                "lat": 40.6370439,
+                                                "lon": -8.6533401
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "delta": {
+                                            "node-LatLon": {
+                                                "lat": 40.6370439,
+                                                "lon": -8.6533401
+                                            }
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "connectsTo": [
+                                {
+                                    "connectingLane": {
+                                        "lane": 14,
+                                        "maneuver": {
+                                            "caution": false,
+                                            "goWithHalt": false,
+                                            "maneuverLaneChangeAllowed": false,
+                                            "maneuverLeftAllowed": false,
+                                            "maneuverLeftTurnOnRedAllowed": false,
+                                            "maneuverNoStoppingAllowed": false,
+                                            "maneuverRightAllowed": false,
+                                            "maneuverRightTurnOnRedAllowed": false,
+                                            "maneuverStraightAllowed": true,
+                                            "maneuverUTurnAllowed": false,
+                                            "reserved1": false,
+                                            "yieldAllwaysRequired": false
+                                        }
+                                    },
+                                    "signalGroup": 2
+                                },
+                                {
+                                    "connectingLane": {
+                                        "lane": 3,
+                                        "maneuver": {
+                                            "caution": false,
+                                            "goWithHalt": false,
+                                            "maneuverLaneChangeAllowed": false,
+                                            "maneuverLeftAllowed": false,
+                                            "maneuverLeftTurnOnRedAllowed": false,
+                                            "maneuverNoStoppingAllowed": false,
+                                            "maneuverRightAllowed": true,
+                                            "maneuverRightTurnOnRedAllowed": false,
+                                            "maneuverStraightAllowed": false,
+                                            "maneuverUTurnAllowed": false,
+                                            "reserved1": false,
+                                            "yieldAllwaysRequired": false
+                                        }
+                                    },
+                                    "signalGroup": 2
+                                },
+                                {
+                                    "connectingLane": {
+                                        "lane": 4,
+                                        "maneuver": {
+                                            "caution": false,
+                                            "goWithHalt": false,
+                                            "maneuverLaneChangeAllowed": false,
+                                            "maneuverLeftAllowed": false,
+                                            "maneuverLeftTurnOnRedAllowed": false,
+                                            "maneuverNoStoppingAllowed": false,
+                                            "maneuverRightAllowed": true,
+                                            "maneuverRightTurnOnRedAllowed": false,
+                                            "maneuverStraightAllowed": false,
+                                            "maneuverUTurnAllowed": false,
+                                            "reserved1": false,
+                                            "yieldAllwaysRequired": false
+                                        }
+                                    },
+                                    "signalGroup": 2
+                                }
+                            ],
+                            "laneAttributes": {
+                                "directionalUse": {
+                                    "egressPath": true,
+                                    "ingressPath": false
+                                },
+                                "laneType": {
+                                    "vehicle": {
+                                        "hasIRbeaconCoverage": false,
+                                        "hovLaneUseOnly": false,
+                                        "isVehicleFlyOverLane": true,
+                                        "isVehicleRevocableLane": false,
+                                        "permissionOnRequest": false,
+                                        "restrictedFromPublicUse": false,
+                                        "restrictedToBusUse": false,
+                                        "restrictedToTaxiUse": false
+                                    }
+                                },
+                                "sharedWith": {
+                                    "busVehicleTraffic": false,
+                                    "cyclistVehicleTraffic": false,
+                                    "individualMotorizedVehicleTraffic": false,
+                                    "multipleLanesTreatedAsOneLane": false,
+                                    "otherNonMotorizedTrafficTypes": false,
+                                    "overlappingLaneDescriptionProvided": false,
+                                    "pedestrianTraffic": false,
+                                    "pedestriansTraffic": false,
+                                    "taxiVehicleTraffic": false,
+                                    "trackedVehicleTraffic": false
+                                }
+                            },
+                            "laneID": 5,
+                            "nodeList": {
+                                "nodes": [
+                                    {
+                                        "delta": {
+                                            "node-LatLon": {
+                                                "lat": 40.6370439,
+                                                "lon": -8.6533401
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "delta": {
+                                            "node-LatLon": {
+                                                "lat": 40.6370439,
+                                                "lon": -8.6533401
+                                            }
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "connectsTo": [
+                                {
+                                    "connectingLane": {
+                                        "lane": 3,
+                                        "maneuver": {
+                                            "caution": false,
+                                            "goWithHalt": false,
+                                            "maneuverLaneChangeAllowed": false,
+                                            "maneuverLeftAllowed": false,
+                                            "maneuverLeftTurnOnRedAllowed": false,
+                                            "maneuverNoStoppingAllowed": false,
+                                            "maneuverRightAllowed": false,
+                                            "maneuverRightTurnOnRedAllowed": false,
+                                            "maneuverStraightAllowed": true,
+                                            "maneuverUTurnAllowed": false,
+                                            "reserved1": false,
+                                            "yieldAllwaysRequired": false
+                                        }
+                                    },
+                                    "signalGroup": 3
+                                }
+                            ],
+                            "laneAttributes": {
+                                "directionalUse": {
+                                    "egressPath": true,
+                                    "ingressPath": false
+                                },
+                                "laneType": {
+                                    "vehicle": {
+                                        "hasIRbeaconCoverage": false,
+                                        "hovLaneUseOnly": false,
+                                        "isVehicleFlyOverLane": true,
+                                        "isVehicleRevocableLane": false,
+                                        "permissionOnRequest": false,
+                                        "restrictedFromPublicUse": false,
+                                        "restrictedToBusUse": false,
+                                        "restrictedToTaxiUse": false
+                                    }
+                                },
+                                "sharedWith": {
+                                    "busVehicleTraffic": false,
+                                    "cyclistVehicleTraffic": false,
+                                    "individualMotorizedVehicleTraffic": false,
+                                    "multipleLanesTreatedAsOneLane": false,
+                                    "otherNonMotorizedTrafficTypes": false,
+                                    "overlappingLaneDescriptionProvided": false,
+                                    "pedestrianTraffic": false,
+                                    "pedestriansTraffic": false,
+                                    "taxiVehicleTraffic": false,
+                                    "trackedVehicleTraffic": false
+                                }
+                            },
+                            "laneID": 8,
+                            "nodeList": {
+                                "nodes": [
+                                    {
+                                        "delta": {
+                                            "node-LatLon": {
+                                                "lat": 40.6370439,
+                                                "lon": -8.6533401
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "delta": {
+                                            "node-LatLon": {
+                                                "lat": 40.6370439,
+                                                "lon": -8.6533401
+                                            }
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "connectsTo": [
+                                {
+                                    "connectingLane": {
+                                        "lane": 4,
+                                        "maneuver": {
+                                            "caution": false,
+                                            "goWithHalt": false,
+                                            "maneuverLaneChangeAllowed": false,
+                                            "maneuverLeftAllowed": false,
+                                            "maneuverLeftTurnOnRedAllowed": false,
+                                            "maneuverNoStoppingAllowed": false,
+                                            "maneuverRightAllowed": false,
+                                            "maneuverRightTurnOnRedAllowed": false,
+                                            "maneuverStraightAllowed": true,
+                                            "maneuverUTurnAllowed": false,
+                                            "reserved1": false,
+                                            "yieldAllwaysRequired": false
+                                        }
+                                    },
+                                    "signalGroup": 3
+                                }
+                            ],
+                            "laneAttributes": {
+                                "directionalUse": {
+                                    "egressPath": true,
+                                    "ingressPath": false
+                                },
+                                "laneType": {
+                                    "vehicle": {
+                                        "hasIRbeaconCoverage": false,
+                                        "hovLaneUseOnly": false,
+                                        "isVehicleFlyOverLane": true,
+                                        "isVehicleRevocableLane": false,
+                                        "permissionOnRequest": false,
+                                        "restrictedFromPublicUse": false,
+                                        "restrictedToBusUse": false,
+                                        "restrictedToTaxiUse": false
+                                    }
+                                },
+                                "sharedWith": {
+                                    "busVehicleTraffic": false,
+                                    "cyclistVehicleTraffic": false,
+                                    "individualMotorizedVehicleTraffic": false,
+                                    "multipleLanesTreatedAsOneLane": false,
+                                    "otherNonMotorizedTrafficTypes": false,
+                                    "overlappingLaneDescriptionProvided": false,
+                                    "pedestrianTraffic": false,
+                                    "pedestriansTraffic": false,
+                                    "taxiVehicleTraffic": false,
+                                    "trackedVehicleTraffic": false
+                                }
+                            },
+                            "laneID": 7,
+                            "nodeList": {
+                                "nodes": [
+                                    {
+                                        "delta": {
+                                            "node-LatLon": {
+                                                "lat": 40.6370439,
+                                                "lon": -8.6533401
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "delta": {
+                                            "node-LatLon": {
+                                                "lat": 40.6370439,
+                                                "lon": -8.6533401
+                                            }
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "laneAttributes": {
+                                "directionalUse": {
+                                    "egressPath": false,
+                                    "ingressPath": true
+                                },
+                                "laneType": {
+                                    "vehicle": {
+                                        "hasIRbeaconCoverage": false,
+                                        "hovLaneUseOnly": false,
+                                        "isVehicleFlyOverLane": true,
+                                        "isVehicleRevocableLane": false,
+                                        "permissionOnRequest": false,
+                                        "restrictedFromPublicUse": false,
+                                        "restrictedToBusUse": false,
+                                        "restrictedToTaxiUse": false
+                                    }
+                                },
+                                "sharedWith": {
+                                    "busVehicleTraffic": false,
+                                    "cyclistVehicleTraffic": false,
+                                    "individualMotorizedVehicleTraffic": false,
+                                    "multipleLanesTreatedAsOneLane": false,
+                                    "otherNonMotorizedTrafficTypes": false,
+                                    "overlappingLaneDescriptionProvided": false,
+                                    "pedestrianTraffic": false,
+                                    "pedestriansTraffic": false,
+                                    "taxiVehicleTraffic": false,
+                                    "trackedVehicleTraffic": false
+                                }
+                            },
+                            "laneID": 10,
+                            "nodeList": {
+                                "nodes": [
+                                    {
+                                        "delta": {
+                                            "node-LatLon": {
+                                                "lat": 40.6370439,
+                                                "lon": -8.6533401
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "delta": {
+                                            "node-LatLon": {
+                                                "lat": 40.6370439,
+                                                "lon": -8.6533401
+                                            }
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "laneAttributes": {
+                                "directionalUse": {
+                                    "egressPath": false,
+                                    "ingressPath": true
+                                },
+                                "laneType": {
+                                    "vehicle": {
+                                        "hasIRbeaconCoverage": false,
+                                        "hovLaneUseOnly": false,
+                                        "isVehicleFlyOverLane": true,
+                                        "isVehicleRevocableLane": false,
+                                        "permissionOnRequest": false,
+                                        "restrictedFromPublicUse": false,
+                                        "restrictedToBusUse": false,
+                                        "restrictedToTaxiUse": false
+                                    }
+                                },
+                                "sharedWith": {
+                                    "busVehicleTraffic": false,
+                                    "cyclistVehicleTraffic": false,
+                                    "individualMotorizedVehicleTraffic": false,
+                                    "multipleLanesTreatedAsOneLane": false,
+                                    "otherNonMotorizedTrafficTypes": false,
+                                    "overlappingLaneDescriptionProvided": false,
+                                    "pedestrianTraffic": false,
+                                    "pedestriansTraffic": false,
+                                    "taxiVehicleTraffic": false,
+                                    "trackedVehicleTraffic": false
+                                }
+                            },
+                            "laneID": 11,
+                            "nodeList": {
+                                "nodes": [
+                                    {
+                                        "delta": {
+                                            "node-LatLon": {
+                                                "lat": 40.6370439,
+                                                "lon": -8.6533401
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "delta": {
+                                            "node-LatLon": {
+                                                "lat": 40.6370439,
+                                                "lon": -8.6533401
+                                            }
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "laneAttributes": {
+                                "directionalUse": {
+                                    "egressPath": false,
+                                    "ingressPath": true
+                                },
+                                "laneType": {
+                                    "vehicle": {
+                                        "hasIRbeaconCoverage": false,
+                                        "hovLaneUseOnly": false,
+                                        "isVehicleFlyOverLane": true,
+                                        "isVehicleRevocableLane": false,
+                                        "permissionOnRequest": false,
+                                        "restrictedFromPublicUse": false,
+                                        "restrictedToBusUse": false,
+                                        "restrictedToTaxiUse": false
+                                    }
+                                },
+                                "sharedWith": {
+                                    "busVehicleTraffic": false,
+                                    "cyclistVehicleTraffic": false,
+                                    "individualMotorizedVehicleTraffic": false,
+                                    "multipleLanesTreatedAsOneLane": false,
+                                    "otherNonMotorizedTrafficTypes": false,
+                                    "overlappingLaneDescriptionProvided": false,
+                                    "pedestrianTraffic": false,
+                                    "pedestriansTraffic": false,
+                                    "taxiVehicleTraffic": false,
+                                    "trackedVehicleTraffic": false
+                                }
+                            },
+                            "laneID": 13,
+                            "nodeList": {
+                                "nodes": [
+                                    {
+                                        "delta": {
+                                            "node-LatLon": {
+                                                "lat": 40.6370439,
+                                                "lon": -8.6533401
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "delta": {
+                                            "node-LatLon": {
+                                                "lat": 40.6370439,
+                                                "lon": -8.6533401
+                                            }
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "laneAttributes": {
+                                "directionalUse": {
+                                    "egressPath": false,
+                                    "ingressPath": true
+                                },
+                                "laneType": {
+                                    "vehicle": {
+                                        "hasIRbeaconCoverage": false,
+                                        "hovLaneUseOnly": false,
+                                        "isVehicleFlyOverLane": true,
+                                        "isVehicleRevocableLane": false,
+                                        "permissionOnRequest": false,
+                                        "restrictedFromPublicUse": false,
+                                        "restrictedToBusUse": false,
+                                        "restrictedToTaxiUse": false
+                                    }
+                                },
+                                "sharedWith": {
+                                    "busVehicleTraffic": false,
+                                    "cyclistVehicleTraffic": false,
+                                    "individualMotorizedVehicleTraffic": false,
+                                    "multipleLanesTreatedAsOneLane": false,
+                                    "otherNonMotorizedTrafficTypes": false,
+                                    "overlappingLaneDescriptionProvided": false,
+                                    "pedestrianTraffic": false,
+                                    "pedestriansTraffic": false,
+                                    "taxiVehicleTraffic": false,
+                                    "trackedVehicleTraffic": false
+                                }
+                            },
+                            "laneID": 14,
+                            "nodeList": {
+                                "nodes": [
+                                    {
+                                        "delta": {
+                                            "node-LatLon": {
+                                                "lat": 40.6370439,
+                                                "lon": -8.6533401
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "delta": {
+                                            "node-LatLon": {
+                                                "lat": 40.6370439,
+                                                "lon": -8.6533401
+                                            }
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "laneAttributes": {
+                                "directionalUse": {
+                                    "egressPath": false,
+                                    "ingressPath": true
+                                },
+                                "laneType": {
+                                    "vehicle": {
+                                        "hasIRbeaconCoverage": false,
+                                        "hovLaneUseOnly": false,
+                                        "isVehicleFlyOverLane": true,
+                                        "isVehicleRevocableLane": false,
+                                        "permissionOnRequest": false,
+                                        "restrictedFromPublicUse": false,
+                                        "restrictedToBusUse": false,
+                                        "restrictedToTaxiUse": false
+                                    }
+                                },
+                                "sharedWith": {
+                                    "busVehicleTraffic": false,
+                                    "cyclistVehicleTraffic": false,
+                                    "individualMotorizedVehicleTraffic": false,
+                                    "multipleLanesTreatedAsOneLane": false,
+                                    "otherNonMotorizedTrafficTypes": false,
+                                    "overlappingLaneDescriptionProvided": false,
+                                    "pedestrianTraffic": false,
+                                    "pedestriansTraffic": false,
+                                    "taxiVehicleTraffic": false,
+                                    "trackedVehicleTraffic": false
+                                }
+                            },
+                            "laneID": 3,
+                            "nodeList": {
+                                "nodes": [
+                                    {
+                                        "delta": {
+                                            "node-LatLon": {
+                                                "lat": 40.6370439,
+                                                "lon": -8.6533401
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "delta": {
+                                            "node-LatLon": {
+                                                "lat": 40.6370439,
+                                                "lon": -8.6533401
+                                            }
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "laneAttributes": {
+                                "directionalUse": {
+                                    "egressPath": false,
+                                    "ingressPath": true
+                                },
+                                "laneType": {
+                                    "vehicle": {
+                                        "hasIRbeaconCoverage": false,
+                                        "hovLaneUseOnly": false,
+                                        "isVehicleFlyOverLane": true,
+                                        "isVehicleRevocableLane": false,
+                                        "permissionOnRequest": false,
+                                        "restrictedFromPublicUse": false,
+                                        "restrictedToBusUse": false,
+                                        "restrictedToTaxiUse": false
+                                    }
+                                },
+                                "sharedWith": {
+                                    "busVehicleTraffic": false,
+                                    "cyclistVehicleTraffic": false,
+                                    "individualMotorizedVehicleTraffic": false,
+                                    "multipleLanesTreatedAsOneLane": false,
+                                    "otherNonMotorizedTrafficTypes": false,
+                                    "overlappingLaneDescriptionProvided": false,
+                                    "pedestrianTraffic": false,
+                                    "pedestriansTraffic": false,
+                                    "taxiVehicleTraffic": false,
+                                    "trackedVehicleTraffic": false
+                                }
+                            },
+                            "laneID": 4,
+                            "nodeList": {
+                                "nodes": [
+                                    {
+                                        "delta": {
+                                            "node-LatLon": {
+                                                "lat": 40.6370439,
+                                                "lon": -8.6533401
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "delta": {
+                                            "node-LatLon": {
+                                                "lat": 40.6370439,
+                                                "lon": -8.6533401
+                                            }
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    ],
+                    "laneWidth": 3,
+                    "refPoint": {
+                        "lat": 40.63693,
+                        "long": -8.65324
+                    },
+                    "revision": 1,
+                    "speedLimits": [
+                        {
+                            "speed": 50,
+                            "type": 5
+                        }
+                    ]
+                }
+            ],
+            "msgIssueRevision": 1
+        }
+    },
+    "newInfo": true,
+    "receiverID": 143,
+    "receiverType": 15,
+    "rssi": -32,
+    "stationID": 158,
+    "test": {
+        "json_timestamp": 1675867760.728606
+    },
+    "timestamp": 1675867760.709398
+}
