@@ -6,7 +6,6 @@ mqtt server (currently using mosquitto)
 import os
 import signal
 import subprocess
-import psutil
 from typing import List
 from autosec.core.autosec_module import AutosecModule, AutosecModuleInformation
 from autosec.core.ressources import AutosecRessource
@@ -25,13 +24,14 @@ class Vanetza(AutosecModule):
     Everytime the wifi interface is joined a new network this app need to be restarted
     """
     def __init__(self, executable: str = '/usr/local/bin/socktap', config_file: str = '') -> None:
-       super().__init__()
-       self._executable = executable
-       self._config_file = config_file
+        super().__init__()
+        self._executable = executable
+        self._config_file = config_file
 
     # Default installation directory from vanetza tool socktap
     _executable: str = '/usr/local/bin/socktap'
     _config_file: str = ''
+    _pid: int = 0
 
     def get_info(self) -> AutosecModuleInformation:
         return AutosecModuleInformation(
@@ -58,18 +58,22 @@ class Vanetza(AutosecModule):
         Not Implemented
         """
         return NotImplementedError
-    
+
     def start_vanetza(self):
+        """
+        Starts the socktap application from the nap-vanetza project
+        """
         self._executable: str = '/home/user/jaf0789/nap-vanetza/vanetza_src/bin/socktap'
-        self._config_file: str = '/home/user/jaf0789/nap-vanetza/vanetza_src/tools/socktap/config.ini'
-        proc = subprocess.Popen([
+        self._config_file: str = '~/jaf0789/nap-vanetza/vanetza_src/tools/socktap/config.ini'
+        process = subprocess.Popen([
             self._executable, \
             '-c', \
             self._config_file
-        ], 
+        ],
         # capture_output=False,
         # check=False,
         )
+        self._pid = process.pid
 
 class MQTTserver(AutosecModule):
     """
