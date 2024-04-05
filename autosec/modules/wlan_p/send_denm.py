@@ -1,5 +1,5 @@
 """
-Module for sending a CAM. (Cooperative Awareness Messages)
+Module for sending a DENM. (Decentralized Environmental Notification Messages)
 """
 import os
 from typing import List
@@ -15,11 +15,11 @@ def load_module() -> List[AutosecModule]:
     """
     Load module
     """
-    return [SendCam()]
+    return [SendDenm()]
 
-class SendCam(AutosecModule):
+class SendDenm(AutosecModule):
     """
-    This module is supposed to send a CAM over a WiFi interface
+    This module is supposed to send a DENM over a WiFi interface
     that is in OCB Mode
     """
     _json_message = 0
@@ -27,14 +27,14 @@ class SendCam(AutosecModule):
 
     def __init__(self) -> None:
         super().__init__()
-        self.load_json('its_g5_messages/in_cam_full.json')
+        self.load_json('its_g5_messages/in_denm.json')
 
     def get_info(self) -> AutosecModuleInformation:
         return AutosecModuleInformation(
             name=self.__class__.__name__,
-            description="Module to send CAM in OCB mode",
+            description="Module to send DENM in OCB mode",
             dependencies=["paho.mqtt", "json", "jsonschema"],
-            tags=["WIFI", "OCB", "ITS-G5", "CAM"]
+            tags=["WIFI", "OCB", "ITS-G5", "DENM"]
         )
 
     def get_produced_outputs(self) -> List[AutosecRessource]:
@@ -52,7 +52,7 @@ class SendCam(AutosecModule):
 
     def run(self) -> None:
         """
-        Send a CAM
+        Send a DENM
         """
         self.connect_mqtt()
         self.send_message()
@@ -77,4 +77,4 @@ class SendCam(AutosecModule):
 
     def send_message(self):
         json_message = json.dumps(self._json_message)
-        self._mqtt_client.publish("vanetza/in/cam_full", json_message)
+        self._mqtt_client.publish("vanetza/in/denm", json_message)

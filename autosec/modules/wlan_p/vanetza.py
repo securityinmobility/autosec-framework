@@ -64,7 +64,7 @@ class Vanetza(AutosecModule):
         Starts the socktap application from the nap-vanetza project
         """
         self._executable: str = '/home/user/jaf0789/nap-vanetza/vanetza_src/bin/socktap'
-        self._config_file: str = '~/jaf0789/nap-vanetza/vanetza_src/tools/socktap/config.ini'
+        self._config_file: str = '/home/user/jaf0789/nap-vanetza/vanetza_src/tools/socktap/config.ini'
         process = subprocess.Popen([
             self._executable, \
             '-c', \
@@ -74,6 +74,12 @@ class Vanetza(AutosecModule):
         # check=False,
         )
         self._pid = process.pid
+
+    def stop_vanetza(self):
+        """
+        Stops the socktap application
+        """
+        os.kill(self._pid, signal.SIGTERM)
 
 class MQTTserver(AutosecModule):
     """
