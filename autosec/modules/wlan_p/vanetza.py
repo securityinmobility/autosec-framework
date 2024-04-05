@@ -122,29 +122,33 @@ class MQTTserver(AutosecModule):
                             self._bind_address + '\n')
             file_handle.writelines('allow_anonymous ' + \
                             str(self._allow_anonymous).lower() )
+    def delete_config(self):
+        """
+        Deletes the configuration for the mqtt server
+        """
+        os.remove(self._config_file)
 
     def start_mosquitto(self):
         """
         Starts the mosquitto server in the background
         Attention: _executable can be misused for arbitrary code execution
         """
-        process = subprocess.run(
+        self.write_config()
+        process = subprocess.Popen(
             [self._executable, \
                 "-c", 
                 self._config_file, \
-                "-d"],
-            # capture_output=False,
-            # check=True
+                # "-d", \
+                ],
+            shell=False,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
         )
-        # self._pid = process.pid
-        # print(self._pid)
+        self._pid = process.pid
 
     def stop_mosquitto(self):
         """
         Stops the mosquitto server
         """
-        parent = psutil.Process(self._pid)
-        for child in parent.children(recursive=True):
-            child.terminate()
-        parent.terminate
-        # os.kill(self._pid, signal.SIGTERM)
+        os.kill(self._pid, signal.SIGTERM)
+        self.delete_config()
