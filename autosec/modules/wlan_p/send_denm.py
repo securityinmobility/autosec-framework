@@ -50,7 +50,7 @@ class SendDenm(AutosecModule):
         """
         return [OcbModeJoin]
 
-    def run(self) -> None:
+    def run(self, inputs: List[AutosecRessource] = None) -> None:
         """
         Send a DENM
         """
@@ -76,5 +76,8 @@ class SendDenm(AutosecModule):
         self._mqtt_client.connect("127.0.0.1", 1883, 60)
 
     def send_message(self):
+        """
+        Sends the message to the mqtt server
+        """
         json_message = json.dumps(self._json_message)
         self._mqtt_client.publish("vanetza/in/denm", json_message)

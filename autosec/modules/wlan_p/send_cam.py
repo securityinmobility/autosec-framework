@@ -1,6 +1,8 @@
 """
 Module for sending a CAM. (Cooperative Awareness Messages)
 """
+from functools import reduce
+import operator
 import os
 from typing import List
 import json
@@ -28,6 +30,7 @@ class SendCam(AutosecModule):
     def __init__(self) -> None:
         super().__init__()
         self.load_json('its_g5_messages/in_cam_full.json')
+        self.connect_mqtt()
 
     def get_info(self) -> AutosecModuleInformation:
         return AutosecModuleInformation(
@@ -50,11 +53,10 @@ class SendCam(AutosecModule):
         """
         return [OcbModeJoin]
 
-    def run(self) -> None:
+    def run(self, inputs: List[AutosecRessource] = None) -> None:
         """
         Send a CAM
         """
-        self.connect_mqtt()
         self.send_message()
 
 
@@ -76,5 +78,16 @@ class SendCam(AutosecModule):
         self._mqtt_client.connect("127.0.0.1", 1883, 60)
 
     def send_message(self):
+        """
+        Sends the message to the mqtt server
+        """
         json_message = json.dumps(self._json_message)
         self._mqtt_client.publish("vanetza/in/cam_full", json_message)
+
+    def modifiy_message(self, keys: List , value: str = ''):
+        """
+        Given the right keys, modify the message as you like :)
+        """
+        data = reduce(operator.getitem, keys[:-1], self._json_message)[keys[-1]]
+        reduce(operator.getitem, keys[:-1], self._json_message)[keys[-1]] = type(data)(value)
+        
