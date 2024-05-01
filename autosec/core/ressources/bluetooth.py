@@ -2,14 +2,16 @@ from .base import AutosecRessource, NetworkInterface
 from typing import Optional
 import socket
 from scapy.layers.bluetooth import BluetoothL2CAPSocket
+import bluetooth
+from typing import List
 
 
 class BluetoothInterface(NetworkInterface):
     #pass
 
-    bd_addr: Optional[str]
+    bd_addr: str
 
-    def __init__(self, interface, bd_addr: str=""):
+    def __init__(self, interface, bd_addr: str):
         super().__init__(interface)
         self.bd_addr = bd_addr
     
@@ -42,9 +44,9 @@ class BluetoothService(AutosecRessource):
     _device: BluetoothDevice
     _protocol: str
     _port: int
-    _service_name: str
+    _service_name: Optional[str]
 
-    def __init__(self, device: BluetoothDevice, protocol: str, port: int, service_name: str):
+    def __init__(self, device: BluetoothDevice, protocol: str, port: int, service_name: str = None):
         self._device = device
         protocol_upper_case = protocol.strip().upper()
         if protocol_upper_case == "RFCOMM" or protocol_upper_case == "L2CAP":
@@ -78,7 +80,7 @@ class BluetoothConnection(AutosecRessource):
         if self._service.get_protocol() == "L2CAP":
             self._socket = BluetoothL2CAPSocket(service.get_device().get_bd_addr()) # Scapy's L2CAP Socket always used port 0, maybe new implementatione needed
         if self._service.get_protocol() == "RFCOMM":
-            self._socket = socket.socket(socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM)
+            self._socket = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
             self._socket.connect(service.get_device().get_bd_addr(), service.get_port)
 
     def send(self, data):
@@ -86,3 +88,38 @@ class BluetoothConnection(AutosecRessource):
 
     def recv(self, amount: int):
         self._socket.recv(amount)
+
+class FileData(AutosecRessource):
+    _filename = str
+    _data = bytes
+
+    def __init__(self, filename: str, data: bytes):
+        self._filename = filename
+        self._data = data
+
+    def write_to_file(self, path):
+        if not path == None:
+            with open(f"{path}/{self._filename}", "wb") as binary_file:
+                binary_file.write(self._data)
+                binary_file.close()
+        else:
+            with open(self._filename, "wb") as binary_file:
+                binary_file.write(self._data)
+                binary_file.close()
+
+class VCard(AutosecRessource):
+    _version: float
+    _name: str
+    _full_name: str
+    _tel: Optional[List[str]]
+    _email: Optional[List[str]]
+    _birthday: Optional[str]
+
+    def __init__(self, version: float, name: str, full_name: str, tel: List[str] = None, email: List[str] = None, birthday: str = None):
+        self._version = version
+        self._name = name
+        self._full_name = full_name
+        self._tel = tel
+        self._email = email
+        self._birthday = birthday
+        
