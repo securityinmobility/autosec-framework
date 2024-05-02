@@ -15,49 +15,13 @@ from autosec.core.autosec_module import AutosecModule, AutosecModuleInformation
 from autosec.core.ressources import AutosecRessource
 #from autosec.core.ressources.base import NetworkInterface
 from autosec.core.ressources.ip import InternetInterface
+from autosec.core.ressources.wlan_p import OcbInterface, WifiChannel
 #from autosec.core.ressources.wifi import WifiInformation
 #from autosec.modules.wlan_p.ocb_scan import OcbInterface
 
 # TODO: This module joins a network interface into an ocb network.
 # Requires the frequencies and channel width in europe, a wifi card with access to
 # these channels and a modified regulatory database
-
-@dataclass
-class WifiChannel:
-    """
-    Helperclass that holds the most important information about
-    a particlar WifiChannel.
-    The tx_power is read out of iw output.
-    Enabled is read out of iw output and depends on the driver and regulatory database
-    """
-    centre_frequency: int = 0       # Carrier centre frequency
-    channel_number: int = 0         # Channel number according 802.11 standard
-    channel_width: int = 0          # Channel width
-    tx_power: float =0              # Ususally measured in dbm
-    enabled: bool = False           # State of the channel with respect to the regulatory domain
-    #TODO: Implement NL_FLAGS like NO-IR
-
-    def __init__(self) -> None:
-        self.centre_frequency = 0
-        self.channel_number = 0
-        self.channel_width = 0
-        self.tx_power = 0
-        self.enabled = False
-
-    def set_tx(self, input_text: str):
-        """
-        Set transmit power value.
-        Will be set to 0, if the string reads disables.
-        The function parses iw output text
-        """
-        if "disabled" in input_text:
-            self.tx_power = 0
-            self.enabled = False
-        elif float(input_text) > 0:
-            self.tx_power = float(input_text)
-            self.enabled = True
-        else:
-            print("Error parsing input")
 
 def load_module(interface: InternetInterface) -> List[AutosecModule]:
     """
@@ -84,7 +48,7 @@ class OcbModeJoin(AutosecModule):
         )
 
     def get_produced_outputs(self) -> List[AutosecRessource]:
-        return [OcbModeJoin]
+        return [OcbInterface]
 
     def get_required_ressources(self) -> List[AutosecRessource]:
         return [InternetInterface]
@@ -100,7 +64,7 @@ class OcbModeJoin(AutosecModule):
             self.join_channel(channels[0])
         else:
             return []
-        return [self]
+        return [OcbInterface(self._iface)]
 
     def _get_supported_channels(self) -> List[WifiChannel]:
         """"
@@ -120,10 +84,10 @@ class OcbModeJoin(AutosecModule):
         for channel_result in command_result:
             if re.search('5..0 MHz', channel_result):
                 channel = WifiChannel()
-                channel_result = channel_result.split()
-                channel.centre_frequency=channel_result[1]
-                channel.channel_number=channel_result[3].strip("[]")
-                channel.set_tx(input_text = channel_result[4].strip("()"))
+                channel_result_split = channel_result.split()
+                channel.centre_frequency= int(channel_result_split[1])
+                channel.channel_number= int(channel_result_split[3].strip("[]"))
+                channel.set_tx(input_text = channel_result_split[4].strip("()"))
                 supported_channels.append(channel)
         return supported_channels
 
@@ -136,9 +100,9 @@ class OcbModeJoin(AutosecModule):
             reader = csv.DictReader(csvfile)
             for row in reader:
                 channel = WifiChannel()
-                channel.centre_frequency = row['centre_frequency']
-                channel.channel_number = row['channel_number']
-                channel.channel_width = row['channdel_width']
+                channel.centre_frequency = int(row['centre_frequency'])
+                channel.channel_number = int(row['channel_number'])
+                channel.channel_width = int(row['channdel_width'])
                 europe_channels.append(channel)
         return europe_channels
 
@@ -187,8 +151,8 @@ class OcbModeJoin(AutosecModule):
                 self._iface, \
                 "ocb", \
                 "join", \
-                channel.centre_frequency, \
-                channel.channel_width],
+                str(channel.centre_frequency), \
+                str(channel.channel_width)],
             capture_output=False,
             check=True
         )
