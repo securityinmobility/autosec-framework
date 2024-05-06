@@ -39,7 +39,7 @@ class RFCOMMService(AutosecModule):
     def run(self,inputs: List[AutosecRessource]) -> tuple[List[BluetoothService], List[BluetoothService]]:
         
         interface = self.get_ressource(inputs, BluetoothInterface)
-        address = interface.get_bd_addr()
+        address = interface.get_network_address()
         services = {"open": [], "closed": []}
         for channel in range(1, 31):
             sock = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
@@ -47,7 +47,7 @@ class RFCOMMService(AutosecModule):
             channel_open = False
 
             try:
-                sock.connect((sys.argv[1], channel))
+                sock.connect((address, channel))
                 sock.close()
                 channel_open = True
             except bluetooth.btcommon.BluetoothError:
@@ -55,10 +55,8 @@ class RFCOMMService(AutosecModule):
 
 
             if channel_open:
-                print("Channel " + str(channel) + " open")
                 services["open"].append(BluetoothService(BluetoothDevice(interface, address), "RFCOMM", channel))
             else:
-                print("Channel " + str(channel) + " closed")
                 services["closed"].append(BluetoothService(BluetoothDevice(interface, address), "RFCOMM", channel))
 
         results = (services["open"], services["closed"])

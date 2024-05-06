@@ -38,8 +38,8 @@ class SDPService(AutosecModule):
     def run(self,inputs: List[AutosecRessource]) -> List[BluetoothService]:
         
         interface = self.get_ressource(inputs, BluetoothInterface)
-        address = interface.get_bd_addr()
+        address = interface.get_network_address()
         services = bluetooth.find_service(address=address)
-        results = [BluetoothService(BluetoothDevice(interface, interface.get_bd_addr()), service["protocol"], service["port"], service["name"]) for service in services]
+        results = [BluetoothService(BluetoothDevice(interface, interface.get_network_address()), service["protocol"], service["port"], service["name"]) for service in services]
         
         return results

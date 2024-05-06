@@ -1,6 +1,6 @@
 from autosec.core.autosec_module import AutosecModule, AutosecModuleInformation
 from autosec.core.ressources.bluetooth import BluetoothDevice, BluetoothInterface, BluetoothService, VCard
-import bt_obex
+import autosec.modules.bluetooth.bt_obex as bt_obex
 from typing import List
 import bluetooth
 from xml.etree import ElementTree
@@ -41,34 +41,27 @@ class PBAccessService(AutosecModule):
     def run(self,inputs: List[AutosecRessource]) -> List[VCard]:
         
         service = self.get_ressource(inputs, BluetoothService)
-        address = service.get_bd_addr()
+        address = service.get_device().get_bd_addr()
         port = service.get_port()
         
         print(f"Trying to connect on port {port}")
-        # Use the generic Client class to connect to the phone.
         c = bt_obex.PBAPClient(address, port)
         r = c.connect()
 
         if isinstance(r, responses.ConnectSuccess):
         
             prefix = ""
-            # Access the list of vcards in the phone's internal phone book.
             hdrs, cards = c.get(prefix+"telecom/pb", header_list=[bt_obex.TypeHeader(b"x-bt/vcard-listing")])
-            # Parse the XML response to the previous request.
             root = ElementTree.fromstring(cards)
             
-            print("\nAvailable cards in %stelecom/pb\n" % prefix)
+            #print("\nAvailable cards in %stelecom/pb\n" % prefix)
             
-            # Examine each XML element, storing the file names we find in a list, and
-            # printing out the file names and their corresponding contact names.
             names = []
             for card in root.findall("card"):
-                #print("%s: %s" % (card.attrib["handle"], card.attrib["name"]))
                 names.append(card.attrib["handle"])
             
-            print("\nCards in %stelecom/pb\n" % prefix)
+            #print("\nCards in %stelecom/pb\n" % prefix)
             
-            # Request all the file names obtained earlier.
             c.setpath(prefix + "telecom/pb")
             
             card_info = []
@@ -80,6 +73,8 @@ class PBAccessService(AutosecModule):
                 this_card["email"] = []
 
                 for line in card_str.split("\n"):
+                    line = line.replace("CHARSET=UTF-8", "")
+                    #print(f"line: {line}")
                     if line.startswith("VERSION"):
                         this_card["version"] = line.split(":")[1]
 
@@ -90,16 +85,16 @@ class PBAccessService(AutosecModule):
                         this_card["full_name"] = line.split(":")[1]
 
                     if line.startswith("TEL"):
-                        this_card["tel"].append(line.split(":")[1])
+                        this_card["tel"].append(line.split(":")[1].strip())
 
                     if line.startswith("EMAIL"):
-                        this_card["email"].append(line.split(":")[1])
+                        this_card["email"].append(line.split(":")[1].strip())
 
                     if line.startswith("BDAY"):
                         this_card["bday"] = line.split(":")[1]
 
                 card_info.append(this_card)
-                print(card_str)
+                #print(card_str)
             
             c.disconnect()
 
@@ -115,7 +110,8 @@ class PBAccessService(AutosecModule):
         results = []
 
         for card in card_info:
-            vcard = VCard(float(card["version"]), card["name"], card["full_name"], card["tel"], card["email"], card["bday"])
+            #print(card)
+            vcard = VCard(float(card["version"]), card["name"], card["full_name"], card["tel"], card["email"], card["bday"] if "bday" in card else None)
             results.append(vcard)
         
         return results

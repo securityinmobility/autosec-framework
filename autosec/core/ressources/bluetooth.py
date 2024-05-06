@@ -97,8 +97,14 @@ class FileData(AutosecRessource):
         self._filename = filename
         self._data = data
 
+    def get_filename(self):
+        return self._filename
+    
+    def get_data(self):
+        return self._data
+
     def write_to_file(self, path):
-        if not path == None:
+        if not path is None:
             with open(f"{path}/{self._filename}", "wb") as binary_file:
                 binary_file.write(self._data)
                 binary_file.close()
@@ -122,4 +128,28 @@ class VCard(AutosecRessource):
         self._tel = tel
         self._email = email
         self._birthday = birthday
+
+    def get_version(self):
+        return self._version
+    
+    def get_name(self):
+        return self._name
+    
+    def get_full_name(self):
+        return self._full_name
+    
+    def get_tel(self):
+        if self._tel is None:
+            raise ValueError("Telephone number is not defined")
+        return self._tel
+    
+    def get_email(self):
+        if self._email is None:
+            raise ValueError("Email is not defined")
+        return self._email
+    
+    def get_birthday(self):
+        if self._birthday is None:
+            return "Birthday is not defined"
+        return self._birthday
         

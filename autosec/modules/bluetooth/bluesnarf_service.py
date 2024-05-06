@@ -3,7 +3,7 @@ from autosec.core.ressources.bluetooth import BluetoothDevice, BluetoothInterfac
 from .bt_obex import FixedClient, FixedBrowserClient, TypeHeader
 from typing import List
 import bluetooth
-import sys
+import os
 from PyOBEX import responses
 
 from autosec.core.ressources.base import AutosecRessource
@@ -40,7 +40,7 @@ class BluesnarfService(AutosecModule):
     
     def run(self,inputs: List[AutosecRessource]) -> List[FileData]:
         service = self.get_ressource(inputs, BluetoothService)
-        if not service.get_protocol == "RFCOMM":
+        if not service.get_protocol() == "RFCOMM":
             print("Wrong service was given")
             exit()
         address = service.get_device().get_bd_addr()
@@ -55,7 +55,7 @@ class BluesnarfService(AutosecModule):
 
         if isinstance(r, responses.ConnectSuccess):
             print("Connection successful")
-            file = open("bluesnarfing_files/common_files.txt")
+            file = open(os.path.dirname(os.path.abspath(__file__)) + "/" + "bluesnarfing_files/common_files.txt")
             files = []
             for line in file:
                 parts = line.replace("\n", "").rsplit("/",1)
