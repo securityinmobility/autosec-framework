@@ -1,0 +1,47 @@
+Requirements:
+ip Tool
+iw Tool
+mosquitto MQTT Broker installed (but not started, Ressource can also be crafted by hand)
+Loaded modified ath9k driver (See https://gitlab.com/hpi-potsdam/osm/g5-on-linux/11p-on-linux/)
+Compiled NAP Vanetza on the System (See https://code.nap.av.it.pt/mobility-networks/vanetza/)
+Script need to be executed with root privileges!
+
+Example:
+
+import os
+from time import sleep
+
+from autosec.core.ressources.ip import InternetInterface
+from autosec.modules.wlan_p.ocb_join import OcbModeJoin
+from autosec.modules.wlan_p.send_message import SendMessage
+from autosec.modules.wlan_p.vanetza import MqttBroker, Vanetza
+
+if os.getuid() != 0:
+    print("Script needs to be run with extended privileges")
+    exit() 
+
+iface = InternetInterface("wlp9s0")
+ocb = OcbModeJoin(interface=iface)
+channels = ocb.get_usable_channels()
+iface_ocb = ocb.run(None).pop()
+ocb.leave_channel()
+sleep(1)
+ocb.join_channel(channels[4])
+
+mqttBr = MqttBroker()
+mqttInst = mqttBr.run(None).pop()
+
+sleep(2)
+van = Vanetza('/home/user/jaf0789/nap-vanetza/vanetza_src/bin/socktap', '/home/user/jaf0789/nap-vanetza/vanetza_src/tools/socktap/config.ini')
+van.run([iface_ocb, mqttInst])
+sleep(2)
+cam = SendMessage("cam")
+denm = SendMessage("denm")
+cam.run(mqttInst)
+cam.modifiy_message(['camParameters', 'basicContainer', 'referencePosition', 'latitude'], '25.54684687')
+cam.modifiy_message(['camParameters', 'basicContainer', 'stationType'], '2')
+cam.run(mqttInst)
+denm.run(mqttInst)
+sleep(2)
+van.stop_vanetza()
+mqttBr.stop_mosquitto()
