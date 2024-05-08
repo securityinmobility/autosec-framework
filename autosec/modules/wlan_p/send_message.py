@@ -62,14 +62,13 @@ class SendMessage(AutosecModule):
         Defining the required ressources for this module
         This module depends on a configured WiFi interface that is joined an ocb channel
         """
-        return [OcbInterface, MqttInstance]
+        return [MqttInstance]
 
-    def run(self, inputs: Tuple[OcbInterface, MqttInstance]) -> None:
+    def run(self, inputs: MqttInstance) -> None:
         """
         Sends the selected message
         """
-        _, mqtt_broker = inputs
-        self.connect_mqtt(mqtt_broker.ip, mqtt_broker.port)
+        self.connect_mqtt(inputs.ip, inputs.port)
         self.send_message()
 
     def load_json(self, rel_filepath: str) -> None:

@@ -71,7 +71,6 @@ class Vanetza(AutosecModule):
         """
         Starts the socktap application from the nap-vanetza project
         """
-        print(self._executable + " " + self._config_file)
         process = subprocess.Popen([
             self._executable, \
             '-c', \
@@ -88,7 +87,7 @@ class Vanetza(AutosecModule):
         """
         config = configparser.ConfigParser(allow_no_value=True, inline_comment_prefixes=[';'])
         
-        with open('/home/user/jaf0789/nap-vanetza/vanetza_src/tools/socktap/config.ini', "r", encoding='UTF-8') as file_handle:
+        with open(self._config_file, "r", encoding='UTF-8') as file_handle:
             config.read_file(file_handle)
 
         config.set('general', 'interface', wifi_interface)
@@ -96,7 +95,7 @@ class Vanetza(AutosecModule):
         config.set('general', 'local_mqtt_port', str(mqtt_port))
         config.set('cam', 'periodicity', '0')
         
-        with open('/home/user/jaf0789/nap-vanetza/vanetza_src/tools/socktap/config.ini', "w", encoding='UTF-8') as file_handle:
+        with open(self._config_file, "w", encoding='UTF-8') as file_handle:
             config.write(file_handle)
 
 
