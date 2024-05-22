@@ -12,6 +12,7 @@ interface_name = "Test name" # not really used for anything, but neccessary for 
 interface = BluetoothInterface(interface_name, bt_addr)
 pbap_service = BluetoothService(BluetoothDevice(interface, bt_addr), "RFCOMM", 19)
 ftp_service = BluetoothService(BluetoothDevice(interface, bt_addr), "RFCOMM", 7)
+opp_service = BluetoothService(BluetoothDevice(interface, bt_addr), "RFCOMM", 12)
 
 
 #------------------------- SERVICE DISCOVERY TEST ---------------------------
@@ -29,26 +30,26 @@ else:
     print("No services found")
 
 #-------------------------- RFCOMM SCANNER TEST -------------------------------
-print("starting RFCOMM scanner test")
-module_RFCOMM_scanner = rfcomm_scanner.load_module()[0]
-assert module_RFCOMM_scanner.can_run([interface]), "Not enough ressources. (BluetoothInterface)"
-open_ports_list, closed_ports_list = module_RFCOMM_scanner.run([interface])
-if len(open_ports_list) > 0:
-    for port in open_ports_list:
-        print(f"Port {port.get_port()} is open")
-else:
-    print("No open RFCOMM ports were found")
+# print("starting RFCOMM scanner test")
+# module_RFCOMM_scanner = rfcomm_scanner.load_module()[0]
+# assert module_RFCOMM_scanner.can_run([interface]), "Not enough ressources. (BluetoothInterface)"
+# open_ports_list, closed_ports_list = module_RFCOMM_scanner.run([interface])
+# if len(open_ports_list) > 0:
+#     for port in open_ports_list:
+#         print(f"Port {port.get_port()} is open")
+# else:
+#     print("No open RFCOMM ports were found")
 
-if len(closed_ports_list) > 0:
-    for port in closed_ports_list:
-        print(f"Port {port.get_port()} is closed")
-else:
-    print("No closed RFCOMM ports were found")
+# if len(closed_ports_list) > 0:
+#     for port in closed_ports_list:
+#         print(f"Port {port.get_port()} is closed")
+# else:
+#     print("No closed RFCOMM ports were found")
 
 #---------------------------- PHONEBOOK ACCESS TEST --------------------------
 print("starting phonebook access test")
 module_pb_access_service = pb_access_service.load_module()[0]
-assert module_RFCOMM_scanner.can_run([pbap_service]), "Not enough ressources. (BluetoothService)"
+assert module_pb_access_service.can_run([pbap_service]), "Not enough ressources. (BluetoothService)"
 vcard_list = module_pb_access_service.run([pbap_service])
 if len(vcard_list) > 0:
     for vcard in vcard_list:
@@ -62,8 +63,8 @@ if len(vcard_list) > 0:
 else:
     print("No vCards were found")
 
-#------------------------------ BLUESNARFING TEST --------------------------
-print("starting Bluesnarfing test")
+#------------------------------ BLUESNARFING TEST FTPSERVICE--------------------------
+print("starting Bluesnarfing test with FTP Service")
 module_bluesnarf_service = bluesnarf_service.load_module()[0]
 assert module_bluesnarf_service.can_run([ftp_service]), "Not enough ressources. (BluetoothService)"
 file_data_list = module_bluesnarf_service.run([ftp_service])
@@ -76,4 +77,17 @@ if len(file_data_list) > 0:
 else:
     print("No files were found")
 
+#------------------------------ BLUESNARFING TEST OPPSERVICE-------------------------------
+print("starting Bluesnarfing test with OPP Service")
+module_bluesnarf_service = bluesnarf_service.load_module()[0]
+assert module_bluesnarf_service.can_run([opp_service]), "Not enough ressources. (BluetoothService)"
+file_data_list = module_bluesnarf_service.run([opp_service])
+if len(file_data_list) > 0:
+    for file_data in file_data_list:
+        print(f"Filename: {file_data.get_filename()} \n"
+              f"Data: {file_data.get_data()}")
+        print("---------------------------------")
+        #file_data.write_to_file(<path>) to test write_to_file method
+else:
+    print("No files were found")
 
