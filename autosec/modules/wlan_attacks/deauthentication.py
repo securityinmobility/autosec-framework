@@ -40,8 +40,8 @@ class Deauthentication(Thread):
                 break
 
     def _send_deauth(self) -> None:
-        # addr1 = RA/DA
-        # addr2 = TA/SA
+        # addr1 = DA
+        # addr2 = SA
         # addr3 = BSSID
         packet: Any = RadioTap()/Dot11(
             addr1=self._target_mac,
