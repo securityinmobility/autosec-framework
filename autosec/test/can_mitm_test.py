@@ -1,5 +1,5 @@
 import sys 
-sys.path.append("../autosec-framework")
+sys.path.append("../autosec-framework-master")
 
 from autosec.core.ressources.can import CanInterface
 import autosec.modules.can_bridge as can_bridge

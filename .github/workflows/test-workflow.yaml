@@ -1,0 +1,71 @@
+name: test_workflow
+
+on: push
+
+jobs:
+
+  setup:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v2
+        with: 
+          python-version: "3.9"
+      
+      - name: Display Python Version
+        run: python -c "import sys; print(sys.version)"
+      
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -r dev-requirements.txt
+
+      - name: Set up two vcans
+        run: |
+            sudo modprobe vcan
+            sudo ip link add name vcan0 type vcan
+            sudo ip link add name vcan1 type vcan
+            sudo ip link set dev vcan0 up
+            sudo ip link set dev vcan1 up
+      
+
+  ipTest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: setup
+        uses: actions/checkout@v3
+      - name: ip_test
+        run: python ../autosec/test/ip_tests.py
+
+
+  canSniffTest:
+    runs-on: ubuntu-latest
+    needs: setup
+    steps:
+      - name: setup
+        uses: actions/checkout@v3
+      - name: can_sniff_test
+        run: python ../autosec/test/can-sniff-test.py  
+
+
+  isotpTest:
+    runs-on: ubuntu-latest
+    needs: setup
+    steps:
+      - name: setup
+        uses: actions/checkout@v3
+      - name: isotp_test
+        run: python ../autosec/test/isotp_test.py
+
+  
+  auotmaticExecutionTest:
+    runs-on: ubuntu-latest
+    needs: setup
+    steps:
+      - name: setup
+        uses: actions/checkout@v3
+      - name: automatic_execution_test
+        run: python ../autosec/test/automatic_execution_test.py
+

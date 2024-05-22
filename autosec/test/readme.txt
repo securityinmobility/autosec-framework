@@ -1,4 +1,3 @@
-
 Test manual:
 
 Note: It is enough to set up the vcans once.
@@ -15,30 +14,30 @@ can_mitm_test.py:
         cangen vcan1
     -   now execute the can_mitm_test
 
-can_sniff_test.py:
+can_sniff_test.py: 
     -   set up one vcan on Linux terminal:
         sudo modprobe vcan
         sudo ip link add name vcan0 type vcan
         sudo ip link set dev vcan0 up
-    -   use cangen from can-utils to generate random data:
-        cangen vcan0
-    -   now execute the can_sniff_test
+    -   execute the can_sniff_test
 
-isotp_test.py:
+isotp_test.py: 
     -   set up one vcan on Linux terminal:
         sudo modprobe vcan
         sudo ip link add name vcan0 type vcan
         sudo ip link set dev vcan0 up
-    -   use endpoints_sim.py from the test folder to initialize isotpSockets
-    -   now start the isotp_test (test may take a while)
-    -   stop the endpoints_sim.py
+    -   start the isotp_test (test may take a while)
 
-ip_test.py:
-    -   start the docker-compose.network.yaml file to initialize the network:
-        sudo docker compose -f docker-compose.network.yaml build
-        sudo docker compose -f docker-compose.network.yaml up
+ip_test.py: 
     -   start ip_tests with the sudo command
-    -   shut down container: sudo docker compose -f docker-compose.network.yaml down
+
+
+automatic_execution_test.py:
+    -   set up one vcan on Linux terminal:
+        sudo modprobe vcan
+        sudo ip link add name vcan0 type vcan
+        sudo ip link set dev vcan0 up
+    -   start automatic_execution_test.py in sudo mode
 
 replay_trc_test.py:
     -   set up one vcan on Linux terminal:
@@ -50,7 +49,7 @@ replay_trc_test.py:
         -   Initialize: conf.contribs['CANSocket'] = {'use-python-can': False}
                         load_contrib('cansocket')
         -   Initialize socket: socket = CANSocket(channel="vcan0")
-        -   Sniff send packets: packets = socket1.sniff(timeout=2)
+        -   Sniff send packets: packets = socket.sniff(timeout=2)
         -   Show data:
              for p in packets: 
                 print(p.identifier, " ", p.data)
