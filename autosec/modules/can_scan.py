@@ -1,3 +1,4 @@
+
 from autosec.core.autosec_module import AutosecModule, AutosecModuleInformation
 from autosec.core.ressources.base import AutosecRessource
 from typing import Tuple, List
@@ -41,4 +42,12 @@ class CanScan(AutosecModule):
         pkts = socket.sniff(timeout=10)
         result = set(p.getfieldval("identifier") for p in pkts)
         result_data = [(p.getfieldval("data"),p.getfieldval("identifier")) for p in pkts]
-        return [CanDevice(interface, addr) for addr in result], [CanService(i,d) for d,i in result_data]
+        if not result_data and not result:
+            return []
+        return_lst = []
+        for addr in result:
+            return_lst.append(CanDevice(interface, addr))
+        for d,i in result_data:
+            return_lst.append(CanService(i,d))
+        return return_lst
+        

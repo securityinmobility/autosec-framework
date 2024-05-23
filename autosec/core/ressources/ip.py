@@ -1,3 +1,4 @@
+
 import socket
 from typing import Optional
 
@@ -48,6 +49,10 @@ class InternetInterface(NetworkInterface):
         if not self._scapy_interface:
             raise ValueError("Trying to get non existent scapy interface from an InternetInterface")
         return self._scapy_interface
+
+    def __eq__(self, other) -> bool:
+        return self.get_network_address() == other.get_network_address()
+
 
 
 class InternetDevice(AutosecRessource):
@@ -131,6 +136,10 @@ class InternetDevice(AutosecRessource):
             raise ValueError("Trying to get non existent manufacturer from an InternetDevice")
         return self._manufacturer
 
+    def __eq__(self, other) -> bool:
+        tmp_1 = self.get_interface().__eq__(other.get_interface())
+        tmp_2 = self.get_address() == other.get_address()
+        return tmp_1 and tmp_2
 
 class PortRange(AutosecRessource):
     """
@@ -199,6 +208,11 @@ class InternetService(AutosecRessource):
         """
         return InternetConnection(self)
 
+    def __eq__(self, other) -> bool:
+        tmp_1 = self.get_device().__eq__(other.get_device())
+        tmp_2 = self.get_port() == other.get_port()
+        return tmp_1 and tmp_2
+
 
 class InternetConnection(AutosecRessource):
     _service: InternetService
@@ -222,3 +236,4 @@ class InternetConnection(AutosecRessource):
 
             if curr == stop:
                 return result
+

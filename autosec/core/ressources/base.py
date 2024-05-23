@@ -1,4 +1,5 @@
 class AutosecRessource:
+
     """
     Autosec ressource base class
     """

@@ -1,11 +1,11 @@
+
 '''
 Load Obd modules
 '''
-from scapy.all import OBD, OBD_S09, OBD_S01, OBD_S09_Enumerator, OBD_S01_Enumerator, print_payload
+from scapy.contrib.automotive.obd.scanner import OBD_S09_Enumerator, OBD_S01_Enumerator, OBD_Service_Enumerator
 from autosec.core.autosec_module import AutosecModule, AutosecModuleInformation
 from autosec.core.ressources import AutosecRessource, CanInterface
 from autosec.core.ressources.can import IsoTPService
-from autosec.modules.Obd import service01, service09
 from autosec.core.ressources.obdInfo import ObdInfo
 from typing import List
 
@@ -74,14 +74,14 @@ class ObdServices(AutosecModule):
 
         enumerator_9 = OBD_S09_Enumerator(sock=isoTpSocket, exit_scan_on_first_negative_response =True, timeout=0.2)
         pkts_9 = enumerator_9._get_initial_requests()
-        loads_9 = [(p.getfieldval("iid"), print_payload(p)) for p in pkts_9]
+        loads_9 = [(p.getfieldval("iid"), OBD_Service_Enumerator.print_payload(p)) for p in pkts_9]
         for p in loads_9:
             results.append(ObdInfo(p[1], 9, p[0]))
         
 
         enumerator_1 = OBD_S01_Enumerator(sock=isoTpSocket, exit_scan_on_first_negative_response =True, timeout=0.2)
         pkts_1 = enumerator_1._get_initial_requests()
-        loads_1 = [(p.getfieldval("pid"), print_payload(p)) for p in pkts_1]
+        loads_1 = [(p.getfieldval("pid"), OBD_Service_Enumerator.print_payload(p)) for p in pkts_1]
         for p in loads_1:
             results.append(ObdInfo(p[1], 1, p[0]))
 

@@ -1,6 +1,6 @@
+# from scapy.all import L3RawSocket, sr
 from scapy.all import sr
-from scapy.layers.inet import TCP, IP
-
+from scapy.layers.inet import IP, TCP
 from autosec.core.autosec_module import AutosecModule, AutosecModuleInformation
 from autosec.core.ressources.ip import InternetDevice, InternetService, InternetInterface
 from autosec.core.ressources.base import AutosecRessource
@@ -43,7 +43,7 @@ class PortService(AutosecModule):
         device = self.get_ressource(inputs, InternetDevice)
         ip_address = device.get_address()
      
-        res, uns = sr(IP(dst=ip_address)/TCP(flags="S",dport=(1,80)))
+        res, uns = sr(IP(dst=ip_address)/TCP(flags="S",dport=(1-65535)), timeout=5)
         a = res.filter(lambda s,r: (r.haslayer(TCP) and (r.getlayer(TCP).flags & 2)))
         open_ports = [answer.getlayer(TCP).sport for query, answer in a]
         service_name = []

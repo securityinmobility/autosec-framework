@@ -1,21 +1,26 @@
+
 from autosec.core.ressources.base import AutosecRessource, NetworkInterface
 from scapy.all import conf, load_contrib
 
-conf.contribs['ISOTP'] = {'use-can-isotp-kernel-module': False}
+conf.contribs['ISOTP'] = {'use-can-isotp-kernel-module': True}
 conf.contribs['CANSocket'] = {'use-python-can': False}
 load_contrib('cansocket')
 load_contrib('isotp')
 
 from scapy.layers.can import CAN
-from scapy.contrib.cansocket import CANSocket
+
+# from scapy.contrib.cansocket import CANSocket
 from scapy.contrib.isotp import ISOTPSocket
+from scapy.contrib.cansocket_native import CANSocket
+
 
 class CanInterface(NetworkInterface):
     _interface: CANSocket
 
     def __init__(self, interface_name: str):
         super().__init__(interface_name)
-        self._interface = CANSocket(channel=interface_name)
+        self._interface_name = interface_name
+        self._interface = CANSocket(interface_name)
 
     def get_socket(self) -> CANSocket:
         return self._interface
@@ -23,6 +28,9 @@ class CanInterface(NetworkInterface):
     def send_message(self, msg_id: int, data: bytes):
         msg = CAN(identifier=msg_id, length=len(data), data=data)
         self._interface.send(msg)
+
+    def __eq__(self, other) -> bool:
+        return self.get_interface_name() == other.get_interface_name()
 
 class CanDevice(AutosecRessource):
     _interface: CanInterface
@@ -41,6 +49,10 @@ class CanDevice(AutosecRessource):
     def request_data(self):
         pass # TODO remote transmission request
 
+    def __eq__(self, other) -> bool:
+        tmp1 = self.get_interface().__eq__(other.get_interface())
+        tmp2 = self.get_address() == other.get_address()
+        return tmp1 and tmp2
 
 class CanOverride(AutosecRessource):
 
@@ -73,6 +85,13 @@ class CanService(AutosecRessource):
     def get_service(self):
         return self.service
 
+    def __eq__(self, other) -> bool:
+        print(type(self), type(other))
+        tmp1 = self.get_data() == other.get_data()
+        tmp2 = self.get_service() == other.get_service()
+        return tmp1 and tmp2
+
+
 
 class IsoTPService(AutosecRessource):
     _interface: CanInterface
@@ -96,3 +115,10 @@ class IsoTPService(AutosecRessource):
 
     def get_socket(self) -> 'ISOTPSocket':
         return ISOTPSocket(self._interface.get_socket(), self._tx_id, self._rx_id)
+
+    def __eq__(self, other) -> bool:
+        tmp_1 = self.get_interface().__eq__(other.get_interface()) 
+        tmp_2 = self.get_tx_id() == other.get_tx_id()
+        tmp_3 = self.get_rx_id() == other.get_rx_id()
+        return tmp_1 and tmp_2 and tmp_3
+
