@@ -4,7 +4,8 @@ such as the country, manufacturer, region and years.
 '''
 import logging
 
-from scapy.all import load_contrib, ISOTPSocket, ISOTP
+from scapy.all import load_contrib
+from scapy.contrib.isotp import ISOTP
 from scapy.main import load_layer
 from autosec.core.ressources.can import IsoTPService
 from vininfo import Vin
