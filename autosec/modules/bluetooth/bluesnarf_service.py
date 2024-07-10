@@ -25,7 +25,7 @@ class BluesnarfService(AutosecModule):
 
     def get_info(self):
         return AutosecModuleInformation(
-            name="RFCOMMScan",
+            name="Bluesnarfing",
             description = "Module to get files from a bluetooth device",
             dependencies = ["PyOBEX"],
             tags = ["Bluetooth", "RFCOMM", "OBEX"]
