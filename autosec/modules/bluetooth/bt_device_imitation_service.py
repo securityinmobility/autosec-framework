@@ -43,7 +43,9 @@ class BTDeviceImitationService(AutosecModule):
         interface = self.get_ressource(inputs, BluetoothInterface)
         interface_name = interface.get_interface_name()
         device = self.get_ressource(inputs, BluetoothDevice)
-        
+        service = self.get_ressource(inputs, BluetoothService)
+
+        print("changing Bluetooth address and name")
         if os.path.isfile("/etc/machine-info"):
             with open("/etc/machine-info", "r") as file:
                 lines = file.readlines()
@@ -63,8 +65,12 @@ class BTDeviceImitationService(AutosecModule):
         time.sleep(2)
         subprocess.run(["hciconfig", interface_name, "up"])
        
+        print("Connecting to service")
         # connect to a third device
+        connection = BluetoothConnection(service)
 
+
+        print("resetting name and address")
         # reset name and mac
         with open("/etc/machine-info", "w") as file:
             for line in lines:

@@ -78,10 +78,11 @@ class BluetoothConnection(AutosecRessource):
     def __init__(self, service: BluetoothService):
         self._service = service
         if self._service.get_protocol() == "L2CAP":
-            self._socket = BluetoothL2CAPSocket(service.get_device().get_bd_addr()) # Scapy's L2CAP Socket always used port 0, maybe new implementatione needed
+            self._socket = bluetooth.BluetoothSocket(bluetooth.L2CAP)
+            self._socket.connect(service.get_device().get_bd_addr(), service.get_port())
         if self._service.get_protocol() == "RFCOMM":
             self._socket = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
-            self._socket.connect(service.get_device().get_bd_addr(), service.get_port)
+            self._socket.connect(service.get_device().get_bd_addr(), service.get_port())
 
     def send(self, data):
         self._socket.send(data)
