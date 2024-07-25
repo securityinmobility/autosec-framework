@@ -3,6 +3,9 @@ from typing import Optional
 import socket
 from scapy.layers.bluetooth import BluetoothL2CAPSocket
 import bluetooth
+import subprocess
+import time
+import os
 from typing import List
 
 
@@ -39,6 +42,43 @@ class BluetoothDevice(AutosecRessource):
         if self._bd_name is None:
              raise ValueError("Name of the device is not defined")
         return self._bd_name
+    
+class BTImitationDevice(BluetoothDevice):
+    _old_address: str
+    _old_name: str
+
+    def __init__(self, interface: BluetoothInterface, bd_addr: str, old_address: str, bd_name: str, old_name: str):
+        super().__init__(interface, bd_addr, bd_name)
+        self._old_address = old_address
+        self._old_name = old_name
+
+    def get_old_address(self):
+        return self._old_address
+    
+    def get_old_name(self):
+        return self._old_name
+
+    def __del__(self):
+        interface_name = self.get_interface().get_interface_name()
+        print(interface_name)
+        print("resetting name and address")
+        # reset name and mac
+        if os.path.isfile("/etc/machine-info"):
+            with open("/etc/machine-info", "r") as file:
+                lines = file.readlines()
+
+        with open("/etc/machine-info", "w") as file:
+            for line in lines:
+                if line.startswith("PRETTY_HOSTNAME"):
+                    file.write(f"PRETTY_HOSTNAME={self._old_name}")
+                else:
+                    file.write(line)
+
+        subprocess.run(["service", "bluetooth", "restart"])
+        time.sleep(1)
+        subprocess.run(["bdaddr", "-i", interface_name, "-r", self._old_address])
+        time.sleep(1)
+        subprocess.run(["hciconfig", interface_name, "up"])
     
 class BluetoothService(AutosecRessource):
     _device: BluetoothDevice
@@ -79,10 +119,10 @@ class BluetoothConnection(AutosecRessource):
         self._service = service
         if self._service.get_protocol() == "L2CAP":
             self._socket = bluetooth.BluetoothSocket(bluetooth.L2CAP)
-            self._socket.connect(service.get_device().get_bd_addr(), service.get_port())
+            self._socket.connect((service.get_device().get_bd_addr(), service.get_port()))
         if self._service.get_protocol() == "RFCOMM":
             self._socket = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
-            self._socket.connect(service.get_device().get_bd_addr(), service.get_port())
+            self._socket.connect((service.get_device().get_bd_addr(), service.get_port()))
 
     def send(self, data):
         self._socket.send(data)

@@ -1,5 +1,6 @@
 from autosec.core.autosec_module import AutosecModule, AutosecModuleInformation
-from autosec.core.ressources.bluetooth import BluetoothDevice, BluetoothInterface, BluetoothService, BluetoothConnection, FileData
+from autosec.core.ressources.bluetooth import BluetoothDevice, BluetoothInterface, BluetoothService, BluetoothConnection, BTImitationDevice
+from autosec.core.ressources.base import NetworkInterface
 from typing import List
 import subprocess
 import time
@@ -36,7 +37,7 @@ class BTDeviceImitationService(AutosecModule):
     
 
     def get_required_ressources(self) -> List[AutosecRessource]:
-        return BluetoothDevice, BluetoothInterface
+        return [BluetoothDevice, BluetoothInterface, BluetoothService]
     
     
     def run(self,inputs: List[AutosecRessource]) -> BluetoothConnection:
@@ -51,7 +52,7 @@ class BTDeviceImitationService(AutosecModule):
                 lines = file.readlines()
                 for line in lines:
                     if line.startswith("PRETTY_HOSTNAME"):
-                        name = line
+                        name = line.replace("PRETTY_HOSTNAME=", "")
 
         with open("/etc/machine-info", "w") as file:
             for line in lines:
@@ -59,29 +60,21 @@ class BTDeviceImitationService(AutosecModule):
                     file.write(f"PRETTY_HOSTNAME={device.get_bd_name()}")
                 else:
                     file.write(line)
-        #subprocess.run(["service", "bluetooth", "restart"])
+
+        subprocess.run(["service", "bluetooth", "restart"])
+        time.sleep(1)
         ##subprocess.run(["hciconfig", interface_name, "name", old_name])
         subprocess.run(["bdaddr", "-i", interface_name, "-r", device.get_bd_addr()])
-        time.sleep(2)
+        time.sleep(1)
         subprocess.run(["hciconfig", interface_name, "up"])
        
         print("Connecting to service")
         # connect to a third device
         connection = BluetoothConnection(service)
-
-
-        print("resetting name and address")
-        # reset name and mac
-        with open("/etc/machine-info", "w") as file:
-            for line in lines:
-                if line.startswith("PRETTY_HOSTNAME"):
-                    file.write(f"PRETTY_HOSTNAME={name}")
-                else:
-                    file.write(line)
-        
-        subprocess.run(["bdaddr", "-i", interface_name, "-r", interface.get_network_address()])
-        time.sleep(2)
-        subprocess.run(["hciconfig", interface_name, "up"])
+        print(device.get_interface().get_interface_name())
+        imitation_device = BTImitationDevice(BluetoothInterface(interface_name, device.get_interface().get_network_address()), device.get_bd_addr(), interface.get_network_address(), device.get_bd_name(), name)
 
         
-        return 
+
+        
+        return imitation_device
