@@ -32,7 +32,7 @@ class BluesnarfService(AutosecModule):
         )
     
     def get_produced_outputs(self) -> List[FileData]:
-        return [BluetoothService]
+        return [FileData]
     
 
     def get_required_ressources(self) -> List[AutosecRessource]:

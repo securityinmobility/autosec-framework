@@ -6,6 +6,8 @@ import autosec.modules.bluetooth.service_discovery as service_discovery
 import autosec.modules.bluetooth.rfcomm_scanner as rfcomm_scanner
 import autosec.modules.bluetooth.pb_access_service as pb_access_service
 import autosec.modules.bluetooth.bluesnarf_service as bluesnarf_service
+import autosec.modules.bluetooth.bluebugging_service as bluebugging_service
+
 import autosec.modules.bluetooth.bt_device_imitation_service as bt_device_imitation_service
 
 
@@ -16,6 +18,7 @@ interface = BluetoothInterface(interface_name, bt_addr)
 pbap_service = BluetoothService(BluetoothDevice(interface, bt_addr), "RFCOMM", 19)
 ftp_service = BluetoothService(BluetoothDevice(interface, bt_addr), "RFCOMM", 7)
 opp_service = BluetoothService(BluetoothDevice(interface, bt_addr), "RFCOMM", 12)
+hsp_service = BluetoothService(BluetoothDevice(interface, bt_addr), "RFCOMM", 2)
 
 # define own interface for imitation
 own_iface_name = "hci1"
@@ -104,6 +107,21 @@ if len(file_data_list) > 0:
         #file_data.write_to_file(<path>) to test write_to_file method
 else:
     print("No files were found")
+
+#-------------------------------- BLUEBUGGING TEST ----------------------------------------
+print("starting Bluebugging test")
+module_bluebugging_service = bluebugging_service.load_module()[0]
+assert module_bluebugging_service.can_run([hsp_service]), "Not enough ressources. (BluetoothService)"
+at_sms_list = module_bluebugging_service.run([hsp_service])
+if len(at_sms_list) > 0:
+    for sms in at_sms_list:
+        print(f"Storage: {sms.get_storage()} \n"
+              f"Index: {sms.get_index()} \n"
+              f"Info: {sms.get_info()} \n"
+              f"Data: {sms.get_data()}")
+else:
+    print("No messages were found")
+
 
 #-------------------------------- DEVICE IMITATION TEST -----------------------------------
 print("Starting device imitation test")

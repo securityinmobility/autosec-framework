@@ -154,6 +154,36 @@ class FileData(AutosecRessource):
                 binary_file.write(self._data)
                 binary_file.close()
 
+class AT_SMS(AutosecRessource):
+    _device: BluetoothDevice
+    _storage: str
+    _index: int
+    _info: str
+    _data: str
+
+    def __init__(self, device: BluetoothDevice, storage: str, index: int, info: str, data: str):
+        self._device = device
+        self._storage = storage
+        self._index = index
+        self._info = info
+        self._data = data
+
+    def get_device(self):
+        return self._device
+    
+    def get_storage(self):
+        return self._storage
+    
+    def get_index(self):
+        return self._index
+    
+    def get_info(self):
+        return self._info
+    
+    def get_data(self):
+        return self._data
+        
+
 class VCard(AutosecRessource):
     _version: float
     _name: str
