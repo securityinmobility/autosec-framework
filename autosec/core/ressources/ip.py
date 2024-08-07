@@ -169,10 +169,10 @@ class PortRange(AutosecRessource):
 
 class InternetService(AutosecRessource):
     """
-    Internet service ressource
+    Internet service ressource (URL and/or InternetDevice with Port)
     """
 
-    def __init__(self, device: InternetDevice, port: int, service_name="unknown"):
+    def __init__(self, device: InternetDevice = None, port: int = None, service_name="unknown", url: str = None):
         """
         :param device: The device that provides the service
         :param port: The port of the service
@@ -181,6 +181,7 @@ class InternetService(AutosecRessource):
         self._device: InternetDevice = device
         self._port: int = port
         self._service_name: str = service_name
+        self._url: str = url
 
     def get_device(self) -> InternetDevice:
         """
@@ -200,6 +201,12 @@ class InternetService(AutosecRessource):
         """
         return self._service_name
 
+    def get_url(self) -> str:
+        """
+        :return: The url of the service
+        """
+        return self._url
+
     def connect(self) -> 'InternetConnection':
         """
         Connect to the service
@@ -211,8 +218,9 @@ class InternetService(AutosecRessource):
     def __eq__(self, other) -> bool:
         tmp_1 = self.get_device().__eq__(other.get_device())
         tmp_2 = self.get_port() == other.get_port()
-        return tmp_1 and tmp_2
-
+        tmp_3 = self.get_url() == other.get_url()
+        return tmp_1 and tmp_2 and tmp_3
+    
 
 class InternetConnection(AutosecRessource):
     _service: InternetService
