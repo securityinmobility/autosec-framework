@@ -70,7 +70,18 @@ class BTDeviceImitationService(AutosecModule):
        
         print("Connecting to service")
         # connect to a third device
-        connection = BluetoothConnection(service)
+        try:
+            # Create a Bluetooth socket using RFCOMM
+            sock = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
+            sock.connect((service.get_device().get_bd_addr(), service.get_port()))
+        except bluetooth.BluetoothError as e:
+                print(f"Bluetooth error: {e}")
+
+        finally:
+            # Close the socket
+            print("Closing connection")
+            sock.close()
+            
         print(device.get_interface().get_interface_name())
         imitation_device = BTImitationDevice(BluetoothInterface(interface_name, device.get_interface().get_network_address()), device.get_bd_addr(), interface.get_network_address(), device.get_bd_name(), name)
 

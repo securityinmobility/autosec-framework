@@ -12,12 +12,12 @@ import autosec.modules.bluetooth.bt_device_imitation_service as bt_device_imitat
 
 
 #define target services
-bt_addr = "D8:9B:3B:AB:F5:0E" # change to your device address
-interface_name = "Phone" # not really used for anything, but neccessary for networkInterface class
+bt_addr = "60:09:C3:38:AC:8C" #"D8:9B:3B:AB:F5:0E" # change to your device address
+interface_name = "AUDI MMI" # not really used for anything, but neccessary for networkInterface class
 interface = BluetoothInterface(interface_name, bt_addr)
 pbap_service = BluetoothService(BluetoothDevice(interface, bt_addr), "RFCOMM", 19)
 ftp_service = BluetoothService(BluetoothDevice(interface, bt_addr), "RFCOMM", 7)
-opp_service = BluetoothService(BluetoothDevice(interface, bt_addr), "RFCOMM", 12)
+opp_service = BluetoothService(BluetoothDevice(interface, bt_addr), "RFCOMM", 3) #12
 hsp_service = BluetoothService(BluetoothDevice(interface, bt_addr), "RFCOMM", 2)
 
 # define own interface for imitation
@@ -26,14 +26,14 @@ own_bd_addr = "00:01:95:77:A1:13"
 own_interface = BluetoothInterface(own_iface_name, own_bd_addr)
 
 # define Bluetooth device to imitate
-imit_bd_addr = "00:23:11:04:F5:8C"
-imit_name = "Jlab GO Air"
+imit_bd_addr = "D8:9B:3B:AB:F5:0E"
+imit_name = "Huawei Mate 20"
 imit_interface = BluetoothInterface(imit_name, imit_bd_addr)
 imit_device = BluetoothDevice(imit_interface, imit_interface.get_network_address(), imit_name)
 
 
 #------------------------- SERVICE DISCOVERY TEST ---------------------------
-print("starting device discovery test")
+print("starting service discovery test")
 module_service_discovery = service_discovery.load_module()[0]
 assert module_service_discovery.can_run([interface]), "Not enough ressources. (BluetoothInterface)"
 service_list = module_service_discovery.run([interface])
@@ -70,8 +70,8 @@ assert module_pb_access_service.can_run([pbap_service]), "Not enough ressources.
 vcard_list = module_pb_access_service.run([pbap_service])
 if len(vcard_list) > 0:
     for vcard in vcard_list:
-        print(f"Name: {vcard.get_name()}") # When I use \n after this line the first letter gets replaced by a space
-        print(f"Full Name: {vcard.get_full_name()}") # # When I use \n after this line the first letter gets replaced by a space
+        print(f"Name: {vcard.get_name()}") 
+        print(f"Full Name: {vcard.get_full_name()}") 
         print(f"Version: {vcard.get_version()} \n"
               f"Email: {vcard.get_email()} \n"
               f"Tel: {vcard.get_tel()} \n"
@@ -122,7 +122,6 @@ if len(at_sms_list) > 0:
 else:
     print("No messages were found")
 
-
 #-------------------------------- DEVICE IMITATION TEST -----------------------------------
 print("Starting device imitation test")
 module_device_imitation_service = bt_device_imitation_service.load_module()[0]
@@ -132,5 +131,5 @@ input("Press enter to resume...")
 print(f"Name: {imitation_dev.get_bd_name()}")
 print(f"Address: {imitation_dev.get_bd_addr()}")
 print(f"Old Name: {imitation_dev.get_old_name()}")
-print(f"Old Address: {imitation_dev.get_old_name()}")
+print(f"Old Address: {imitation_dev.get_old_address()}")
 input("Press enter to finish the test...")

@@ -88,11 +88,14 @@ class BluetoothService(AutosecRessource):
 
     def __init__(self, device: BluetoothDevice, protocol: str, port: int, service_name: str = None):
         self._device = device
-        protocol_upper_case = protocol.strip().upper()
-        if protocol_upper_case == "RFCOMM" or protocol_upper_case == "L2CAP":
-            self._protocol = protocol_upper_case
-        else:
-            raise ValueError(f"Protocol is not RFCOMM or L2CAP")
+        if not protocol is None:
+            protocol_upper_case = protocol.strip().upper()
+            if protocol_upper_case == "RFCOMM" or protocol_upper_case == "L2CAP":
+                self._protocol = protocol_upper_case
+            else:
+                raise ValueError(f"Protocol is not RFCOMM or L2CAP")
+        if protocol == None:
+            self._protocol = "None"
         self._port = port
         self._service_name = service_name
 

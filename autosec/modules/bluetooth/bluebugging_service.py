@@ -42,12 +42,14 @@ class BluebuggingService(AutosecModule):
     
     def run(self,inputs: List[AutosecRessource]) -> List[AT_SMS]:
         service = self.get_ressource(inputs, BluetoothService)
-        if not service.get_protocol() == "RFCOMM":
+        if not service.get_protocol() == "RFCOMM" and not service.get_protocol() == "None":
             print("wrong service was given")
             exit()
         device = service.get_device()
         bd_addr  = service.get_device().get_bd_addr()
         port = service.get_port()
+
+        messages = {}
         
         try:
             # Create a Bluetooth socket using RFCOMM
@@ -90,7 +92,6 @@ class BluebuggingService(AutosecModule):
             else:
                 print(f"Unknown response: Response was {response_str}")
 
-            messages = {}
             for mem in memories:
                 command3 = f'AT+CPMS="{mem}"' # select storage
                 

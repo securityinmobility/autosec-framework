@@ -41,7 +41,7 @@ class BluesnarfService(AutosecModule):
     
     def run(self,inputs: List[AutosecRessource]) -> List[FileData]:
         service = self.get_ressource(inputs, BluetoothService)
-        if not service.get_protocol() == "RFCOMM":
+        if not service.get_protocol() == "RFCOMM" and not service.get_protocol() == "None":
             print("Wrong service was given")
             exit()
         address = service.get_device().get_bd_addr()
@@ -59,9 +59,11 @@ class BluesnarfService(AutosecModule):
                 else:
                     print("trying to bluesnarf with OPP Client")
                 r = c.connect()
+            
             except OSError as e:
                 print("Connect failed. " + str(e))
-                exit()
+                continue
+            
 
             if isinstance(r, responses.ConnectSuccess):
                 print("Connection successful")
