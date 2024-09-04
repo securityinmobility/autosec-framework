@@ -81,7 +81,7 @@ class BluesnarfService(AutosecModule):
                     if isinstance(r, responses.UnknownResponse):
                         if r.code == 209:
                             print("Opcode is not implemented")
-                        break
+                        continue
 
                     if isinstance(r, responses.FailureResponse):
                         print("Failed to get file " + filename)
