@@ -1,7 +1,6 @@
 from .base import AutosecRessource, NetworkInterface
 from typing import Optional
 import socket
-from scapy.layers.bluetooth import BluetoothL2CAPSocket
 import bluetooth
 import subprocess
 import time

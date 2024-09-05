@@ -1,12 +1,8 @@
 from autosec.core.autosec_module import AutosecModule, AutosecModuleInformation
-from autosec.core.ressources.bluetooth import BluetoothDevice, BluetoothInterface, BluetoothService, BluetoothConnection, AT_SMS
+from autosec.core.ressources.bluetooth import BluetoothService, AT_SMS
 from .bt_at_commands import *
 from typing import List
-import subprocess
-import time
 import bluetooth
-import os
-from PyOBEX import responses
 
 from autosec.core.ressources.base import AutosecRessource
 

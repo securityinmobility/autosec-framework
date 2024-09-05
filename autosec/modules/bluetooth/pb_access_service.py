@@ -2,9 +2,8 @@ from autosec.core.autosec_module import AutosecModule, AutosecModuleInformation
 from autosec.core.ressources.bluetooth import BluetoothDevice, BluetoothInterface, BluetoothService, VCard
 import autosec.modules.bluetooth.bt_obex as bt_obex
 from typing import List
-import bluetooth
 from xml.etree import ElementTree
-from PyOBEX import client, headers, responses
+from PyOBEX import responses
 
 from autosec.core.ressources.base import AutosecRessource
 

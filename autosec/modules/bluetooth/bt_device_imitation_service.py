@@ -1,12 +1,10 @@
 from autosec.core.autosec_module import AutosecModule, AutosecModuleInformation
 from autosec.core.ressources.bluetooth import BluetoothDevice, BluetoothInterface, BluetoothService, BluetoothConnection, BTImitationDevice
-from autosec.core.ressources.base import NetworkInterface
 from typing import List
 import subprocess
 import time
 import bluetooth
 import os
-from PyOBEX import responses
 
 from autosec.core.ressources.base import AutosecRessource
 
@@ -29,7 +27,7 @@ class BTDeviceImitationService(AutosecModule):
             name="DeviceImitation",
             description = "Module to imitate a different bluetooth device by using its Bluetooth address and name",
             dependencies = ["Linux", "sudo"],
-            tags = ["Bluetooth"]
+            tags = ["Bluetooth", "bdaddr"]
         )
     
     def get_produced_outputs(self) -> BluetoothConnection:

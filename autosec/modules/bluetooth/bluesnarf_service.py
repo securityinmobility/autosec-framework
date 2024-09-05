@@ -1,9 +1,8 @@
 from autosec.core.autosec_module import AutosecModule, AutosecModuleInformation
-from autosec.core.ressources.bluetooth import BluetoothDevice, BluetoothInterface, BluetoothService, BluetoothConnection, FileData
-from .bt_obex import FixedClient, FixedBrowserClient, TypeHeader
+from autosec.core.ressources.bluetooth import BluetoothService, FileData
+from .bt_obex import FixedClient, FixedBrowserClient
 from typing import List
 import time
-import bluetooth
 import os
 from PyOBEX import responses
 

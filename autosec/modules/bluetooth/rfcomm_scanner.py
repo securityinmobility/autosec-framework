@@ -2,7 +2,6 @@ from autosec.core.autosec_module import AutosecModule, AutosecModuleInformation
 from autosec.core.ressources.bluetooth import BluetoothDevice, BluetoothInterface, BluetoothService, BluetoothConnection
 from typing import List
 import bluetooth
-import sys
 
 from autosec.core.ressources.base import AutosecRessource
 

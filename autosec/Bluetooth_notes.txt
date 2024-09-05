@@ -1,0 +1,2 @@
+the bluetooth moduels uses the libraries Pybluez (https://github.com/pybluez/pybluez) and PyOBEX(https://github.com/blacklight/PyOBEX).
+The device_imitation_service can only be used on Linux OS. For it to work the Linux tool "bdaddr" (https://github.com/thxomas/bdaddr) has to be installed and moved to the bin folder.
