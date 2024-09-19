@@ -179,7 +179,10 @@ class EVChargingStationFinder(AutosecModule):
         iface = interface.get_interface_name()  # Get the interface name
         services = asyncio.run(self.run_exploit(iface))  # Run the exploit and get services
     
-        print(f"\nCharging Station Found: \n")
+        if services and len(services) > 0:
+            print(f"\nCharging Station Found: \n")
+        else:
+            print(f"\nNo Charging Station Found.\n")
         
         return services  # Return the discovered services
 
