@@ -221,6 +221,10 @@ class InternetService(AutosecRessource):
         tmp_3 = self.get_url() == other.get_url()
         return tmp_1 and tmp_2 and tmp_3
     
+    def __str__(self):
+        #return str(self.get_port())
+        #return str(self.get_name())
+        return str(self.get_service_name())
 
 class InternetConnection(AutosecRessource):
     _service: InternetService
